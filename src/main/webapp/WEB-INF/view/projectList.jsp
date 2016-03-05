@@ -41,7 +41,7 @@
                     <h2 class="tool_header_title">项目列表</h2>
                 </div>
                 <div class="tool_header_right">
-                    <a href="newProject.html" class="tool_btn">新增项目</a>
+                    <a href="newProject" class="tool_btn">新增项目</a>
                 </div>
             </div>
             <div class="info_main_content">

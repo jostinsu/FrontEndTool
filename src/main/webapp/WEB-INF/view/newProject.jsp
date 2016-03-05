@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="info_main_content">
-                <form action="#"  class="info_newProject_form">
+                <form action="projectSave" class="info_newProject_form" method="get">
                     <div class="info_newProject_item">
                         <span>项目名称：</span><input name="name" type="text" class="tool_text info_newProject_name" maxlength="255" required/>
                     </div>
