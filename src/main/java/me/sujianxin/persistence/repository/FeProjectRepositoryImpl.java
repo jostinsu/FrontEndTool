@@ -30,10 +30,9 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
 
     @Override
     public Map<String, Object> findByPage(FeProjectForm feProjectForm) {
-        Map<String, Object> map = new HashMap<String, Object>(2);
+        Map<String, Object> map = new HashMap<>(2);
         StringBuilder sb = new StringBuilder("select new me.sujianxin.spring.domain.FeProjectDomain(f.id,f.name,f.createTime,f.remark) from FeProject f");
         StringBuilder sbCount = new StringBuilder("select count(*) from FeProject f");
-
 
         if(!isNullOrEmpty(feProjectForm.getName())){
             sb.append(" where f.name like CONCAT('%',:name,'%')");
