@@ -10,7 +10,8 @@ import javax.persistence.TypedQuery;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,15 +35,15 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
         StringBuilder sb = new StringBuilder("select new me.sujianxin.spring.domain.FeProjectDomain(f.id,f.name,f.createTime,f.remark) from FeProject f");
         StringBuilder sbCount = new StringBuilder("select count(*) from FeProject f");
 
-        if(!isNullOrEmpty(feProjectForm.getName())){
+        if (!isNullOrEmpty(feProjectForm.getName())) {
             sb.append(" where f.name like CONCAT('%',:name,'%')");
             sbCount.append(" where f.name like CONCAT('%',:name,'%')");
-            if(!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())){
+            if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
                 sb.append(" and f.createTime between :fromTime and :toTime");
                 sbCount.append(" and f.createTime between :fromTime and :toTime");
             }
-        }else{
-            if(!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())){
+        } else {
+            if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
                 sb.append(" where f.createTime between :fromTime and :toTime");
                 sbCount.append(" where f.createTime between :fromTime and :toTime");
             }
@@ -66,10 +67,12 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
                 queryCount.setParameter("toTime", format.parse(feProjectForm.getToTime()));
             } catch (ParseException e) {
                 e.printStackTrace();
-                query.setParameter("fromTime", new Date(1970, 1, 1, 0, 0, 0));
-                query.setParameter("toTime", new Date(2099, 1, 1, 0, 0, 0));
-                queryCount.setParameter("fromTime", new Date(1970, 1, 1, 0, 0, 0));
-                queryCount.setParameter("toTime", new Date(2099, 1, 1, 0, 0, 0));
+                Calendar tmpFromTime = new GregorianCalendar(1970, 1, 1, 0, 0, 0);
+                Calendar tmpToTime = new GregorianCalendar(2099, 1, 1, 0, 0, 0);
+                query.setParameter("fromTime", tmpFromTime.getTime());
+                query.setParameter("toTime", tmpToTime.getTime());
+                queryCount.setParameter("fromTime", tmpFromTime.getTime());
+                queryCount.setParameter("toTime", tmpToTime.getTime());
             }
         }
 
