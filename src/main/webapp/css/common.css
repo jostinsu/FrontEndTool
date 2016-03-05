@@ -1,0 +1,155 @@
+html, body {
+  background-color: #E9EAEB; }
+
+.tool_btn {
+  background-image: -webkit-linear-gradient(top, #fff 0, #F8F8F8 100%);
+  background-image: linear-gradient(to bottom, #fff 0, #F8F8F8 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFFFF', endColorstr='#FFF8F8F8', GradientType=0);
+  border-radius: 2px;
+  _line-height: 28px;
+  vertical-align: middle;
+  -webkit-transition: all 0.3s linear 0s;
+          transition: all 0.3s linear 0s;
+  display: inline-block;
+  box-sizing: content-box;
+  min-width: 38px;
+  height: 24px;
+  padding: 0 16px;
+  border: 1px solid #B4BEC8;
+  line-height: 24px;
+  outline: 0;
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  color: #222;
+  _overflow-y: hidden; }
+
+.tool_btn:hover {
+  border-color: #79838D;
+  color: #222;
+  text-decoration: none; }
+
+.tool_btn:active, .tool_btn_Active {
+  background-image: -webkit-linear-gradient(top, #eee 0, #f4f4f4 100%);
+  background-image: linear-gradient(to bottom, #eee 0, #f4f4f4 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFEEEEEE', endColorstr='#FFF4F4F4', GradientType=0);
+  -webkit-transition-duration: 0s;
+          transition-duration: 0s; }
+
+.tool_btn:active, .tool_btn[disabled], .tool_btn[disabled]:hover, .tool_btn_Active, .tool_btn_Disabled, .tool_btn_Disabled:hover {
+  background-repeat: repeat-x;
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -o-transition-duration: 0s; }
+
+.tool_btn[disabled], .tool_btn[disabled]:hover, .tool_btn_Disabled, .tool_btn_Disabled:hover {
+  background-image: -webkit-linear-gradient(top, #fcfcfc 0, #f5f5f5 100%);
+  background-image: linear-gradient(to bottom, #fcfcfc 0, #f5f5f5 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFCFCFC', endColorstr='#FFF5F5F5', GradientType=0);
+  border-color: #E4E4E4;
+  color: #c3c3c3;
+  cursor: default;
+  -webkit-transition-duration: 0s;
+          transition-duration: 0s; }
+
+button.tool_btn, input.tool_btn {
+  *height: 26px;
+  *line-height: 21px;
+  _line-height: 23px; }
+
+.tool_btn_Blue {
+  border-color: #2084CA;
+  color: #fff !important;
+  background-image: -webkit-linear-gradient(top, #4490D6 0, #357FB8 100%);
+  background-image: linear-gradient(to bottom, #4490D6 0, #357FB8 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF4490D6', endColorstr='#FF357FB8', GradientType=0); }
+
+.tool_btn_Blue:hover {
+  background-image: -webkit-linear-gradient(top, #61A6E6 0, #4890C7 100%);
+  background-image: linear-gradient(to bottom, #61A6E6 0, #4890C7 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF61A6E6', endColorstr='#FF4890C7', GradientType=0);
+  border-color: #3388C3;
+  color: #fff; }
+
+.tool_btn_Blue:active, .tool_btn_Blue_Active {
+  border-color: #3081BD;
+  background-image: -webkit-linear-gradient(top, #3587C7 0, #4490D6 100%);
+  background-image: linear-gradient(to bottom, #3587C7 0, #4490D6 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF3587C7', endColorstr='#FF4490D6', GradientType=0); }
+
+.tool_btn_Blue[disabled], .tool_btn_Blue[disabled]:hover, .tool_btn_Blue_Disabled, .tool_btn_Blue_Disabled:hover {
+  border-color: #8FBCDB;
+  background-image: -webkit-linear-gradient(top, #A2C8EA 0, #9BC0DD 100%);
+  background-image: linear-gradient(to bottom, #A2C8EA 0, #9BC0DD 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFA2C8EA', endColorstr='#FF9BC0DD', GradientType=0);
+  color: #fff !important;
+  cursor: default; }
+
+.tool_btn_Big {
+  height: 28px;
+  line-height: 28px;
+  font-size: 14px;
+  padding: 0 20px; }
+
+.tool_text {
+  height: 18px;
+  font-size: 12px;
+  padding: 3px 8px;
+  border: 1px solid #A0AAB4;
+  background-color: #fff;
+  width: 125px;
+  color: #666; }
+
+.tool_textarea {
+  padding: 8px;
+  border: 1px solid #A0AAB4;
+  background-color: #fff;
+  color: #666;
+  resize: none;
+  width: 400px;
+  height: 120px; }
+
+.tool_icon {
+  color: #666666;
+  padding: 0 5px;
+  font-size: 14px;
+  cursor: pointer; }
+
+.tool_icon:hover {
+  color: #ff9900; }
+
+.tool_header {
+  height: 40px;
+  border-bottom: 1px solid #D2D7DC;
+  margin-bottom: 20px;
+  line-height: 40px;
+  overflow: hidden; }
+
+.tool_header_left {
+  height: 100%;
+  float: left; }
+
+.tool_header_title_back {
+  display: inline-block;
+  height: 100%;
+  margin-right: 10px;
+  line-height: 40px; }
+  .tool_header_title_back i {
+    font-size: 16px;
+    color: #336699; }
+
+.tool_header_title {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: normal; }
+
+.tool_header_right {
+  height: 100%;
+  float: right; }
+
+/*# sourceMappingURL=common.css.map */
