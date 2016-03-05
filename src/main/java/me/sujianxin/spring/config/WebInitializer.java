@@ -26,31 +26,33 @@ public class WebInitializer implements WebApplicationInitializer {
     public void onStartup(javax.servlet.ServletContext sc) throws ServletException {
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(ApplicationConfig.class);
-
         sc.addListener(new ContextLoaderListener(rootContext));
+
+        //CharacterEncodingFilter
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        FilterRegistration filterRegistration =
+                sc.addFilter("characterEncodingFilter", characterEncodingFilter);
+        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
+
         //follow can be deleted
         //sc.addFilter("hibernateFilter", OpenSessionInViewFilter.class).addMappingForUrlPatterns(null, false, "/*");
 
         //maybe follow will be use
         // sc.addFilter("OpenEntityManagerInViewFilter", org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter.class).addMappingForUrlPatterns(null, false, "/*");
 
-        //2、springmvc上下文
+        //springmvc上下文
         AnnotationConfigWebApplicationContext springMvcContext = new AnnotationConfigWebApplicationContext();
         springMvcContext.register(MvcConfig.class);
-        //3、DispatcherServlet
+
+        //DispatcherServlet
         DispatcherServlet dispatcherServlet = new DispatcherServlet(springMvcContext);
         dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-
         ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
         dynamic.setLoadOnStartup(1);
         dynamic.addMapping("/");
 
-        //4、CharacterEncodingFilter
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("utf-8");
-        FilterRegistration filterRegistration =
-                sc.addFilter("characterEncodingFilter", characterEncodingFilter);
-        filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/");
 
     }
 }

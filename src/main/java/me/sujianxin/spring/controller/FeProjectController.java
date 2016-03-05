@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,12 +37,16 @@ public class FeProjectController {
     @ResponseBody
     public Map<String, Object> projectListByPage(@ModelAttribute FeProjectForm feProjectForm, HttpSession session) {
         Map<String, Object> map = new HashMap<String, Object>(3);
-        System.out.println(feProjectForm);
         Map<String, Object> result = feProjectService.findAll(feProjectForm);
         map.put("data", result.get("data"));
         map.put("iTotalRecords", result.get("count"));
         map.put("iTotalDisplayRecords", result.get("count"));
         return map;
+    }
+
+    @RequestMapping(value = {"newProject"}, method = RequestMethod.GET)
+    public String projectNewPage() {
+        return "newProject";
     }
 
     @RequestMapping(value = "projectSave", method = RequestMethod.POST)
@@ -50,6 +55,7 @@ public class FeProjectController {
         FeProject feProject = new FeProject();
         feProject.setRemark(feProjectDomain.getRemark());
         feProject.setName(feProjectDomain.getName());
+        feProject.setCreateTime(new Date());
         feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
         feProjectService.save(feProject);
         Map<String, Object> map = new HashMap<String, Object>(2);
