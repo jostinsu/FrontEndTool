@@ -36,7 +36,7 @@ public class FeProjectController {
     @ResponseBody
     public Map<String, Object> projectListByPage(@ModelAttribute FeProjectForm feProjectForm, HttpSession session) {
         Map<String, Object> map = new HashMap<String, Object>(3);
-        //System.out.println(feProjectForm);
+        System.out.println(feProjectForm);
         Map<String, Object> result = feProjectService.findAll(feProjectForm);
         map.put("data", result.get("data"));
         map.put("iTotalRecords", result.get("count"));
