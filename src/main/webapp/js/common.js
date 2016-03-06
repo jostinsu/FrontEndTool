@@ -11,19 +11,19 @@ $.extend({
 			title:"确认框",
 			confirm:"您确定执行该操作吗？"
 		},option||{});
-		return $(' <div class="com-cover confirmBox-cover">\
-			           <article id='+setting.id+' class="com-confirmBox">\
+		return $(' <div class="tool_cover confirmBox_cover">\
+			           <article id=' + setting.id + ' class="tool_confirmBox">\
 			               <header>\
 			                   <h2>'+setting.title+'</h2>\
-			                   <i class="icon-remove confirmBox-closeBtn"></i>\
+			                   <i class="icon-remove confirmBox_closeBtn"></i>\
 			               </header>\
 			               <section>\
-			                   <i class="icon-question-sign com-active-icon"></i>\
+			                   <i class="icon-question-sign tool_icon_Remind"></i>\
 			                   <p>'+setting.confirm+'</p>\
 		                   </section>\
 		                   <footer>\
-		                       <a class="com-btn confirmBox-submitBtn">确定</a>\
-			                   <a class="com-btn confirmBox-cancelBtn">取消</a>\
+		                       <a class="tool_btn tool_btn_Blue confirmBox_submitBtn">确定</a>\
+			                   <a class="tool_btn confirmBox_cancelBtn">取消</a>\
 			               </footer>\
 			           </article>\
 			      </div>').appendTo($('body'));
@@ -36,22 +36,32 @@ $.extend({
 			title:"提醒框",
 			remind:"您的操作出现错误！"
 		},option||{});
-		return $(' <div class="com-cover remindBox-cover">\
-			           <article id='+setting.id+' class="com-remindBox">\
+		return $(' <div class="tool_cover remindBox_cover">\
+			           <article id=' + setting.id + ' class="tool_remindBox">\
 			               <header>\
 			                   <h2>'+setting.title+'</h2>\
-			                   <i class="icon-remove remindBox-closeBtn"></i>\
+			                   <i class="icon-remove remindBox_closeBtn"></i>\
 			               </header>\
 			               <section>\
-			                   <i class="icon-info-sign com-active-icon"></i>\
+			                   <i class="icon-info-sign tool_icon_Remind"></i>\
 			                   <p>'+setting.remind+'</p>\
 		                   </section>\
 		                   <footer>\
-		                       <a class="com-btn remindBox-submitBtn">确定</a>\
+		                       <a class="tool_btn tool_btn_Blue remindBox_submitBtn">确定</a>\
 			               </footer>\
 			           </article>\
 			      </div>').appendTo($('body'));
 	},
+
+	/*动态生成提醒框的方法*/
+	tip: function (option) {
+		var setting = $.extend({
+			content: "提醒内容"
+		}, option || {});
+		return $('<div class="tool_tip">\
+			           <span class="tool_tip_content">' + setting.content + '</span>\
+			      </div>').appendTo($('body'));
+	}
 });
 
 
@@ -80,7 +90,7 @@ fe.tool = {
 			start = 0,
 			sortCol = 0,
 			mData = [],
-			oSearch = {},
+		//oSearch = {},
 			oData = {};
 		for(;i<len;i++){
 			obj = aoData[i];
@@ -177,69 +187,79 @@ fe.tool = {
 
 	formatTime:function(date){
 		return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+	},
+
+	//form 表单提交后返回的信息
+	success: function (obj, callbackForSuccess, callbackForFail) {
+		if (obj.success != undefined) {
+			if (obj.success) {
+				callbackForSuccess();
+			} else {
+				callbackForFail();
+			}
+		}
 	}
 
 }
 
 /*--------------------------------项目中的公共运用函数------------------------------*/
-/*
 fe.app = {} //公共的实现方法
-/!*主导航的事件绑定函数*!/
-fe.app.nav = function(){
-	$('.nav dt').on('click',function(){
-		if(!$(this).siblings('dd').hasClass('dd-active')){
-			$(this).siblings('dd').toggle();
-		}
-	});
-	$('.nav dl').delegate('dd','click',function(){
-		$('.nav dt').removeClass('dt-active');
-		$('.nav dd').removeClass('dd-active');
-		$(this).addClass('dd-active').siblings('dt').addClass('dt-active');
-	});
-	$('.face').on('click',function(){
-		$.remindBox({
-			remind:'该系统暂无提供登录用户功能，可后期添上，如有登录功能，则登录者信息将保留在这头像中!'
-		});
-	});
-}
+/*主导航的事件绑定函数*/
+//fe.app.nav = function(){
+//	$('.nav dt').on('click',function(){
+//		if(!$(this).siblings('dd').hasClass('dd-active')){
+//			$(this).siblings('dd').toggle();
+//		}
+//	});
+//	$('.nav dl').delegate('dd','click',function(){
+//		$('.nav dt').removeClass('dt-active');
+//		$('.nav dd').removeClass('dd-active');
+//		$(this).addClass('dd-active').siblings('dt').addClass('dt-active');
+//	});
+//	$('.face').on('click',function(){
+//		$.remindBox({
+//			remind:'该系统暂无提供登录用户功能，可后期添上，如有登录功能，则登录者信息将保留在这头像中!'
+//		});
+//	});
+//}
 
-/!*为确认框绑定事件*!/
+/*为确认框绑定事件*/
 fe.app.confirmBoxEvent = function(){
-
-	/!*为确认框绑定关闭事件*!/
-	$(document).delegate('.confirmBox-cancelBtn, .confirmBox-closeBtn','click',function(){
-		switch($('.com-confirmBox').attr('id')){
-			case 'dep-delete-confirmBox':
-				$('.icon-trash').removeClass('com-active-icon');
-				break;
-			case 'job-delete-confirmBox':
-				$('.icon-trash').removeClass('com-active-icon');
-				break;
+	/*为确认框绑定关闭事件*/
+	$(document).delegate('.confirmBox_cancelBtn, .confirmBox_closeBtn', 'click', function () {
+		switch ($('.tool_confirmBox').attr('id')) {
+			//case 'dep-delete-confirmBox':
+			//	$('.icon-trash').removeClass('com-active-icon');
+			//	break;
+			//case 'job-delete-confirmBox':
+			//	$('.icon-trash').removeClass('com-active-icon');
+			//	break;
 		}
-		$('.confirmBox-cover').remove();
+		$('.confirmBox_cover').remove();
 	});
 
-	/!*为确认框绑定“确认”事件*!/
-	$(document).delegate('.confirmBox-submitBtn','click',function(){
-		var confirmBox = $('.com-confirmBox'),
+	/*为确认框绑定“确认”事件*/
+	$(document).delegate('.confirmBox_submitBtn', 'click', function () {
+		var confirmBox = $('.tool_confirmBox'),
 			id=confirmBox.attr('id');
 		switch(id){
-			case 'dep-delete-confirmBox':
-				fe.dep.delete($('.confirmBox-cover').data('depId'));
+			case 'info_deleteProject':
+				fe.info.deleteProject($('.confirmBox_cover').data('projectId'));
 				break;
-			case 'job-delete-confirmBox':
-				fe.job.delete($('.confirmBox-cover').data('jobId'));
+			case 'info_newProject':
+				window.location.href = "#";
+				//fe.job.delete($('.confirmBox-cover').data('jobId'));
 				break;
 		}
-		$('.confirmBox-cover').remove();
+		$('.confirmBox_cover').remove();
 	});
 }
 
-/!*为提醒框绑定事件*!/
+/*为提醒框绑定事件*/
 fe.app.remindBoxEvent = function(){
-	/!*为提醒框绑定关闭事件*!/
-	$(document).delegate('.remindBox-submitBtn,.remindBox-closeBtn','click',function(){
-		var remindBox = $('.com-remindBox'),
+	/*为提醒框绑定关闭事件*/
+	$(document).delegate('.remindBox_submitBtn,.remindBox_closeBtn', 'click', function () {
+		var remindBox = $('.tool_remindBox'),
 			id=remindBox.attr('id');
 		switch(id){
 			case 'dep-deleteFail-remindBox':
@@ -249,6 +269,8 @@ fe.app.remindBoxEvent = function(){
 				$('.icon-trash').removeClass('com-active-icon');
 				break;
 		}
-		$('.remindBox-cover').remove();
+		$('.remindBox_cover').remove();
 	});
-}*/
+}
+
+

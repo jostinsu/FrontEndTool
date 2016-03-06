@@ -111,6 +111,8 @@
             }
         }).show();
         fe.info.dataTableEvent();
+        fe.app.confirmBoxEvent();
+        fe.app.remindBoxEvent();
     });
 </script>
 </body>

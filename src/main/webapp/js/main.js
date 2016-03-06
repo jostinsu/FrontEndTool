@@ -4,7 +4,7 @@
 /*------------------------------个人中心模块-----------------------------*/
 fe.info = {} //个人中心命名空间
 
-/*为部门管理的dataTable绑定事件*/
+/*为项目列表的dataTable绑定事件*/
 fe.info.dataTableEvent = function(){
 
 	$('#info_table_searchBtn').on('click',search);
@@ -26,8 +26,8 @@ fe.info.dataTableEvent = function(){
 		}else{
 			alert("不能只填写开始时间或结束时间");
 		}
-
 	}
+
 
 	//$('#dep-add-btn').on('click',function(){
 	//	$(this).css('background','#ff9900');
@@ -51,13 +51,75 @@ fe.info.dataTableEvent = function(){
 	//	fe.info.beforeEdit($(this).data('rowIndex'));
 	//});
 	//
-	//fe.info.dataTable.delegate('.icon-trash','click',function(){
-	//	var id = $(this).data('id');
-	//	$(this).addClass('com-active-icon');
-	//	$.confirmBox({
-	//		id:"dep-delete-confirmBox",
-	//		title:"删除部门",
-	//		confirm:"确定要删除该部门吗？"
-	//	}).data('depId',id);
-	//});
+
+	fe.info.dataTable.delegate('.icon-trash', 'click', function () {
+		var id = $(this).data('id');
+		$.confirmBox({
+			id: "info_deleteProject",
+			title: "删除项目",
+			confirm: "确定要删除该项目吗？"
+		}).data('projectId', id);
+	});
+
 }
+
+fe.info.deleteProject = function (id) {
+	fe.tool.getJSON({
+		url: "data.json",
+		data: {'id': id},
+		success: function () {
+			fe.info.dataTable.fnDraw(true);
+		},
+		error: {
+			remind: "删除部门出错"
+		}
+	});
+
+}
+
+
+//修改用户昵称
+fe.info.account = function () {
+	var newNicknameInput = $('#newNickname'),
+		oldNicknameText = $('#oldNickname'),
+		btnWrap = $('.info_account_item_Last').eq(0),
+		editNicknameBtn = $('#editNicknameBtn');
+
+	editNicknameBtn.on('click', function () {
+		$(this).hide();
+		oldNicknameText.hide();
+		newNicknameInput.show();
+		btnWrap.show();
+	});
+
+	$('#cancelBtn').on('click', function () {
+		btnWrap.hide();
+		newNicknameInput.hide();
+		oldNicknameText.show();
+		editNicknameBtn.show();
+	});
+
+	$('#submitBtn').on('click', function () {
+		var nickname = $('#newNickname').val();
+		if (!nickname) {
+			$('#remind').show();
+		} else {
+			$('#remind').hide();
+			fe.tool.getJSON({
+				url: "data.json",
+				data: {'nickname': nickname},
+				success: function () {
+					btnWrap.hide();
+					newNicknameInput.hide();
+					oldNicknameText.html(nickname).show();
+					editNicknameBtn.show();
+				},
+				error: {
+					"remind": "修改昵称失败！"
+				}
+			});
+		}
+	});
+
+};
+

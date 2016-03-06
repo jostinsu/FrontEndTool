@@ -7,6 +7,7 @@ html {
   background-color: #fff; }
 
 body {
+  position: relative;
   color: #333;
   font-size: 14px;
   font-family: "微软雅黑","黑体", "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif; }
@@ -148,6 +149,143 @@ button.tool_btn, input.tool_btn {
 .tool_icon:hover {
   color: #ff9900; }
 
+.tool_icon_Remind {
+  color: #FF9900;
+}
+
+/*提醒框，确认框的样式*/
+.tool_cover {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: auto;
+}
+
+.remindBox_cover, .confirmBox_cover {
+  z-index: 500;
+}
+
+.tool_remindBox, .tool_confirmBox {
+  position: absolute;
+  left: 50%;
+  top: 120px;
+  width: 400px;
+  height: 180px;
+  margin-left: -200px;
+  z-index: 1000;
+  background-color: #FFF;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.tool_remindBox header, .tool_confirmBox header {
+  height: 30px;
+  line-height: 30px;
+  background-color: #336699;
+  border-radius: 4px 4px 0 0;
+}
+
+.tool_remindBox header h2, .tool_confirmBox header h2 {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 30px;
+  color: #fff;
+  text-align: left;
+  padding-left: 12px;
+}
+
+.tool_remindBox section, .tool_confirmBox section {
+  margin: 34px 0 0 30px;
+  height: 48px;
+}
+
+.tool_remindBox section i, .tool_confirmBox section i {
+  display: inline-block;
+  line-height: 48px;
+  font-size: 35px;
+  vertical-align: middle;
+}
+
+.tool_remindBox section p, .tool_confirmBox section p {
+  display: inline-block;
+  width: 300px;
+  vertical-align: middle;
+  font-size: 16px;
+  line-height: 24px;
+  padding-left: 10px;
+}
+
+.tool_remindBox footer, .tool_confirmBox footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 5px 10px 6px 0;
+  background-color: #F8F8F8;
+  border-top: 1px solid #DCE1E6;
+  text-align: right;
+  border-radius: 0 0 4px 4px;
+}
+
+.tool_remindBox footer .tool_btn, .tool_confirmBox footer .tool_btn {
+  margin-left: 10px;
+}
+
+.remindBox_closeBtn, .confirmBox_closeBtn {
+  position: absolute;
+  right: 8px;
+  top: 7px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.remindBox_closeBtn:hover, .confirmBox_closeBtn:hover {
+  color: #ff9900;
+}
+
+.tool_tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50px;
+  text-align: center;
+  -webkit-animation: disappear 1s linear 2s forwards;
+  animation: disappear 1s linear 2s forwards;
+}
+
+.tool_tip_content {
+  display: inline-block;
+  height: 30px;
+  background-color: #ff9900;
+  color: #fff;
+  line-height: 30px;
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+@-webkit-keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
 .tool_header {
   height: 40px;
   border-bottom: 1px solid #D2D7DC;
@@ -347,6 +485,13 @@ button.tool_btn, input.tool_btn {
 
 .info_account_item_content {
   overflow: hidden; }
+
+.info_account_item_remind {
+  font-weight: normal;
+  color: red;
+  display: inline-block;
+  margin-left: 10px;
+}
 
 .info_account_item_edit {
   display: inline-block;

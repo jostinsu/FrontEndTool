@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="info_main_content">
-                <form action="#" class="info_account_form">
+                <div class="info_account_form">
                     <div class="info_account_item">
                         <span>注册邮箱：</span><strong>491501792@qq.com</strong>
                     </div>
@@ -49,7 +49,9 @@
                         <span>昵称：</span>
                         <div class="info_account_item_content">
                             <strong id="oldNickname">苏健鑫</strong>
-                            <input id="newNickname" type="text" class="tool_text" placeholder="请输入昵称" name="nickname" style="display: none;" required/>
+                            <input id="newNickname" type="text" class="tool_text" placeholder="请输入昵称" name="nickname"
+                                   style="display: none;"/> <b id="remind" class="info_account_item_remind"
+                                                               style="display: none;">请输入有效字符</b>
                             <i id="editNicknameBtn" class="info_account_item_edit icon-pencil tool_icon"></i>
                         </div>
                     </div>
@@ -60,10 +62,10 @@
                         <span>注册时间：</span><strong>2016-03-20</strong>
                     </div>
                     <div class="info_account_item info_account_item_Last">
-                        <input type="submit" class="tool_btn tool_btn_Blue" value="确定"/>
-                        <input type="button" class="tool_btn" value="取消"/>
+                        <input id="submitBtn" type="button" class="tool_btn tool_btn_Blue" value="确定"/>
+                        <input id="cancelBtn" type="button" class="tool_btn" value="取消"/>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -73,7 +75,8 @@
 <script src="js/main.js"></script>
 <script>
     $(function(){
-        fe.info.dataTableEvent();
+        fe.info.account();
+        fe.app.remindBoxEvent();
     });
 </script>
 </body>

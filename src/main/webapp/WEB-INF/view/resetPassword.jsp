@@ -44,15 +44,18 @@
                 </div>
             </div>
             <div class="info_main_content">
-                <form action="#"  class="info_resize_form">
+                <form action="#" class="info_resize_form" id="info_resize_form" method="post">
                     <div class="info_resize_item">
-                        <span>原密码：</span><input name="name" type="password" class="tool_text" required  maxlength="16"/>
+                        <span>原密码：</span><input name="name" type="password" class="tool_text" required maxlength="16"
+                                                pattern="[\w]{6,16}"/>
                     </div>
                     <div class="info_resize_item">
-                        <span>新密码：</span><input name="name" type="password" class="tool_text" placeholder="请输入6到16位新密码" required  maxlength="16"/>
+                        <span>新密码：</span><input id="newPassword1" name="name" type="password" class="tool_text"
+                                                placeholder="请输入6到16位新密码" required maxlength="16" pattern="[\w]{6,16}"/>
                     </div>
                     <div class="info_resize_item">
-                        <span>确认新密码：</span><input name="name" type="password" class="tool_text" placeholder="请确认新密码" required  maxlength="16"/>
+                        <span>确认新密码：</span><input id="newPassword2" name="name" type="password" class="tool_text"
+                                                  placeholder="请确认新密码" required maxlength="16" pattern="[\w]{6,16}"/>
                     </div>
                     <div class="info_resize_item">
                         <input type="submit" value="确定" class="tool_btn tool_btn_Blue"/>
@@ -68,7 +71,28 @@
 <script src="js/main.js"></script>
 <script>
     $(function(){
-        fe.info.dataTableEvent();
+        $('#newPassword2').on('change', function () {
+            if ($(this).val() != $('#newPassword1').val()) {
+                $(this).get(0).setCustomValidity("两次输入的密码不匹配");
+            } else {
+                $(this).get(0).setCustomValidity("");
+            }
+        });
+        fe.app.remindBoxEvent();
+        var backInfo = {
+            success: true,
+            msg: ""
+        };
+        fe.tool.success(backInfo, function () {
+            $.tip({
+                content: "已成功修改密码"
+            });
+        }, function () {
+            $.remindBox({
+                remind: backInfo.msg || "修改密码失败"
+            });
+        });
+
     });
 </script>
 </body>

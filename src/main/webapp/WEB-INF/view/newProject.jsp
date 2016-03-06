@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="info_main_content">
-                <form action="projectSave" class="info_newProject_form" method="get">
+                <form action="projectSave" class="info_newProject_form" method="post">
                     <div class="info_newProject_item">
                         <span>项目名称：</span><input name="name" type="text" class="tool_text info_newProject_name" maxlength="255" required/>
                     </div>
@@ -64,7 +64,25 @@
 <script src="js/main.js"></script>
 <script>
     $(function(){
-        fe.info.dataTableEvent();
+        fe.app.confirmBoxEvent();
+        fe.app.remindBoxEvent();
+
+        var backInfo = {
+            success: true,
+            msg: ""
+        };
+        fe.tool.success(backInfo, function () {
+            $.confirmBox({
+                id: "info_newProject",
+                title: "创建成功",
+                confirm: "项目已创建成功,是否跳转到编辑页面"
+            });
+        }, function () {
+            $.remindBox({
+                remind: backInfo.msg || "项目创建失败"
+            });
+        });
+
     });
 </script>
 </body>
