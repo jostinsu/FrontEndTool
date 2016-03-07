@@ -106,7 +106,7 @@ fe.info.account = function () {
 		} else {
 			$('#remind').hide();
 			fe.tool.getJSON({
-				url: "data.json",
+				url: "updateNickname",
 				data: {'nickname': nickname},
 				success: function () {
 					btnWrap.hide();

@@ -30,8 +30,11 @@
     <div class="info_main_container">
         <nav class="info_main_nav">
             <ul class="info_main_nav_list">
-                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link" href="projectList.html"><i class="icon-reorder"></i>个人项目</a></li>
-                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link info_main_nav_list_item_link_Active" href="account.html"><i class=" icon-user"></i>账号信息</a></li>
+                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link" href="project"><i
+                        class="icon-reorder"></i>个人项目</a></li>
+                <li class="info_main_nav_list_item"><a
+                        class="info_main_nav_list_item_link info_main_nav_list_item_link_Active" href="userInfo"><i
+                        class=" icon-user"></i>账号信息</a></li>
             </ul>
         </nav>
         <div class="info_main_stage">
@@ -43,12 +46,12 @@
             <div class="info_main_content">
                 <div class="info_account_form">
                     <div class="info_account_item">
-                        <span>注册邮箱：</span><strong>491501792@qq.com</strong>
+                        <span>注册邮箱：</span><strong>${feUser.mail}</strong>
                     </div>
                     <div class="info_account_item">
                         <span>昵称：</span>
                         <div class="info_account_item_content">
-                            <strong id="oldNickname">苏健鑫</strong>
+                            <strong id="oldNickname">${feUser.nickname}</strong>
                             <input id="newNickname" type="text" class="tool_text" placeholder="请输入昵称" name="nickname"
                                    style="display: none;"/> <b id="remind" class="info_account_item_remind"
                                                                style="display: none;">请输入有效字符</b>
@@ -59,7 +62,7 @@
                         <span>密码：</span><strong class="info_account_item_password">********</strong> <a href="resetPassword.html" class="info_account_item_edit"><i class="icon-pencil tool_icon"></i></a>
                     </div>
                     <div class="info_account_item">
-                        <span>注册时间：</span><strong>2016-03-20</strong>
+                        <span>注册时间：</span><strong>${feUser.registerTime}</strong>
                     </div>
                     <div class="info_account_item info_account_item_Last">
                         <input id="submitBtn" type="button" class="tool_btn tool_btn_Blue" value="确定"/>

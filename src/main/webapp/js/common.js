@@ -133,6 +133,7 @@ fe.tool = {
 			url:"#",
 			data:null,
 			loading:false,
+			type: "post",
 			success:function(data){},
 			error:{}
 		},option||{});
@@ -191,8 +192,8 @@ fe.tool = {
 
 	//form 表单提交后返回的信息
 	success: function (obj, callbackForSuccess, callbackForFail) {
-		if (obj.success != undefined) {
-			if (obj.success) {
+		if (obj.success != "") {
+			if (!!obj.success) {
 				callbackForSuccess();
 			} else {
 				callbackForFail();

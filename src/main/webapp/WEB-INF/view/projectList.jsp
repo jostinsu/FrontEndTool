@@ -31,8 +31,11 @@
     <div class="info_main_container">
         <nav class="info_main_nav">
             <ul class="info_main_nav_list">
-                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link info_main_nav_list_item_link_Active" href="javascript:;"><i class="icon-reorder"></i>个人项目</a></li>
-                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link" href="account.html"><i class=" icon-user"></i>账号信息</a></li>
+                <li class="info_main_nav_list_item"><a
+                        class="info_main_nav_list_item_link info_main_nav_list_item_link_Active" href="project"><i
+                        class="icon-reorder"></i>个人项目</a></li>
+                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link" href="userInfo"><i
+                        class=" icon-user"></i>账号信息</a></li>
             </ul>
         </nav>
         <div class="info_main_stage">

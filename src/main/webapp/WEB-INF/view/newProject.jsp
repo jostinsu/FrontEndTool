@@ -30,21 +30,24 @@
     <div class="info_main_container">
         <nav class="info_main_nav">
             <ul class="info_main_nav_list">
-                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link info_main_nav_list_item_link_Active" href="newProject.html"><i class="icon-reorder"></i>个人项目</a></li>
-                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link" href="account.html"><i class="icon-user"></i>账号信息</a></li>
+                <li class="info_main_nav_list_item"><a
+                        class="info_main_nav_list_item_link info_main_nav_list_item_link_Active" href="project"><i
+                        class="icon-reorder"></i>个人项目</a></li>
+                <li class="info_main_nav_list_item"><a class="info_main_nav_list_item_link" href="userInfo"><i
+                        class="icon-user"></i>账号信息</a></li>
             </ul>
         </nav>
         <div class="info_main_stage">
             <div class="tool_header">
                 <div class="tool_header_left">
                     <div class="tool_header_title_back">
-                        <a href="projectList.html"><i class="icon-chevron-left"></i></a>
+                        <a href="project"><i class="icon-chevron-left"></i></a>
                     </div>
                     <h2 class="tool_header_title">新增项目</h2>
                 </div>
             </div>
             <div class="info_main_content">
-                <form action="projectSave" class="info_newProject_form" method="post">
+                <form action="newProject" class="info_newProject_form" method="post">
                     <div class="info_newProject_item">
                         <span>项目名称：</span><input name="name" type="text" class="tool_text info_newProject_name" maxlength="255" required/>
                     </div>
@@ -68,8 +71,8 @@
         fe.app.remindBoxEvent();
 
         var backInfo = {
-            success: true,
-            msg: ""
+            success: "${success}",
+            msg: "${msg}"
         };
         fe.tool.success(backInfo, function () {
             $.confirmBox({

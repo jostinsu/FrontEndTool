@@ -60,7 +60,9 @@ public class FeProjectServiceTest {
         project.setCreateTime(new Date());
         project.setRemark("remark_" + sdf.format(new Date()));
         project.setUser(new FeUser(1));
-        feProjectService.save(project);
+        FeProject tmp = feProjectService.save(project);
+        System.out.println(project.hashCode());
+        System.out.println(tmp.hashCode());
     }
 
     @Test

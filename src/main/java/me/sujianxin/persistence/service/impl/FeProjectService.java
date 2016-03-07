@@ -24,8 +24,8 @@ public class FeProjectService implements IFeProjectService {
     private FeProjectRepository feProjectRepository;
 
     @Override
-    public void save(FeProject feProject) {
-        feProjectRepository.save(feProject);
+    public FeProject save(FeProject feProject) {
+        return feProjectRepository.save(feProject);
     }
 
     @Override

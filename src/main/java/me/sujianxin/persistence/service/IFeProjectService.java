@@ -13,7 +13,7 @@ import java.util.Map;
  * <p>Version: 1.0
  */
 public interface IFeProjectService {
-    void save(FeProject feProject);
+    FeProject save(FeProject feProject);
 
     void updateById(FeProject feProject);
 

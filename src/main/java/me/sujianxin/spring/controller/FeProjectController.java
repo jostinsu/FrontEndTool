@@ -7,6 +7,7 @@ import me.sujianxin.spring.domain.FeProjectDomain;
 import me.sujianxin.spring.domain.FeProjectForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,19 +50,17 @@ public class FeProjectController {
         return "newProject";
     }
 
-    @RequestMapping(value = "projectSave", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, Object> projectPOST(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session) {
+    @RequestMapping(value = "newProject", method = RequestMethod.POST)
+    public String projectPOST(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session, Model model) {
         FeProject feProject = new FeProject();
         feProject.setRemark(feProjectDomain.getRemark());
         feProject.setName(feProjectDomain.getName());
         feProject.setCreateTime(new Date());
         feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
         feProjectService.save(feProject);
-        Map<String, Object> map = new HashMap<String, Object>(2);
-        map.put("success", true);
-        map.put("msg", "保存成功");
-        return map;
+        model.addAttribute("success", true);
+        model.addAttribute("msg", "保存成功");
+        return "redirect:newProject";
     }
 
     @RequestMapping(value = "projectDelete", method = RequestMethod.DELETE)
