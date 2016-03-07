@@ -192,11 +192,12 @@ fe.tool = {
 
 	//form 表单提交后返回的信息
 	success: function (obj, callbackForSuccess, callbackForFail) {
-		if (obj.success != "") {
-			if (!!obj.success) {
+		if (obj != "") {
+			var arr = obj.split('&');
+			if (arr[0].split('=')[1]) {
 				callbackForSuccess();
 			} else {
-				callbackForFail();
+				callbackForFail(arr[1].split('=')[1]);
 			}
 		}
 	}

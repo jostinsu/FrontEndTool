@@ -82,17 +82,14 @@
             }
         });
         fe.app.remindBoxEvent();
-        var backInfo = {
-            success: "${success}",
-            msg: "${msg}"
-        };
-        fe.tool.success(backInfo, function () {
+
+        fe.tool.success(window.location.search, function () {
             $.tip({
                 content: "已成功修改密码"
             });
-        }, function () {
+        }, function (msg) {
             $.remindBox({
-                remind: backInfo.msg || "修改密码失败"
+                remind: msg || "修改密码失败"
             });
         });
 

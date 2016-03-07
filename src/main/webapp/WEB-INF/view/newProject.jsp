@@ -70,19 +70,15 @@
         fe.app.confirmBoxEvent();
         fe.app.remindBoxEvent();
 
-        var backInfo = {
-            success: "${success}",
-            msg: "${msg}"
-        };
-        fe.tool.success(backInfo, function () {
+        fe.tool.success(window.location.search, function () {
             $.confirmBox({
                 id: "info_newProject",
                 title: "创建成功",
                 confirm: "项目已创建成功,是否跳转到编辑页面"
             });
-        }, function () {
+        }, function (msg) {
             $.remindBox({
-                remind: backInfo.msg || "项目创建失败"
+                remind: msg || "项目创建失败"
             });
         });
 
