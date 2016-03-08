@@ -49,15 +49,17 @@
             <div class="info_main_content">
                 <form action="updatePassword" class="info_resize_form" id="info_resize_form" method="post">
                     <div class="info_resize_item">
-                        <span>原密码：</span><input name="name" type="password" class="tool_text" required maxlength="16"
+                        <span>原密码：</span><input name="password" type="password" class="tool_text" required
+                                                maxlength="16"
                                                 pattern="[\w]{6,16}"/>
                     </div>
                     <div class="info_resize_item">
-                        <span>新密码：</span><input id="newPassword1" name="name" type="password" class="tool_text"
+                        <span>新密码：</span><input id="newPassword1" name="newPassword1" type="password" class="tool_text"
                                                 placeholder="请输入6到16位新密码" required maxlength="16" pattern="[\w]{6,16}"/>
                     </div>
                     <div class="info_resize_item">
-                        <span>确认新密码：</span><input id="newPassword2" name="name" type="password" class="tool_text"
+                        <span>确认新密码：</span><input id="newPassword2" name="newPassword2" type="password"
+                                                  class="tool_text"
                                                   placeholder="请确认新密码" required maxlength="16" pattern="[\w]{6,16}"/>
                     </div>
                     <div class="info_resize_item">

@@ -2,6 +2,7 @@ package me.sujianxin.persistence.repository;
 
 import me.sujianxin.persistence.model.FeUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Repository;
  * <p>Version: 1.0
  */
 @Repository
-public interface FeUserRepository extends JpaRepository<FeUser, Integer> {
-    @Query("select f.id,f.mail,f.nickname from FeUser f where f.mail=:account and f.password=:password")
+public interface FeUserRepository extends JpaRepository<FeUser, Integer>, JpaSpecificationExecutor<FeUser> {
+    @Query("select f.id,f.nickname,f.mail,f.password from FeUser f where f.mail=:account and f.password=:password")
     Object[] login(@Param("account") String account, @Param("password") String password);
 
     @Query("update FeUser f set f.nickname=:nickname where f.id=:id")
@@ -26,4 +27,7 @@ public interface FeUserRepository extends JpaRepository<FeUser, Integer> {
     @Query("update FeUser f set f.password=:password where f.id=:id")
     @Modifying
     int updatePassword(@Param("id") int id, @Param("password") String password);
+
+    @Query("select count(*) from FeUser f where f.mail=:mail")
+    int existMail(@Param("mail") String mail);
 }

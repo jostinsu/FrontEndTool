@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -34,18 +37,45 @@ public class FeUserController {
     }
 
 
+    @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
+    public String updatePassword(String password, String newPassword1, String newPassword2, HttpSession session, Model model) {
+        boolean check;
+        int tmp = 0;
+        boolean isSame = !isNullOrEmpty(newPassword1) && !isNullOrEmpty(newPassword2) && newPassword1.equals(newPassword2);
+        if (check = !isNullOrEmpty(password)) {
+            int id = Integer.valueOf(String.valueOf(session.getAttribute("userId")));
+            FeUser feUser = feUserService.findOne(id);
+            if (null != feUser && feUser.getPassword().equals(password) && isSame) {
+                tmp = feUserService.updatePassword(id, newPassword1);
+            }
+        }
+        model.addAttribute("success", check && 1 == tmp ? true : false);
+        model.addAttribute("msg", check && 1 == tmp ? "成功修改密码" : "修改密码失败");
+        return "redirect:resetPassword";
+    }
+
+    @RequestMapping(value = "userInfo", method = RequestMethod.GET)
+    public String findOne(HttpSession session, Model model) {
+        model.addAttribute("feUser", feUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
+        return "account";
+    }
+
     @RequestMapping(value = "register", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> save(@ModelAttribute FeUser feUser, HttpSession session) {
         Map<String, Object> map = new HashMap<>(2);
-        feUserService.save(feUser);
-        map.put("success", true);
-        map.put("msg", "成功注册用户");
+        boolean tmp = feUserService.existMail(feUser.getMail());
+        if (!tmp) {
+            feUser.setRegisterTime(new Date());
+            feUserService.save(feUser);
+        }
+        map.put("success", !tmp ? true : false);
+        map.put("msg", !tmp ? "成功注册用户" : "该邮箱已经被注册");
         return map;
     }
 
-    @RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
-    @ResponseBody
+    //@RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
+    //@ResponseBody
     public Map<String, Object> deleteById(int id) {
         Map<String, Object> map = new HashMap<>(2);
         feUserService.deleteById(id);
@@ -58,48 +88,49 @@ public class FeUserController {
     @ResponseBody
     public Map<String, Object> updateNickname(String nickname, HttpSession session) {
         Map<String, Object> map = new HashMap<>(2);
-        int tmp = feUserService.updateNickname(Integer.valueOf(String.valueOf(session.getAttribute("userId"))), nickname);
-        map.put("success", 1 == tmp ? true : false);
-        map.put("msg", 1 == tmp ? "成功修改昵称" : "修改昵称失败");
+        int tmp = 0;
+        boolean b;
+        if (b = !isNullOrEmpty(nickname)) {
+            tmp = feUserService.updateNickname(1, nickname);
+        }
+        map.put("success", 1 == tmp && b ? true : false);
+        map.put("msg", 1 == tmp && b ? "成功修改昵称" : "修改昵称失败");
         return map;
-    }
-
-    @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
-    public String updatePassword(String password, HttpSession session, Model model) {
-        Map<String, Object> map = new HashMap<>(2);
-        int tmp = feUserService.updatePassword(Integer.valueOf(String.valueOf(session.getAttribute("userId"))), password);
-        map.put("success", true);
-        model.addAttribute("success", true);
-        model.addAttribute("msg", "成功修改密码");
-        map.put("msg", "成功修改密码");
-        return "resetPassword";
-    }
-
-    @RequestMapping(value = "userInfo", method = RequestMethod.GET)
-    public String findOne(HttpSession session, Model model) {
-        model.addAttribute("feUser", feUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
-        return "account";
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> login(String name, String password) {
+    public Map<String, Object> login(String name, String password, HttpSession session, Model model) {
         Map<String, Object> map = new HashMap<>(3);
-        Object[] tmp = feUserService.login(name, password);
-        if (tmp.length > 0) {
-            map.put("success", true);
-            map.put("msg", "登录成功");
-            map.put("data", tmp);
-
-        } else {
-            map.put("success", false);
-            map.put("msg", "请检测账号/密码是否正确");
+        boolean validate = !isNullOrEmpty(name) && !isNullOrEmpty(password);
+        Object[] tmp = {};
+        if (validate) {
+            tmp = feUserService.login(name, password);
+            boolean b;
+            if (b = tmp.length > 0) {
+                session.setAttribute("userid", tmp[0]);//f.id,f.nickname,f.mail,f.password
+                session.setAttribute("nickname", tmp[1]);
+                model.addAttribute("userid", tmp[0]);
+                model.addAttribute("nickname", tmp[1]);
+            }
+            map.put("success", b ? true : false);
+            map.put("msg", b ? "登录成功" : "请检测账号/密码是否正确");
         }
         return map;
     }
 
-    @RequestMapping(value = "userAll", method = RequestMethod.GET)
-    @ResponseBody
+    //@RequestMapping(value = "existMail", method = RequestMethod.POST)
+    //@ResponseBody
+    public Map<String, Object> existMail(String mail) {
+        Map<String, Object> map = new HashMap<>(5);
+        boolean tmp = feUserService.existMail(mail);
+        map.put("success", tmp ? false : true);
+        map.put("msg", tmp ? "该邮箱已经被注册" : "邮箱可用");
+        return map;
+    }
+
+    //@RequestMapping(value = "userAll", method = RequestMethod.GET)
+    //@ResponseBody
     public Map<String, Object> findAll(int page, int pageSize) {
         Map<String, Object> map = new HashMap<>(5);
         map.put("success", true);

@@ -27,4 +27,8 @@ public interface IFeUserService {
     Page<FeUser> findAll(Pageable pageable);
 
     long count();
+
+    boolean existMail(String mail);
+
+    Page<FeUser> findBySpecification(String nickname, String password);
 }

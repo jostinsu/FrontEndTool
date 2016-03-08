@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * <p>Created with IDEA
  * <p>Author: laudukang
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Service;
  * <p>Time: 23:04
  * <p>Version: 1.0
  */
-@Service
+@Service("feTreeService")
+@Transactional
 public class FeTreeService implements IFeTreeService {
     @Override
     public void save(FeTree feTree) {

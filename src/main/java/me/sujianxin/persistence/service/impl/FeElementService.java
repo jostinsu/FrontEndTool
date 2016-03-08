@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * <p>Created with IDEA
  * <p>Author: laudukang
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Service;
  * <p>Time: 23:04
  * <p>Version: 1.0
  */
-@Service
+@Service("feElementService")
+@Transactional
 public class FeElementService implements IFeElementService {
     @Override
     public void save(FeElement feElement) {

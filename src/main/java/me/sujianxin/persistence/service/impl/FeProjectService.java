@@ -18,17 +18,18 @@ import java.util.Map;
  * <p>Version: 1.0
  */
 @Service("feProjectService")
-@Transactional
 public class FeProjectService implements IFeProjectService {
     @Autowired
     private FeProjectRepository feProjectRepository;
 
     @Override
+    @Transactional
     public FeProject save(FeProject feProject) {
         return feProjectRepository.save(feProject);
     }
 
     @Override
+    @Transactional
     public void updateById(FeProject feProject) {
         FeProject tmp = feProjectRepository.findOne(feProject.getId());
         if (null != tmp) {
@@ -39,6 +40,7 @@ public class FeProjectService implements IFeProjectService {
     }
 
     @Override
+    @Transactional
     public void deleteById(int id) {
         feProjectRepository.delete(id);
     }
