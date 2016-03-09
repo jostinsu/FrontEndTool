@@ -55,7 +55,7 @@ public class FeTreeController {
             feTree.setTree(new FeTree(feTreeDomain.getParentid()));
         }
         feTreeService.updateById(feTree);
-        return MapUtil.updateMap;
+        return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "tree/{id}", method = RequestMethod.GET)

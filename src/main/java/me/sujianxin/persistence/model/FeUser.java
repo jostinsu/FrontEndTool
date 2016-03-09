@@ -25,6 +25,8 @@ public class FeUser implements Serializable {
 
     private String password;
 
+    private String status;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "register_time")
     private Date registerTime;
@@ -79,6 +81,14 @@ public class FeUser implements Serializable {
 
     public void setRegisterTime(Date registerTime) {
         this.registerTime = registerTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<FeProject> getProjects() {

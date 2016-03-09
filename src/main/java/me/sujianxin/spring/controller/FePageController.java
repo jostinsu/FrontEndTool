@@ -54,7 +54,7 @@ public class FePageController {
         fePage.setStyle(fePageDomain.getStyle());
         fePage.setTree(new FeTree(fePageDomain.getTreeid()));
         fePageService.updateById(fePage);
-        return MapUtil.updateMap;
+        return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "page/{id}", method = RequestMethod.GET)

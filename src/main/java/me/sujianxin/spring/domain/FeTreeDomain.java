@@ -1,5 +1,8 @@
 package me.sujianxin.spring.domain;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * <p>Created with IDEA
  * <p>Author: laudukang
@@ -58,4 +61,10 @@ public class FeTreeDomain {
     public void setParentid(int parentid) {
         this.parentid = parentid;
     }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, true);
+    }
+
 }

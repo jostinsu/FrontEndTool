@@ -78,7 +78,6 @@ public class FeUserController {
     //@RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
     //@ResponseBody
     public Map<String, Object> deleteById(int id) {
-        Map<String, Object> map = new HashMap<>(2);
         feUserService.deleteById(id);
         return MapUtil.deleteMap();
     }
@@ -98,24 +97,23 @@ public class FeUserController {
     }
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, Object> login(String name, String password, HttpSession session, Model model) {
-        Map<String, Object> map = new HashMap<>(3);
+    public String login(String name, String password, HttpSession session, Model model) {
         boolean validate = !isNullOrEmpty(name) && !isNullOrEmpty(password);
         Object[] tmp = {};
+        boolean b = false;
         if (validate) {
             tmp = feUserService.login(name, password);
-            boolean b;
             if (b = tmp.length > 0) {
                 session.setAttribute("userid", tmp[0]);//f.id,f.nickname,f.mail,f.password
                 session.setAttribute("nickname", tmp[1]);
                 model.addAttribute("userid", tmp[0]);
                 model.addAttribute("nickname", tmp[1]);
+                return "redirect:";
             }
-            map.put("success", b ? true : false);
-            map.put("msg", b ? "登录成功" : "请检测账号/密码是否正确");
         }
-        return map;
+        model.addAttribute("success", validate && b ? true : false);
+        model.addAttribute("msg", validate && b ? "" : "请检测账号/密码是否正确");
+        return "redirect:";
     }
 
     //@RequestMapping(value = "existMail", method = RequestMethod.POST)

@@ -41,7 +41,7 @@ public class FeElementController {
     public Map<String, Object> update(@ModelAttribute FeElement feElement, int typeid) {
         feElement.setType(new FeType(typeid));
         feElementService.updateById(feElement);
-        return MapUtil.updateMap;
+        return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "element/{id}", method = RequestMethod.GET)

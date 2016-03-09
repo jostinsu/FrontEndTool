@@ -40,7 +40,7 @@ public class FeTypeController {
     @ResponseBody
     public Map<String, Object> update(@ModelAttribute FeType feType) {
         feTypeService.updateById(feType);
-        return MapUtil.updateMap;
+        return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "type/{id}", method = RequestMethod.GET)

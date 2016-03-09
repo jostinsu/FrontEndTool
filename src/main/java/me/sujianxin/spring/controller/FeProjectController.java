@@ -41,7 +41,7 @@ public class FeProjectController {
         Map<String, Object> map = new HashMap<String, Object>(3);
         Map<String, Object> result = feProjectService.findAll(feProjectForm);
         map.put("data", result.get("data"));
-        map.put("iTotalRecords", result.get("count"));
+        map.put("iTotalRecords", feProjectService.count());//result.get("count")
         map.put("iTotalDisplayRecords", result.get("count"));
         return map;
     }
