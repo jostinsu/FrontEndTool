@@ -1,8 +1,8 @@
 package me.sujianxin.persistence.service;
 
 import me.sujianxin.persistence.model.FeType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * <p>Created with IDEA
@@ -20,7 +20,7 @@ public interface IFeTypeService {
 
     FeType findOne(int id);
 
-    Page<FeType> findAll(Pageable pageable);
+    List<FeType> findAll();
 
     long count();
 }

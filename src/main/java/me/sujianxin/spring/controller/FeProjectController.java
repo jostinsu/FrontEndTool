@@ -5,6 +5,7 @@ import me.sujianxin.persistence.model.FeUser;
 import me.sujianxin.persistence.service.IFeProjectService;
 import me.sujianxin.spring.domain.FeProjectDomain;
 import me.sujianxin.spring.domain.FeProjectForm;
+import me.sujianxin.spring.util.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,12 +66,22 @@ public class FeProjectController {
 
     @RequestMapping(value = "projectDelete", method = RequestMethod.DELETE)
     @ResponseBody
-    public Map<String, Object> projectDELETE(int id, HttpSession session) {
+    public Map<String, Object> projectDelete(@RequestParam("id") int id, HttpSession session) {
         feProjectService.deleteById(id);
-        Map<String, Object> map = new HashMap<String, Object>(2);
-        map.put("success", true);
-        map.put("msg", "删除成功");
-        return map;
+        return MapUtil.deleteMap();
+    }
+
+    @RequestMapping(value = "updateProject", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> update(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session) {
+        FeProject feProject = new FeProject();
+        feProject.setId(feProjectDomain.getId());
+        feProject.setRemark(feProjectDomain.getRemark());
+        feProject.setName(feProjectDomain.getName());
+        feProject.setCreateTime(new Date());
+        feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
+        feProjectService.updateById(feProject);
+        return MapUtil.updateMap();
     }
 
 

@@ -1,12 +1,13 @@
 package me.sujianxin.persistence.service.impl;
 
 import me.sujianxin.persistence.model.FeType;
+import me.sujianxin.persistence.repository.FeTypeRepository;
 import me.sujianxin.persistence.service.IFeTypeService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * <p>Created with IDEA
@@ -18,33 +19,40 @@ import javax.transaction.Transactional;
 @Service("feTypeService")
 @Transactional
 public class FeTypeService implements IFeTypeService {
+    @Autowired
+    private FeTypeRepository feTypeRepository;
+
     @Override
     public void save(FeType feType) {
-
+        feTypeRepository.save(feType);
     }
 
     @Override
     public void deleteById(int id) {
-
+        feTypeRepository.delete(id);
     }
 
     @Override
     public void updateById(FeType feType) {
-
+        FeType tmp = feTypeRepository.findOne(feType.getId());
+        if (null != tmp) {
+            tmp.setName(feType.getName());
+            feTypeRepository.save(tmp);
+        }
     }
 
     @Override
     public FeType findOne(int id) {
-        return null;
+        return feTypeRepository.findOne(id);
     }
 
     @Override
-    public Page<FeType> findAll(Pageable pageable) {
-        return null;
+    public List<FeType> findAll() {
+        return feTypeRepository.findAll();
     }
 
     @Override
     public long count() {
-        return 0;
+        return feTypeRepository.count();
     }
 }

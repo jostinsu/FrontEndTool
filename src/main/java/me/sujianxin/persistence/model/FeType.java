@@ -7,63 +7,66 @@ import java.util.List;
 
 /**
  * The persistent class for the type database table.
- * 
  */
 @Entity
-@Table(name="type")
-@NamedQuery(name="FeType.findAll", query="SELECT f FROM FeType f")
+@Table(name = "type")
+@NamedQuery(name = "FeType.findAll", query = "SELECT f FROM FeType f")
 public class FeType implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-	private String name;
+    private String name;
 
-	//bi-directional many-to-one association to FeElement
-	@OneToMany(mappedBy="type")
-	private List<FeElement> elements;
+    //bi-directional many-to-one association to FeElement
+    @OneToMany(mappedBy = "type")
+    private List<FeElement> elements;
 
-	public FeType() {
-	}
+    public FeType(int id) {
+        this.id = id;
+    }
 
-	public int getId() {
-		return this.id;
-	}
+    public FeType() {
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public int getId() {
+        return this.id;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public List<FeElement> getElements() {
-		return this.elements;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setElements(List<FeElement> elements) {
-		this.elements = elements;
-	}
+    public List<FeElement> getElements() {
+        return this.elements;
+    }
 
-	public FeElement addElement(FeElement element) {
-		getElements().add(element);
-		element.setType(this);
+    public void setElements(List<FeElement> elements) {
+        this.elements = elements;
+    }
 
-		return element;
-	}
+    public FeElement addElement(FeElement element) {
+        getElements().add(element);
+        element.setType(this);
 
-	public FeElement removeElement(FeElement element) {
-		getElements().remove(element);
-		element.setType(null);
+        return element;
+    }
 
-		return element;
-	}
+    public FeElement removeElement(FeElement element) {
+        getElements().remove(element);
+        element.setType(null);
+
+        return element;
+    }
 
 }

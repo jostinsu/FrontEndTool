@@ -1,7 +1,9 @@
 package me.sujianxin.persistence.service.impl;
 
 import me.sujianxin.persistence.model.FePage;
+import me.sujianxin.persistence.repository.FePageRepository;
 import me.sujianxin.persistence.service.IFePageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,33 +20,42 @@ import javax.transaction.Transactional;
 @Service("fePageService")
 @Transactional
 public class FePageService implements IFePageService {
+    @Autowired
+    private FePageRepository fePageRepository;
+
     @Override
     public void save(FePage fePage) {
-
+        fePageRepository.save(fePage);
     }
 
     @Override
     public void deleteById(int id) {
-
+        fePageRepository.delete(id);
     }
 
     @Override
     public void updateById(FePage fePage) {
-
+        FePage tmp = fePageRepository.findOne(fePage.getId());
+        if (null != tmp) {
+            tmp.setCode(fePage.getCode());
+            tmp.setStyle(fePage.getStyle());
+            tmp.setTree(fePage.getTree());
+            fePageRepository.save(tmp);
+        }
     }
 
     @Override
     public FePage findOne(int id) {
-        return null;
+        return fePageRepository.findOne(id);
     }
 
     @Override
     public Page<FePage> findAll(Pageable pageable) {
-        return null;
+        return fePageRepository.findAll(pageable);
     }
 
     @Override
     public long count() {
-        return 0;
+        return fePageRepository.count();
     }
 }

@@ -14,9 +14,9 @@ import org.springframework.data.domain.Pageable;
 public interface IFeStyleService {
     void save(FeStyle feStyle);
 
-    void deleteById();
+    void deleteById(int id);
 
-    void updateById(FeStyle feStyle);
+    int updateById(int id, String code);
 
     FeStyle findOne(int id);
 

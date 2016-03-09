@@ -45,6 +45,10 @@ public class FeProject implements Serializable {
     public FeProject() {
     }
 
+    public FeProject(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return this.id;
     }

@@ -2,6 +2,9 @@ package me.sujianxin.persistence.repository;
 
 import me.sujianxin.persistence.model.FeStyle;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +16,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FeStyleRepository extends JpaRepository<FeStyle, Integer> {
+
+    @Query("update FeStyle f set f.code=:code where f.id=:id")
+    @Modifying
+    int updateById(@Param("id") int id, @Param("code") String code);
 }

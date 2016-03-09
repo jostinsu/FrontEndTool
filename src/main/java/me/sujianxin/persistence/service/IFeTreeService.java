@@ -1,8 +1,8 @@
 package me.sujianxin.persistence.service;
 
 import me.sujianxin.persistence.model.FeTree;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * <p>Created with IDEA
@@ -20,7 +20,7 @@ public interface IFeTreeService {
 
     FeTree findOne(int id);
 
-    Page<FeTree> findAll(Pageable pageable);
+    List<FeTree> findAll();
 
     long count();
 }

@@ -2,6 +2,7 @@ package me.sujianxin.spring.controller;
 
 import me.sujianxin.persistence.model.FeUser;
 import me.sujianxin.persistence.service.IFeUserService;
+import me.sujianxin.spring.util.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -79,9 +80,7 @@ public class FeUserController {
     public Map<String, Object> deleteById(int id) {
         Map<String, Object> map = new HashMap<>(2);
         feUserService.deleteById(id);
-        map.put("success", true);
-        map.put("msg", "成功删除用户");
-        return map;
+        return MapUtil.deleteMap();
     }
 
     @RequestMapping(value = "updateNickname", method = RequestMethod.POST)

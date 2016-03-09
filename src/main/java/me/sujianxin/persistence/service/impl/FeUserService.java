@@ -54,7 +54,6 @@ public class FeUserService implements IFeUserService {
     @Transactional
     public int updatePassword(int id, String password) {
         return feUserRepository.updatePassword(id, password);
-
     }
 
     @Override
