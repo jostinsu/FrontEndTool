@@ -96,9 +96,9 @@
         });
 
         $('#info_resize_form').on('submit', function () {
-            $('#password').val($.md5($(this).val()));
-            $('#newPassword1').val($.md5($(this).val()));
-            $('#newPassword2').val($.md5($(this).val()));
+            $('#password').val($.md5($('#password').val()));
+            $('#newPassword1').val($.md5($('#newPassword1').val()));
+            $('#newPassword2').val($.md5($('#newPassword2').val()));
         });
 
         fe.app.remindBoxEvent();

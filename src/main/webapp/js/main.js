@@ -112,7 +112,8 @@ fe.user.login = function () {
 	});
 
 	$('.login').on('submit', function () {
-		$(this).find('input[name="password"]').val($.md5($(this).val()));
+		var password = $(this).find('input[name="password"]').val();
+		$(this).find('input[name="password"]').val($.md5(password));
 	});
 };
 
@@ -131,8 +132,8 @@ fe.user.register = function () {
 	});
 
 	$('.register').on('submit', function () {
-		$('#password1').val($.md5($(this).val()));
-		$('#password2').val($.md5($(this).val()));
+		$('#password1').val($.md5($('#password1').val()));
+		$('#password2').val($.md5($('#password2').val()));
 	});
 };
 

@@ -257,11 +257,11 @@ button.tool_btn, input.tool_btn {
   right: 0;
   top: 50px;
   text-align: center;
-  -webkit-animation: disappear 1s linear 2s forwards;
-  animation: disappear 1s linear 2s forwards;
 }
 
 .tool_tip_content {
+  position: relative;
+  top: 20px;
   display: inline-block;
   height: 30px;
   background-color: #ff9900;
@@ -269,6 +269,8 @@ button.tool_btn, input.tool_btn {
   line-height: 30px;
   font-size: 14px;
   padding: 0 10px;
+  -webkit-animation: disappear 1s linear 2s forwards;
+  animation: disappear 1s linear 2s forwards;
 }
 
 @-webkit-keyframes disappear {
@@ -625,7 +627,6 @@ button.tool_btn, input.tool_btn {
 .login_item:nth-child(3) {
   margin-bottom: 30px;
 }
-
 .login_item:nth-child(4) {
   margin-bottom: 10px;
 }
@@ -705,21 +706,17 @@ button.tool_btn, input.tool_btn {
   margin-bottom: 15px;
   overflow: hidden;
 }
-
 .forgivePassword_item:nth-child(2) {
   margin-bottom: 10px;
 }
-
 .forgivePassword_item:nth-child(4) {
   margin-bottom: 10px;
 }
-
 .forgivePassword_item .forgivePassword_title {
   float: left;
   font-weight: normal;
   font-size: 18px;
 }
-
 .forgivePassword_item .icon-circle-arrow-right {
   float: right;
   font-size: 24px;
@@ -731,7 +728,6 @@ button.tool_btn, input.tool_btn {
   color: #357FB8;
   cursor: pointer;
 }
-
 .forgivePassword_item .tool_text {
   width: 214px;
   padding-left: 36px;
