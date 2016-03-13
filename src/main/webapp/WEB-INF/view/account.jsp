@@ -59,7 +59,9 @@
                         </div>
                     </div>
                     <div class="info_account_item">
-                        <span>密码：</span><strong class="info_account_item_password">********</strong> <a href="resetPassword.html" class="info_account_item_edit"><i class="icon-pencil tool_icon"></i></a>
+                        <span>密码：</span><strong class="info_account_item_password">********</strong> <a
+                            href="updatePassword" class="info_account_item_edit"><i
+                            class="icon-pencil tool_icon"></i></a>
                     </div>
                     <div class="info_account_item">
                         <span>注册时间：</span><strong>${feUser.registerTime}</strong>

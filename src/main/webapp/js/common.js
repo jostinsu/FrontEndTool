@@ -132,6 +132,7 @@ fe.tool = {
 			async:true,
 			url:"#",
 			data:null,
+			type: "post",
 			loading:false,
 			success:function(data){},
 			error:{}
@@ -152,7 +153,7 @@ fe.tool = {
 					$('.com-loadCover').hide();
 				}
 				if(data.success){
-					setting.success(data.data);
+					setting.success(data);
 				}else{
 					setting.error.remind = data.msg;
 					$.remindBox(setting.error);

@@ -49,7 +49,7 @@
             <div class="info_main_content">
                 <form action="updatePassword" class="info_resize_form" id="info_resize_form" method="post">
                     <div class="info_resize_item">
-                        <span>原密码：</span><input name="password" type="password" class="tool_text" required
+                        <span>原密码：</span><input name="password" type="password" id="password" class="tool_text" required
                                                 maxlength="16"
                                                 pattern="[\w]{6,16}"/>
                     </div>
@@ -72,6 +72,7 @@
     </div>
 </div>
 <script src="js/jquery.js"></script>
+<script src="js/jQuery.md5.js"></script>
 <script src="js/common.js"></script>
 <script src="js/main.js"></script>
 <script>
@@ -83,7 +84,6 @@
                 $(this).get(0).setCustomValidity("");
             }
         });
-        fe.app.remindBoxEvent();
 
         fe.tool.success(window.location.search, function () {
             $.tip({
@@ -95,6 +95,13 @@
             });
         });
 
+        $('#info_resize_form').on('submit', function () {
+            $('#password').val($.md5($(this).val()));
+            $('#newPassword1').val($.md5($(this).val()));
+            $('#newPassword2').val($.md5($(this).val()));
+        });
+
+        fe.app.remindBoxEvent();
     });
 </script>
 </body>

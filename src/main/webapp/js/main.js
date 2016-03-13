@@ -82,16 +82,14 @@ fe.info.account = function () {
 		} else {
 			$('#remind').hide();
 			fe.tool.getJSON({
-				url: "data.json",
+				url: "updateNickname",
 				data: {'nickname': nickname},
-				success: function () {
+				success: function (res) {
 					btnWrap.hide();
 					newNicknameInput.hide();
 					oldNicknameText.html(nickname).show();
 					editNicknameBtn.show();
-				},
-				error: {
-					"remind": "修改昵称失败！"
+					$.tip({"content": res.msg});
 				}
 			});
 		}
