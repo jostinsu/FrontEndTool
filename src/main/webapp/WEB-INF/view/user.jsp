@@ -109,11 +109,11 @@
             case 'register':
                 $('.user_container').addClass('turnRight');
                 break;
-                fe.user.login();
-                fe.user.register();
-                fe.user.forgivePassword();
         }
-        );
+        fe.user.login();
+        fe.user.register();
+        fe.user.forgivePassword();
+    });
 </script>
 </body>
 </html>
