@@ -76,7 +76,7 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
             }
         }
 
-        query.setFirstResult(feProjectForm.getPage() - 1);//前端页面计数从1开始
+        query.setFirstResult((feProjectForm.getPage() - 1) * feProjectForm.getPageSize());//前端页面计数从1开始
         query.setMaxResults(feProjectForm.getPageSize());
         map.put("data", query.getResultList());
         map.put("count", queryCount.getSingleResult());
