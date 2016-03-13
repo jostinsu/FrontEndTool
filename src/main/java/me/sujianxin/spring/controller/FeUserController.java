@@ -37,6 +37,10 @@ public class FeUserController {
         return "login";
     }
 
+    @RequestMapping(value = "updatePassword", method = RequestMethod.GET)
+    public String updatePassword() {
+        return "updatePassword";
+    }
 
     @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
     public String updatePassword(String password, String newPassword1, String newPassword2, HttpSession session, Model model) {
@@ -44,7 +48,7 @@ public class FeUserController {
         int tmp = 0;
         boolean isSame = !isNullOrEmpty(newPassword1) && !isNullOrEmpty(newPassword2) && newPassword1.equals(newPassword2);
         if (check = !isNullOrEmpty(password)) {
-            int id = Integer.valueOf(String.valueOf(session.getAttribute("userId")));
+            int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
             FeUser feUser = feUserService.findOne(id);
             if (null != feUser && feUser.getPassword().equals(password) && isSame) {
                 tmp = feUserService.updatePassword(id, newPassword1);
@@ -52,12 +56,12 @@ public class FeUserController {
         }
         model.addAttribute("success", check && 1 == tmp ? true : false);
         model.addAttribute("msg", check && 1 == tmp ? "成功修改密码" : "修改密码失败");
-        return "redirect:resetPassword";
+        return "redirect:updatePassword";
     }
 
     @RequestMapping(value = "userInfo", method = RequestMethod.GET)
     public String findOne(HttpSession session, Model model) {
-        model.addAttribute("feUser", feUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
+        model.addAttribute("feUser", feUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
         return "account";
     }
 
@@ -143,7 +147,8 @@ public class FeUserController {
     @InitBinder
     protected void initBinder(HttpServletRequest request,
                               ServletRequestDataBinder binder) throws Exception {
-        request.getSession().setAttribute("userId", 1);
+        System.out.println("in FeUserController initBinder");
+        request.getSession().setAttribute("userid", 1);
     }
 
 }

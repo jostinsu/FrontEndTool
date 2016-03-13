@@ -57,7 +57,7 @@ public class FeProjectController {
         feProject.setRemark(feProjectDomain.getRemark());
         feProject.setName(feProjectDomain.getName());
         feProject.setCreateTime(new Date());
-        feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
+        feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
         feProjectService.save(feProject);
         model.addAttribute("success", true);
         model.addAttribute("msg", "保存成功");
@@ -79,7 +79,7 @@ public class FeProjectController {
         feProject.setRemark(feProjectDomain.getRemark());
         feProject.setName(feProjectDomain.getName());
         feProject.setCreateTime(new Date());
-        feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userId")))));
+        feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
         feProjectService.updateById(feProject);
         return MapUtil.updateMap();
     }
@@ -88,7 +88,9 @@ public class FeProjectController {
     @InitBinder
     protected void initBinder(HttpServletRequest request,
                               ServletRequestDataBinder binder) throws Exception {
-        request.getSession().setAttribute("userId", 1);
+        System.out.println("in FeProjectController initBinder");
+
+        request.getSession().setAttribute("userid", 1);
     }
 
 }
