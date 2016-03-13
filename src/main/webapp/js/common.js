@@ -133,7 +133,6 @@ fe.tool = {
 			url:"#",
 			data:null,
 			loading:false,
-			type: "post",
 			success:function(data){},
 			error:{}
 		},option||{});
@@ -180,28 +179,40 @@ fe.tool = {
 
 	/*序列化函数*/
 	serialize :function(form,data){
+		var obj = data || {};
 		$(form).find('[name]').each(function(){
-			data[this.name] = $(this).val();
+			obj[this.name] = $(this).val();
 		});
-		return data;
+		return obj;
 	},
 
+	//获取url中的参数
+	search: function (str) {
+		var obj = {}
+		var arr = str.slice(1).split('&');
+		for (var i = 0, len = arr.length; i < len; i++) {
+			var arr1 = arr[i].split("=");
+			obj[arr1[0]] = arr1[1];
+		}
+		return obj;
+	},
+
+	//格式化时间
 	formatTime:function(date){
 		return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 	},
 
 	//form 表单提交后返回的信息
-	success: function (obj, callbackForSuccess, callbackForFail) {
-		if (obj != "") {
-			var arr = obj.split('&');
-			if (arr[0].split('=')[1]) {
+	success: function (str, callbackForSuccess, callbackForFail) {
+		if (str != "") {
+			var obj = fe.tool.search(str);
+			if (obj.success) {
 				callbackForSuccess();
 			} else {
-				callbackForFail(arr[1].split('=')[1]);
+				callbackForFail(obj.msg);
 			}
 		}
 	}
-
 }
 
 /*--------------------------------项目中的公共运用函数------------------------------*/

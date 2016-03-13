@@ -28,30 +28,6 @@ fe.info.dataTableEvent = function(){
 		}
 	}
 
-
-	//$('#dep-add-btn').on('click',function(){
-	//	$(this).css('background','#ff9900');
-	//	$('#dep-addBox-cover').show();
-	//	$('#dep-addBox-cover [type="date"]').val(hr.tool.formatTime(new Date()));
-	//	hr.tool.getJSON({
-	//		url:oUrl.OG.depNameForSelect.url,
-	//		success:function(data){
-	//			var aHtml = hr.tool.getOptionsOfSelect(data);
-	//			$('#dep-addBox-depSelect').html(aHtml.join(''));
-	//		},
-	//		error:{
-	//			remind:'获取上级部门下拉框数据失败!'
-	//		}
-	//	});
-	//});
-	//
-	//fe.info.dataTable.delegate('.icon-edit','click',function(){
-	//	$(this).addClass('com-active-icon');
-	//	$('#dep-editBox-cover').show();
-	//	fe.info.beforeEdit($(this).data('rowIndex'));
-	//});
-	//
-
 	fe.info.dataTable.delegate('.icon-trash', 'click', function () {
 		var id = $(this).data('id');
 		$.confirmBox({
@@ -63,6 +39,7 @@ fe.info.dataTableEvent = function(){
 
 }
 
+//删除项目
 fe.info.deleteProject = function (id) {
 	fe.tool.getJSON({
 		url: "data.json",
@@ -76,7 +53,6 @@ fe.info.deleteProject = function (id) {
 	});
 
 }
-
 
 //修改用户昵称
 fe.info.account = function () {
@@ -106,7 +82,7 @@ fe.info.account = function () {
 		} else {
 			$('#remind').hide();
 			fe.tool.getJSON({
-				url: "updateNickname",
+				url: "data.json",
 				data: {'nickname': nickname},
 				success: function () {
 					btnWrap.hide();
@@ -122,4 +98,80 @@ fe.info.account = function () {
 	});
 
 };
+
+/*------------------------------用户（登录注册）模块-----------------------------*/
+fe.user = {} //用户命名空间
+
+fe.user.login = function () {
+	$('#forgivePasswordBtn').on('click', function () {
+		$('.user_container').addClass('turnLeft');
+		$('.forgivePassword .remind').html('');
+	});
+
+	$('#registerBtn').on('click', function () {
+		$('.user_container').addClass('turnRight');
+		$('.register .remind').html('');
+	});
+
+	$('.login').on('submit', function () {
+		$(this).find('input[name="password"]').val($.md5($(this).val()));
+	});
+};
+
+fe.user.register = function () {
+	$('#password2').on('change', function () {
+		if ($(this).val() != $('#password1').val()) {
+			$(this).get(0).setCustomValidity("两次输入的密码不匹配");
+		} else {
+			$(this).get(0).setCustomValidity("");
+		}
+	});
+
+	$('.icon-circle-arrow-left').on('click', function () {
+		$('.user_container').removeClass('turnRight');
+		$('.login .remind').html('');
+	});
+
+	$('.register').on('submit', function () {
+		$('#password1').val($.md5($(this).val()));
+		$('#password2').val($.md5($(this).val()));
+	});
+};
+
+fe.user.forgivePassword = function () {
+	$('.icon-circle-arrow-right').on('click', function () {
+		$('.user_container').removeClass('turnLeft');
+		$('.login .remind').html('');
+	});
+	$('#forgivePassword_submitBtn').on('click', function () {
+		var obj = fe.tool.serialize($('.forgivePassword'));
+		if (/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(obj.mail)) {
+			$.ajax({
+				type: "post",
+				url: "data.json",
+				dataType: "json",
+				data: obj,
+				success: function (res) {
+					if (res.success) {
+						$('.forgivePassword_item:last-child').html('请到注册邮箱接收激活邮件，并按步骤重置密码');
+						$('.user_remind').html('');
+					} else {
+						$('.user_remind').html(res.msg || "该邮箱非注册登记的邮箱");
+						$('.forgivePassword_item:last-child').html('');
+					}
+				}
+			});
+		} else {
+			$('.user_remind').html("请输入有效的邮箱地址");
+		}
+	});
+};
+
+
+
+
+
+
+
+
 
