@@ -1,6 +1,7 @@
 package me.sujianxin.persistence.service;
 
 import me.sujianxin.persistence.model.FeUser;
+import me.sujianxin.spring.config.ApplicationConfig;
 import me.sujianxin.spring.config.PersistenceJPAConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ import javax.transaction.Transactional;
  * <p>Version: 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PersistenceJPAConfig.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = {ApplicationConfig.class, PersistenceJPAConfig.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 @Rollback(false)
 public class FeUserServiceTest {

@@ -3,13 +3,13 @@ package me.sujianxin.spring.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -22,9 +22,10 @@ import java.util.Properties;
  * <p>Version: 1.0
  */
 @Configuration
-@EnableTransactionManagement
+//@EnableTransactionManagement
 @EnableSpringDataWebSupport
 @PropertySource({"classpath:system.properties"})
+@Import(PersistenceJPAConfig.class)
 //@EnableWebMvc
 public class ApplicationConfig {
     @Autowired
