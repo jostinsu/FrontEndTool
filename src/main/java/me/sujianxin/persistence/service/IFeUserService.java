@@ -22,7 +22,9 @@ public interface IFeUserService {
 
     FeUser findOne(int id);
 
-    Object[] login(String name, String password);
+    FeUser findByMailEquals(String mail);
+
+    FeUser login(String name, String password);
 
     Page<FeUser> findAll(Pageable pageable);
 

@@ -62,7 +62,12 @@ public class FeUserService implements IFeUserService {
     }
 
     @Override
-    public Object[] login(String name, String password) {
+    public FeUser findByMailEquals(String mail) {
+        return feUserRepository.findByMailEquals(mail);
+    }
+
+    @Override
+    public FeUser login(String name, String password) {
         return feUserRepository.login(name, password);
     }
 

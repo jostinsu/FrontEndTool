@@ -13,5 +13,5 @@ import java.util.Map;
  */
 public interface FeProjectRepositoryCustom {
 
-    Map<String,Object> findByPage(FeProjectForm feProjectForm);
+    Map<String, Object> findByPage(FeProjectForm feProjectForm, int userid);
 }

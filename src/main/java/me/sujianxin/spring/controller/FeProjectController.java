@@ -30,7 +30,7 @@ public class FeProjectController {
     @Autowired
     private IFeProjectService feProjectService;
 
-    @RequestMapping(value = {"/", "project"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"project"}, method = RequestMethod.GET)
     public String projectPage() {
         return "projectList";
     }
@@ -39,7 +39,9 @@ public class FeProjectController {
     @ResponseBody
     public Map<String, Object> projectListByPage(@ModelAttribute FeProjectForm feProjectForm, HttpSession session) {
         Map<String, Object> map = new HashMap<String, Object>(3);
-        Map<String, Object> result = feProjectService.findAll(feProjectForm);
+        int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
+        Map<String, Object> result = feProjectService.findAll(feProjectForm, id);
+        // // TODO: 2016/3/14 这里按用户id分开
         map.put("data", result.get("data"));
         map.put("iTotalRecords", result.get("count"));
         map.put("iTotalDisplayRecords", result.get("count"));
@@ -88,9 +90,7 @@ public class FeProjectController {
     @InitBinder
     protected void initBinder(HttpServletRequest request,
                               ServletRequestDataBinder binder) throws Exception {
-        System.out.println("in FeProjectController initBinder");
-
-        request.getSession().setAttribute("userid", 1);
+        //request.getSession().setAttribute("userid", 1);
     }
 
 }

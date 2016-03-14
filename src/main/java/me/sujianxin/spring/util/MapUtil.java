@@ -12,8 +12,13 @@ import java.util.Map;
  */
 public class MapUtil {
     public static Map<String, Object> deleteMap = new HashMap<>(2);
+    public static Map<String, Object> deleteForbiddenMap = new HashMap<>(2);
     public static Map<String, Object> saveMap = new HashMap<>(2);
     public static Map<String, Object> updateMap = new HashMap<>(2);
+    public static Map<String, Object> forbiddenOperationMap = new HashMap<>(2);
+    public static Map<String, Object> ableMap = new HashMap<>(2);
+    public static Map<String, Object> userPasswordResetRequstFailMap = new HashMap<>(2);
+    public static Map<String, Object> userPasswordResetRequstSuccessMap = new HashMap<>(2);
 
     public static Map<String, Object> deleteMap() {
         if (deleteMap.isEmpty()) {
@@ -21,6 +26,14 @@ public class MapUtil {
             deleteMap.put("msg", "删除成功");
         }
         return deleteMap;
+    }
+
+    public static Map<String, Object> deleteForbiddenMap() {
+        if (deleteForbiddenMap.isEmpty()) {
+            deleteForbiddenMap.put("success", false);
+            deleteForbiddenMap.put("msg", "已处理投稿不允许删除");
+        }
+        return deleteForbiddenMap;
     }
 
     public static Map<String, Object> saveMap() {
@@ -37,5 +50,37 @@ public class MapUtil {
             updateMap.put("msg", "更新成功");
         }
         return updateMap;
+    }
+
+    public static Map<String, Object> forbiddenOperationMap() {
+        if (forbiddenOperationMap.isEmpty()) {
+            forbiddenOperationMap.put("success", false);
+            forbiddenOperationMap.put("msg", "非法操作");
+        }
+        return forbiddenOperationMap;
+    }
+
+    public static Map<String, Object> ableMap() {
+        if (ableMap.isEmpty()) {
+            ableMap.put("success", false);
+            ableMap.put("msg", "操作成功");
+        }
+        return ableMap;
+    }
+
+    public static Map<String, Object> userPasswordResetRequstFailMap() {
+        if (userPasswordResetRequstFailMap.isEmpty()) {
+            userPasswordResetRequstFailMap.put("success", false);
+            userPasswordResetRequstFailMap.put("msg", "账户不存在，请确认");
+        }
+        return userPasswordResetRequstFailMap;
+    }
+
+    public static Map<String, Object> userPasswordResetRequstSuccessMap() {
+        if (userPasswordResetRequstSuccessMap.isEmpty()) {
+            userPasswordResetRequstSuccessMap.put("success", true);
+            userPasswordResetRequstSuccessMap.put("msg", "重置密码邮件已发送到您的邮箱，请查收");
+        }
+        return userPasswordResetRequstSuccessMap;
     }
 }

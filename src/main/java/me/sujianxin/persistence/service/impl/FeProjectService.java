@@ -47,8 +47,8 @@ public class FeProjectService implements IFeProjectService {
 
 
     @Override
-    public Map<String, Object> findAll(FeProjectForm feProjectForm) {
-        return feProjectRepository.findByPage(feProjectForm);
+    public Map<String, Object> findAll(FeProjectForm feProjectForm, int userid) {
+        return feProjectRepository.findByPage(feProjectForm, userid);
     }
 
     @Override

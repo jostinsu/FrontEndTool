@@ -96,7 +96,7 @@ public class PersistenceJPAConfig {
 
         // hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
         //hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "validate");
+        //hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "validate");
         // System.out.println("hibernate.format_sql=" + env.getProperty("hibernate.format_sql"));
 
         return hibernateProperties;

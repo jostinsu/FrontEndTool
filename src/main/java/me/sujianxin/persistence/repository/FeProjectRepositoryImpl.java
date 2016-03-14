@@ -30,29 +30,28 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Map<String, Object> findByPage(FeProjectForm feProjectForm) {
+    public Map<String, Object> findByPage(FeProjectForm feProjectForm, int userid) {
         Map<String, Object> map = new HashMap<>(2);
-        StringBuilder sb = new StringBuilder("select new me.sujianxin.spring.domain.FeProjectDomain(f.id,f.name,f.createTime,f.remark) from FeProject f");
-        StringBuilder sbCount = new StringBuilder("select count(*) from FeProject f");
+        StringBuilder sb = new StringBuilder("select new me.sujianxin.spring.domain.FeProjectDomain(f.id,f.name,f.createTime,f.remark) from FeProject f where f.user.id=:userid");
+        StringBuilder sbCount = new StringBuilder("select count(*) from FeProject f where f.user.id=:userid");
 
         if (!isNullOrEmpty(feProjectForm.getName())) {
-            sb.append(" where f.name like CONCAT('%',:name,'%')");
-            sbCount.append(" where f.name like CONCAT('%',:name,'%')");
+            sb.append(" f.name like CONCAT('%',:name,'%')");
+            sbCount.append(" f.name like CONCAT('%',:name,'%')");
             if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
                 sb.append(" and f.createTime between :fromTime and :toTime");
                 sbCount.append(" and f.createTime between :fromTime and :toTime");
             }
         } else {
             if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
-                sb.append(" where f.createTime between :fromTime and :toTime");
-                sbCount.append(" where f.createTime between :fromTime and :toTime");
+                sb.append(" and f.createTime between :fromTime and :toTime");
+                sbCount.append(" and f.createTime between :fromTime and :toTime");
             }
         }
 
         sb.append(" order by f.").append(feProjectForm.getSortCol()).append(" ").append(feProjectForm.getSortDir());
         TypedQuery<FeProjectDomain> query = entityManager.createQuery(sb.toString(), FeProjectDomain.class);
         TypedQuery<Long> queryCount = entityManager.createQuery(sbCount.toString(), Long.class);
-
 
         if (!isNullOrEmpty(feProjectForm.getName())) {
             query.setParameter("name", feProjectForm.getName());
@@ -75,7 +74,8 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
                 queryCount.setParameter("toTime", tmpToTime.getTime());
             }
         }
-
+        query.setParameter("userid", userid);
+        queryCount.setParameter("userid", userid);
         query.setFirstResult((feProjectForm.getPage() - 1) * feProjectForm.getPageSize());//前端页面计数从1开始
         query.setMaxResults(feProjectForm.getPageSize());
         map.put("data", query.getResultList());

@@ -17,8 +17,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FeUserRepository extends JpaRepository<FeUser, Integer>, JpaSpecificationExecutor<FeUser> {
-    @Query("select f.id,f.nickname,f.mail,f.password from FeUser f where f.mail=:account and f.password=:password")
-    Object[] login(@Param("account") String account, @Param("password") String password);
+    @Query("select f from FeUser f where f.mail=:account and f.password=:password")
+    FeUser login(@Param("account") String account, @Param("password") String password);
 
     @Query("update FeUser f set f.nickname=:nickname where f.id=:id")
     @Modifying
@@ -30,4 +30,6 @@ public interface FeUserRepository extends JpaRepository<FeUser, Integer>, JpaSpe
 
     @Query("select count(*) from FeUser f where f.mail=:mail")
     int existMail(@Param("mail") String mail);
+
+    FeUser findByMailEquals(String mail);
 }

@@ -50,4 +50,10 @@ public class FeUserServiceTest {
     public void existMail() {
         System.out.println(feUserService.existMail("75161201@qq.com"));
     }
+
+    @Test
+    public void login() {
+        FeUser tmp = feUserService.login("laudukang@gmail.com", "e10adc3949ba59abbe56e057f20f883e");
+        System.out.println();
+    }
 }

@@ -45,12 +45,12 @@ public class FeProjectServiceTest {
     @Test
     public void findAllByPage() {
         FeProjectForm feProjectForm = new FeProjectForm();
-        feProjectForm.setPage(2);
-        feProjectForm.setPageSize(10);
+        feProjectForm.setPage(1);
+        feProjectForm.setPageSize(100);
         feProjectForm.setSortCol("createTime");
         feProjectForm.setSortDir("desc");
         // feProjectForm.setName("项目");
-        Map<String, Object> result = feProjectService.findAll(feProjectForm);
+        Map<String, Object> result = feProjectService.findAll(feProjectForm, 1);
         System.out.println(((List<FeProjectDomain>) result.get("data")).size());
     }
 
