@@ -27,7 +27,7 @@
 </head>
 <body>
 <div class="user_container">
-    <form class="user_side login" action="#" method="post">
+    <form class="user_side login" action="login" method="post">
         <ul class="user_content">
             <li class="login_item">
                 <h2 class="login_title">用户登录</h2>
@@ -43,7 +43,7 @@
                 <i class="icon-lock user_icon"></i></li>
             <li class="login_item">
                 <input type="submit" class="tool_btn tool_btn_Blue tool_btn_Big" value="登录"/>
-                <span class="user_remind remind">${账号或密码出错}</span>
+                <span class="user_remind remind">${loginMsg}</span>
             </li>
             <li class="login_item">
                 <a id="forgivePasswordBtn" class="login_item_leftBtn" href="javascript:;">忘记密码?</a>
@@ -51,7 +51,7 @@
             </li>
         </ul>
     </form>
-    <form class="user_side register" action="#" method="post">
+    <form class="user_side register" action="register" method="post">
         <ul class="user_content">
             <li class="register_item">
                 <h2 class="register_title">用户注册</h2>
@@ -74,7 +74,7 @@
             </li>
             <li class="register_item">
                 <input type="submit" class="tool_btn tool_btn_Big tool_btn_Blue" value="注册"/>
-                <span class="user_remind remind">${该邮箱已被注册}</span>
+                <span class="user_remind remind">${registerMsg}</span>
             </li>
         </ul>
     </form>
@@ -104,8 +104,8 @@
 <script src="js/main.js"></script>
 <script>
     $(function () {
-        var oSearch = fe.tool.search(window.location.search);
-        switch (oSearch.page) {
+        /*  var oSearch = fe.tool.search(window.location.search);*/
+        switch ("${page}") {
             case 'register':
                 $('.user_container').addClass('turnRight');
                 break;

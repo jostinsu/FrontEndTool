@@ -17,7 +17,7 @@ import java.util.Map;
  * <p>Time: 22:32
  * <p>Version: 1.0
  */
-@Service("feProjectService")
+@Service
 public class FeProjectService implements IFeProjectService {
     @Autowired
     private FeProjectRepository feProjectRepository;

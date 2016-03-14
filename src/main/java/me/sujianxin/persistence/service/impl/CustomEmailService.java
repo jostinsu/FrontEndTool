@@ -2,10 +2,15 @@ package me.sujianxin.persistence.service.impl;
 
 import me.sujianxin.persistence.service.ICustomEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -19,24 +24,28 @@ public class CustomEmailService implements ICustomEmailService {
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
-    private SimpleMailMessage simpleMailMessage;
+    private MimeMessage mimeMessage;
 
-    //@Async
+    @Async
     @Override
     public void send(String toAddress, String subject, String content) {
-        simpleMailMessage.setTo(toAddress);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(content);
+        //mimeMessage = javaMailSender.createMimeMessage();
         try {
-            javaMailSender.send(simpleMailMessage);
-        } catch (MailException ex) {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+            mimeMessageHelper.setTo(toAddress);
+            if (!isNullOrEmpty(subject))
+                mimeMessageHelper.setSubject(subject);
+            if (!isNullOrEmpty(content))
+                mimeMessageHelper.setText(content, true);
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException ex) {
+            ex.printStackTrace();
             try {
                 Thread.sleep(1000 * 5);//5s后重发一次
-                javaMailSender.send(simpleMailMessage);
+                javaMailSender.send(mimeMessage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            ex.printStackTrace();
         }
     }
 }

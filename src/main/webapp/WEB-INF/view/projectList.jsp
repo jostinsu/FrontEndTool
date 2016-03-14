@@ -15,18 +15,7 @@
     <link rel="stylesheet" href="css/jquery.dataTables.css"/>
     <link rel="stylesheet" href="css/main.css"/>
 <body>
-<header class="info_header">
-    <div class="info_header_container">
-        <h1 class="info_header_title">
-            <img src="images/logo.png" alt="前端可视化布局工具"/>
-            <span>前端可视化布局工具</span>
-        </h1>
-        <div class="info_header_aside">
-            <span class="info_header_aside_title">欢迎您 : 用户名</span>
-            <a href="javascript:;" class="info_header_aside_btn">退出</a>
-        </div>
-    </div>
-</header>
+<%@include file="header.jsp" %>
 <div class="info_main">
     <div class="info_main_container">
         <nav class="info_main_nav">

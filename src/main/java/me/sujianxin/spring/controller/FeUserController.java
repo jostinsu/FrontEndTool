@@ -2,9 +2,13 @@ package me.sujianxin.spring.controller;
 
 import me.sujianxin.persistence.model.FeUser;
 import me.sujianxin.persistence.service.IFeUserService;
+import me.sujianxin.spring.events.EmailEvent;
 import me.sujianxin.spring.util.MapUtil;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,9 +34,15 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  * <p>Version: 1.0
  */
 @Controller
-public class FeUserController {
+public class FeUserController implements ApplicationContextAware {
     @Autowired
-    private IFeUserService feUserService;
+    private IFeUserService iFeUserService;
+    private ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     @RequestMapping(value = {"/", "login"}, method = RequestMethod.GET)
     public String init() {
@@ -45,19 +55,17 @@ public class FeUserController {
         FeUser tmp = null;
         boolean b = false;
         if (validate) {
-            tmp = feUserService.login(mail, password);
+            tmp = iFeUserService.login(mail, password);
             if (b = (null != tmp)) {
                 session.setAttribute("userid", tmp.getId());//f.id,f.nickname,f.mail,f.password
-                session.setAttribute("nickname", null != tmp.getNickname() ? tmp.getNickname() : "");
-                model.addAttribute("userid", tmp.getId());
-                model.addAttribute("nickname", tmp.getNickname());
+                session.setAttribute("name", null != tmp.getNickname() ? tmp.getNickname() : tmp.getMail());
                 return "redirect:project";
             }
         }
         model.addAttribute("success", validate && b ? true : false);
-        model.addAttribute("msg", validate && b ? "" : "请检查账号/密码是否正确");
+        model.addAttribute("loginMsg", validate && b ? "" : "请检查账号/密码是否正确");
         model.addAttribute("page", "login");
-        return "redirect:login";
+        return "user";
     }
 
 
@@ -73,9 +81,9 @@ public class FeUserController {
         boolean isSame = !isNullOrEmpty(newPassword1) && !isNullOrEmpty(newPassword2) && newPassword1.equals(newPassword2);
         if (check = !isNullOrEmpty(password)) {
             int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
-            FeUser feUser = feUserService.findOne(id);
+            FeUser feUser = iFeUserService.findOne(id);
             if (null != feUser && feUser.getPassword().equals(password) && isSame) {
-                tmp = feUserService.updatePassword(id, newPassword1);
+                tmp = iFeUserService.updatePassword(id, newPassword1);
             }
         }
         model.addAttribute("success", check && 1 == tmp ? true : false);
@@ -85,32 +93,34 @@ public class FeUserController {
 
     @RequestMapping(value = "userInfo", method = RequestMethod.GET)
     public String findOne(HttpSession session, Model model) {
-        model.addAttribute("feUser", feUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
+        model.addAttribute("feUser", iFeUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
         return "account";
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public String save(String mail, String password1, Model model, HttpSession session) {
-        boolean tmp = feUserService.existMail(mail);
+        boolean tmp = iFeUserService.existMail(mail);
         if (!tmp) {
             FeUser feUser = new FeUser();
             feUser.setMail(mail);
             feUser.setPassword(password1);
             feUser.setRegisterTime(new Date());
             feUser.setStatus("normal");
-            feUserService.save(feUser);
+            FeUser feUser1 = iFeUserService.save(feUser);
+            session.setAttribute("userid", feUser1.getId());
+            session.setAttribute("name", feUser1.getMail());
             return "redirect:project";
         }
         model.addAttribute("success", !tmp ? true : false);
-        model.addAttribute("msg", !tmp ? "成功注册用户" : "该邮箱已经被注册");
+        model.addAttribute("registerMsg", !tmp ? "成功注册用户" : "该邮箱已经被注册");
         model.addAttribute("page", "register");
-        return "redirect:login";
+        return "user";
     }
 
     //@RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
     //@ResponseBody
     public Map<String, Object> deleteById(int id) {
-        feUserService.deleteById(id);
+        iFeUserService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
@@ -122,8 +132,9 @@ public class FeUserController {
         boolean b;
         if (b = !isNullOrEmpty(nickname)) {
             int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
-            tmp = feUserService.updateNickname(id, nickname);
+            tmp = iFeUserService.updateNickname(id, nickname);
         }
+        session.setAttribute("name", nickname);
         map.put("success", 1 == tmp && b ? true : false);
         map.put("msg", 1 == tmp && b ? "成功修改昵称" : "修改昵称失败");
         return map;
@@ -134,7 +145,7 @@ public class FeUserController {
     //@ResponseBody
     public Map<String, Object> existMail(String mail) {
         Map<String, Object> map = new HashMap<>(5);
-        boolean tmp = feUserService.existMail(mail);
+        boolean tmp = iFeUserService.existMail(mail);
         map.put("success", tmp ? false : true);
         map.put("msg", tmp ? "该邮箱已经被注册" : "邮箱可用");
         return map;
@@ -148,20 +159,40 @@ public class FeUserController {
         map.put("msg", "登录成功");
         Pageable pageable = new PageRequest(page,
                 pageSize, new Sort(Sort.Direction.ASC, "nickname"));
-        map.put("data", feUserService.findAll(pageable));
-        map.put("iTotalRecords", feUserService.count());
-        map.put("iTotalDisplayRecords", feUserService.count());
+        map.put("data", iFeUserService.findAll(pageable));
+        map.put("iTotalRecords", iFeUserService.count());
+        map.put("iTotalDisplayRecords", iFeUserService.count());
         return map;
     }
 
     @RequestMapping(value = "resetRequest", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> resetRequest(@RequestParam("mail") String mail) {
-        FeUser feUser = feUserService.findByMailEquals(mail);
+    public Map<String, Object> resetRequest(@RequestParam("mail") String mail, HttpServletRequest request) {
+        FeUser feUser = iFeUserService.findByMailEquals(mail);
         if (null != feUser) {
             feUser.setStatus("resetting");
-            feUserService.save(feUser);
-            // 这里发送邮件
+            iFeUserService.save(feUser);
+            StringBuffer sb = new StringBuffer(
+                    "<html><head><meta http-equiv='content-type' content='text/html; charset=GBK'></head><body>")
+                    .append(null != feUser.getNickname() ? feUser.getNickname() : feUser.getMail())
+                    .append(",您好</br><b>温馨提示</b>：重置密码链接只能使用一次，24小时内有效</br>")
+                    .append("<a href=\"")
+                    .append(request.getScheme())
+                    .append("://")
+                    .append(request.getServerName())
+                    .append(":")
+                    .append(request.getServerPort())
+                    .append(request.getContextPath())
+                    .append("/")
+                    .append("resetPassword?mail=")
+                    .append(mail)
+                    .append("&v=")
+                    .append(new Date().getTime())
+                    .append("\">")
+                    .append("点击这里进入重置密码页面,如非本人操作请忽略")
+                    .append("</a></body></html>");
+            EmailEvent emailEvent = new EmailEvent(this, mail, "重置密码-前端可视化工具服务邮件", sb.toString());
+            applicationContext.publishEvent(emailEvent);
             return MapUtil.userPasswordResetRequstSuccessMap();
         }
         return MapUtil.userPasswordResetRequstFailMap();
@@ -178,24 +209,24 @@ public class FeUserController {
         }
         model.addAttribute("success", false);
         model.addAttribute("msg", "链接失效");
-        return "login";//返回登录页面
+        return "redirect:login";//返回登录页面
     }
 
     @RequestMapping(value = "resetPassword", method = RequestMethod.POST)
     public String resetPassword(@RequestParam("mail") String mail, @RequestParam("password") String password, Model model) {
         if (!isNullOrEmpty(mail)) {
-            FeUser feUser = feUserService.findByMailEquals(mail);
+            FeUser feUser = iFeUserService.findByMailEquals(mail);
             if ("resetting".equals(feUser.getStatus())) {
                 feUser.setPassword(password);
-                feUserService.save(feUser);
+                iFeUserService.save(feUser);
                 model.addAttribute("success", true);
                 model.addAttribute("msg", "成功重置密码");
-                return "login";
+                return "redirect:login";
             }
         }
         model.addAttribute("success", false);
         model.addAttribute("msg", "非法操作");
-        return "/";
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/logout")

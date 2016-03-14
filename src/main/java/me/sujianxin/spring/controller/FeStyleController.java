@@ -21,25 +21,25 @@ import java.util.Map;
 @Controller
 public class FeStyleController {
     @Autowired
-    private IFeStyleService feStyleService;
+    private IFeStyleService iFeStyleService;
 
     @RequestMapping(value = "saveStyle", method = RequestMethod.POST)
     public String save(@ModelAttribute FeStyle feStyle, int projectid) {
         feStyle.setProject(new FeProject(projectid));
-        feStyleService.save(feStyle);
+        iFeStyleService.save(feStyle);
         return "";
     }
 
     @RequestMapping(value = "deleteStyle", method = RequestMethod.DELETE)
     public Map<String, Object> delete(@RequestParam("id") int id) {
-        feStyleService.deleteById(id);
+        iFeStyleService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
     @RequestMapping(value = "updateStyle", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> update(@ModelAttribute FeStyle feStyle) {
-        feStyleService.updateById(feStyle.getId(), feStyle.getCode());
+        iFeStyleService.updateById(feStyle.getId(), feStyle.getCode());
         return MapUtil.updateMap();
     }
 
@@ -47,7 +47,7 @@ public class FeStyleController {
     @ResponseBody
     public Map<String, Object> findOne(@PathVariable("id") int id) {
         Map<String, Object> map = new HashMap<>(3);
-        FeStyle feStyle = feStyleService.findOne(id);
+        FeStyle feStyle = iFeStyleService.findOne(id);
         map.put("success", null != feStyle ? true : false);
         map.put("msg", null != feStyle ? "" : "非法操作");
         map.put("data", null != feStyle ? feStyle : "");

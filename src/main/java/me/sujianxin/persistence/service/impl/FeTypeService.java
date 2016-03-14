@@ -16,7 +16,7 @@ import java.util.List;
  * <p>Time: 23:05
  * <p>Version: 1.0
  */
-@Service("feTypeService")
+@Service
 @Transactional
 public class FeTypeService implements IFeTypeService {
     @Autowired

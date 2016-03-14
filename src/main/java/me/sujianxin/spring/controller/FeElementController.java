@@ -21,18 +21,18 @@ import java.util.Map;
 @Controller
 public class FeElementController {
     @Autowired
-    private IFeElementService feElementService;
+    private IFeElementService iFeElementService;
 
     @RequestMapping(value = "saveElement", method = RequestMethod.POST)
     public String save(@ModelAttribute FeElement feElement, @RequestParam("typeid") int typeid) {
         feElement.setType(new FeType(typeid));
-        feElementService.save(feElement);
+        iFeElementService.save(feElement);
         return "";
     }
 
     @RequestMapping(value = "deleteElement", method = RequestMethod.DELETE)
     public Map<String, Object> delete(@RequestParam("id") int id) {
-        feElementService.deleteById(id);
+        iFeElementService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
@@ -40,14 +40,14 @@ public class FeElementController {
     @ResponseBody
     public Map<String, Object> update(@ModelAttribute FeElement feElement, int typeid) {
         feElement.setType(new FeType(typeid));
-        feElementService.updateById(feElement);
+        iFeElementService.updateById(feElement);
         return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "element/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> findOne(@PathVariable("id") int id) {
-        FeElement feElement = feElementService.findOne(id);
+        FeElement feElement = iFeElementService.findOne(id);
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", null != feElement ? true : false);
         map.put("msg", null != feElement ? "" : "非法操作");

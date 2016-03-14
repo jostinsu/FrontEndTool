@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailEventListener implements ApplicationListener<EmailEvent> {
     @Autowired
-    private ICustomEmailService customEmailService;
+    private ICustomEmailService iCustomEmailService;
 
     @Override
     public void onApplicationEvent(EmailEvent event) {
-        customEmailService.send(event.getToAddress(), event.getSubject(), event.getContent());
+        iCustomEmailService.send(event.getToAddress(), event.getSubject(), event.getContent());
     }
 }

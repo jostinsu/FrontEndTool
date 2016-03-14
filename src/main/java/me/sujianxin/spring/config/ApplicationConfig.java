@@ -11,6 +11,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
@@ -25,7 +28,7 @@ import java.util.Properties;
 //@EnableTransactionManagement
 @EnableSpringDataWebSupport
 @PropertySource({"classpath:system.properties"})
-@Import(PersistenceJPAConfig.class)
+@Import({PersistenceJPAConfig.class, AsyncConfig.class})
 //@EnableWebMvc
 public class ApplicationConfig {
     @Autowired
@@ -58,4 +61,16 @@ public class ApplicationConfig {
         return simpleMailMessage;
     }
 
+    @Bean
+    public MimeMessage mimeMessage(JavaMailSender javaMailSender) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            mimeMessage.setSubject(environment.getProperty("mail.default.subject"));
+            mimeMessage.setText(environment.getProperty("mail.default.text"));
+            mimeMessage.setFrom(new InternetAddress(environment.getProperty("mail.from")));
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return mimeMessage;
+    }
 }

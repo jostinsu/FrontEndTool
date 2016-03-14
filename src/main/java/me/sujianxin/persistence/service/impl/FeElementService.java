@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
  * <p>Time: 23:04
  * <p>Version: 1.0
  */
-@Service("feElementService")
+@Service
 @Transactional
 public class FeElementService implements IFeElementService {
     @Autowired

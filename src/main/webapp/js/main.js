@@ -147,7 +147,7 @@ fe.user.forgivePassword = function () {
 		if (/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(obj.mail)) {
 			$.ajax({
 				type: "post",
-				url: "data.json",
+				url: "resetRequest",
 				dataType: "json",
 				data: obj,
 				success: function (res) {

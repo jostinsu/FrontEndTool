@@ -22,7 +22,7 @@ import java.util.Map;
 @Controller
 public class FeTreeController {
     @Autowired
-    private IFeTreeService feTreeService;
+    private IFeTreeService iFeTreeService;
 
     @RequestMapping(value = "saveTree", method = RequestMethod.POST)
     public String save(@ModelAttribute FeTreeDomain feTreeDomain) {
@@ -33,13 +33,13 @@ public class FeTreeController {
         if (0 != feTreeDomain.getParentid()) {
             feTree.setTree(new FeTree(feTreeDomain.getParentid()));
         }
-        feTreeService.save(feTree);
+        iFeTreeService.save(feTree);
         return "";
     }
 
     @RequestMapping(value = "deleteTree", method = RequestMethod.DELETE)
     public Map<String, Object> delete(@RequestParam("id") int id) {
-        feTreeService.deleteById(id);
+        iFeTreeService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
@@ -54,14 +54,14 @@ public class FeTreeController {
         if (0 != feTreeDomain.getParentid()) {
             feTree.setTree(new FeTree(feTreeDomain.getParentid()));
         }
-        feTreeService.updateById(feTree);
+        iFeTreeService.updateById(feTree);
         return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "tree/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> findOne(@PathVariable("id") int id) {
-        FeTree feTree = feTreeService.findOne(id);
+        FeTree feTree = iFeTreeService.findOne(id);
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", null != feTree ? true : false);
         map.put("msg", null != feTree ? "" : "非法操作");
@@ -72,7 +72,7 @@ public class FeTreeController {
     @RequestMapping(value = "trees", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> findAll() {
-        List<FeTree> feTree = feTreeService.findAll();
+        List<FeTree> feTree = iFeTreeService.findAll();
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", !feTree.isEmpty() ? true : false);
         map.put("msg", !feTree.isEmpty() ? "" : "非法操作");

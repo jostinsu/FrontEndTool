@@ -28,7 +28,7 @@ import java.util.Map;
 @Controller
 public class FeProjectController {
     @Autowired
-    private IFeProjectService feProjectService;
+    private IFeProjectService iFeProjectService;
 
     @RequestMapping(value = {"project"}, method = RequestMethod.GET)
     public String projectPage() {
@@ -40,8 +40,7 @@ public class FeProjectController {
     public Map<String, Object> projectListByPage(@ModelAttribute FeProjectForm feProjectForm, HttpSession session) {
         Map<String, Object> map = new HashMap<String, Object>(3);
         int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
-        Map<String, Object> result = feProjectService.findAll(feProjectForm, id);
-        // // TODO: 2016/3/14 这里按用户id分开
+        Map<String, Object> result = iFeProjectService.findAll(feProjectForm, id);
         map.put("data", result.get("data"));
         map.put("iTotalRecords", result.get("count"));
         map.put("iTotalDisplayRecords", result.get("count"));
@@ -60,7 +59,7 @@ public class FeProjectController {
         feProject.setName(feProjectDomain.getName());
         feProject.setCreateTime(new Date());
         feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
-        feProjectService.save(feProject);
+        iFeProjectService.save(feProject);
         model.addAttribute("success", true);
         model.addAttribute("msg", "保存成功");
         return "redirect:newProject";
@@ -69,7 +68,7 @@ public class FeProjectController {
     @RequestMapping(value = "projectDelete", method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> projectDelete(@RequestParam("id") int id, HttpSession session) {
-        feProjectService.deleteById(id);
+        iFeProjectService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
@@ -82,7 +81,7 @@ public class FeProjectController {
         feProject.setName(feProjectDomain.getName());
         feProject.setCreateTime(new Date());
         feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
-        feProjectService.updateById(feProject);
+        iFeProjectService.updateById(feProject);
         return MapUtil.updateMap();
     }
 

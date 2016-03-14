@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -14,18 +15,7 @@
     <link rel="stylesheet" href="css/font-awesome.css"/>
     <link rel="stylesheet" href="css/main.css"/>
 <body>
-<header class="info_header">
-    <div class="info_header_container">
-        <h1 class="info_header_title">
-            <img src="images/logo.png" alt="前端可视化布局工具"/>
-            <span>前端可视化布局工具</span>
-        </h1>
-        <div class="info_header_aside">
-            <span class="info_header_aside_title">欢迎您 : 用户名</span>
-            <a href="javascript:;" class="info_header_aside_btn">退出</a>
-        </div>
-    </div>
-</header>
+<%@include file="header.jsp" %>
 <div class="info_main">
     <div class="info_main_container">
         <nav class="info_main_nav">
@@ -64,7 +54,8 @@
                             class="icon-pencil tool_icon"></i></a>
                     </div>
                     <div class="info_account_item">
-                        <span>注册时间：</span><strong>${feUser.registerTime}</strong>
+                        <span>注册时间：</span><strong><fmt:formatDate value="${feUser.registerTime}"
+                                                                  pattern="yyyy-MM-dd hh:MM:ss"/></strong>
                     </div>
                     <div class="info_account_item info_account_item_Last">
                         <input id="submitBtn" type="button" class="tool_btn tool_btn_Blue" value="确定"/>

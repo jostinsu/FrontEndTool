@@ -21,32 +21,32 @@ import java.util.Map;
 @Controller
 public class FeTypeController {
     @Autowired
-    private IFeTypeService feTypeService;
+    private IFeTypeService iFeTypeService;
 
     @RequestMapping(value = "saveType", method = RequestMethod.POST)
     public String save(@ModelAttribute FeType feType) {
-        feTypeService.save(feType);
+        iFeTypeService.save(feType);
         return "";
     }
 
     @RequestMapping(value = "deleteType", method = RequestMethod.DELETE)
     @ResponseBody
     public Map<String, Object> delete(@RequestParam("id") int id) {
-        feTypeService.deleteById(id);
+        iFeTypeService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
     @RequestMapping(value = "updateType", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> update(@ModelAttribute FeType feType) {
-        feTypeService.updateById(feType);
+        iFeTypeService.updateById(feType);
         return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "type/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> findOne(@PathVariable("id") int id) {
-        FeType feType = feTypeService.findOne(id);
+        FeType feType = iFeTypeService.findOne(id);
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", null != feType ? true : false);
         map.put("msg", null != feType ? "" : "非法操作");
@@ -57,7 +57,7 @@ public class FeTypeController {
     @RequestMapping(value = "types", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> findAll() {
-        List<FeType> feType = feTypeService.findAll();
+        List<FeType> feType = iFeTypeService.findAll();
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", !feType.isEmpty() ? true : false);
         map.put("msg", !feType.isEmpty() ? "" : "非法操作");

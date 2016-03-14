@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
  * <p>Version: 1.0
  */
 public interface IFeUserService {
-    void save(FeUser feUser);
+    FeUser save(FeUser feUser);
 
     void deleteById(int id);
 

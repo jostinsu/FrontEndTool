@@ -24,7 +24,7 @@ import java.util.Map;
 public class FePageController {
 
     @Autowired
-    private IFePageService fePageService;
+    private IFePageService iFePageService;
 
     @RequestMapping(value = "savePage", method = RequestMethod.POST)
     public String save(@ModelAttribute FePageDomain fePageDomain, Model model) {
@@ -32,7 +32,7 @@ public class FePageController {
         fePage.setTree(new FeTree(fePageDomain.getTreeid()));
         fePage.setStyle(fePageDomain.getStyle());
         fePage.setCode(fePageDomain.getCode());
-        fePageService.save(fePage);
+        iFePageService.save(fePage);
         Map<String, Object> map = new HashMap<>(2);
         map.put("success", true);
         map.put("msg", "保存成功");
@@ -41,7 +41,7 @@ public class FePageController {
 
     @RequestMapping(value = "deletePage", method = RequestMethod.DELETE)
     public Map<String, Object> deletePageById(@RequestParam("id") int id) {
-        fePageService.deleteById(id);
+        iFePageService.deleteById(id);
         return MapUtil.deleteMap();
     }
 
@@ -53,14 +53,14 @@ public class FePageController {
         fePage.setCode(fePageDomain.getCode());
         fePage.setStyle(fePageDomain.getStyle());
         fePage.setTree(new FeTree(fePageDomain.getTreeid()));
-        fePageService.updateById(fePage);
+        iFePageService.updateById(fePage);
         return MapUtil.updateMap();
     }
 
     @RequestMapping(value = "page/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> pageInfo(@PathVariable("id") int id) {
-        FePage fePage = fePageService.findOne(id);
+        FePage fePage = iFePageService.findOne(id);
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", null != fePage ? true : false);
         map.put("msg", null != fePage ? "" : "非法操作");

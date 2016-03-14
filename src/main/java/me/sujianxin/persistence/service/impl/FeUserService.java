@@ -26,15 +26,15 @@ import java.util.List;
  * <p>Time: 23:35
  * <p>Version: 1.0
  */
-@Service("feUserService")
+@Service
 public class FeUserService implements IFeUserService {
     @Autowired
     private FeUserRepository feUserRepository;
 
     @Override
     @Transactional
-    public void save(FeUser feUser) {
-        feUserRepository.save(feUser);
+    public FeUser save(FeUser feUser) {
+        return feUserRepository.save(feUser);
     }
 
     @Override
