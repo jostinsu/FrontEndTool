@@ -59,6 +59,7 @@ public class FeUserController implements ApplicationContextAware {
             if (b = (null != tmp)) {
                 session.setAttribute("userid", tmp.getId());//f.id,f.nickname,f.mail,f.password
                 session.setAttribute("name", null != tmp.getNickname() ? tmp.getNickname() : tmp.getMail());
+                session.setAttribute("mail", mail);
                 return "redirect:project";
             }
         }
@@ -156,7 +157,7 @@ public class FeUserController implements ApplicationContextAware {
     public Map<String, Object> findAll(int page, int pageSize) {
         Map<String, Object> map = new HashMap<>(5);
         map.put("success", true);
-        map.put("msg", "登录成功");
+        map.put("msg", "");
         Pageable pageable = new PageRequest(page,
                 pageSize, new Sort(Sort.Direction.ASC, "nickname"));
         map.put("data", iFeUserService.findAll(pageable));

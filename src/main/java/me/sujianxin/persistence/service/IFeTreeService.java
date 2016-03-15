@@ -20,7 +20,11 @@ public interface IFeTreeService {
 
     FeTree findOne(int id);
 
+    FeTree findOneByProjectId(int projectid);
+
     List<FeTree> findAll();
 
     long count();
+
+    List<FeTree> findAllByProjectId(int id);
 }

@@ -1,5 +1,6 @@
 package me.sujianxin.spring.config;
 
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -28,6 +29,8 @@ public class WebInitializer implements WebApplicationInitializer {
         rootContext.register(ApplicationConfig.class);
         sc.addListener(new ContextLoaderListener(rootContext));
 
+        OpenEntityManagerInViewFilter openEntityManagerInViewFilter = new OpenEntityManagerInViewFilter();
+
         //CharacterEncodingFilter
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
@@ -35,6 +38,10 @@ public class WebInitializer implements WebApplicationInitializer {
         FilterRegistration filterRegistration =
                 sc.addFilter("characterEncodingFilter", characterEncodingFilter);
         filterRegistration.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
+
+        FilterRegistration filterRegistration1 =
+                sc.addFilter("openEntityManagerInViewFilter", openEntityManagerInViewFilter);
+        filterRegistration1.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
 
         //follow can be deleted
         //sc.addFilter("hibernateFilter", OpenSessionInViewFilter.class).addMappingForUrlPatterns(null, false, "/*");

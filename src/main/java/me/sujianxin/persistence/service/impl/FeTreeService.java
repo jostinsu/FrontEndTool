@@ -50,6 +50,11 @@ public class FeTreeService implements IFeTreeService {
     }
 
     @Override
+    public FeTree findOneByProjectId(int projectid) {
+        return feTreeRepository.findOneByProjectId(projectid);
+    }
+
+    @Override
     public List<FeTree> findAll() {
         return feTreeRepository.findAll();
     }
@@ -57,5 +62,10 @@ public class FeTreeService implements IFeTreeService {
     @Override
     public long count() {
         return feTreeRepository.count();
+    }
+
+    @Override
+    public List<FeTree> findAllByProjectId(int id) {
+        return null;
     }
 }

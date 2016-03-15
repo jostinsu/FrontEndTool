@@ -2,6 +2,8 @@ package me.sujianxin.persistence.repository;
 
 import me.sujianxin.persistence.model.FeTree;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FeTreeRepository extends JpaRepository<FeTree, Integer> {
+    @Query("select tree from FeTree tree join tree.projects as pr join pr.trees tr where tr.id=tree.id and pr.id=:projectid")
+    FeTree findOneByProjectId(@Param("projectid") int projectid);
 }

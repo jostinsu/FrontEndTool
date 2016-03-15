@@ -7,6 +7,7 @@ import me.sujianxin.spring.domain.FeProjectDomain;
 import me.sujianxin.spring.domain.FeProjectForm;
 import me.sujianxin.spring.util.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,8 @@ import java.util.Map;
 public class FeProjectController {
     @Autowired
     private IFeProjectService iFeProjectService;
+    @Autowired
+    private Environment environment;
 
     @RequestMapping(value = {"project"}, method = RequestMethod.GET)
     public String projectPage() {
@@ -54,14 +58,22 @@ public class FeProjectController {
 
     @RequestMapping(value = "newProject", method = RequestMethod.POST)
     public String projectPOST(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session, Model model) {
-        FeProject feProject = new FeProject();
-        feProject.setRemark(feProjectDomain.getRemark());
-        feProject.setName(feProjectDomain.getName());
-        feProject.setCreateTime(new Date());
-        feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
-        iFeProjectService.save(feProject);
-        model.addAttribute("success", true);
-        model.addAttribute("msg", "保存成功");
+        String projectPath = environment.getProperty("file.upload.path")
+                + File.separator + String.valueOf(session.getAttribute("mail")) + File.separator + feProjectDomain.getName();
+        File project = new File(projectPath);
+        if (!project.exists()) {
+            FeProject feProject = new FeProject();
+            feProject.setRemark(feProjectDomain.getRemark());
+            feProject.setName(feProjectDomain.getName());
+            feProject.setCreateTime(new Date());
+            feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
+            iFeProjectService.save(feProject);
+        } else {
+            project.mkdir();
+            // TODO: 2016/3/15 默认创建css内容
+        }
+        model.addAttribute("success", !project.exists() ? true : false);
+        model.addAttribute("msg", !project.exists() ? "保存成功" : "项目名称不能重复");
         return "redirect:newProject";
     }
 
