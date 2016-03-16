@@ -48,7 +48,7 @@
                         <a href="javascript:;" class="tool_btn tool_btn_Blue" id="info_table_searchBtn">查询</a>
                     </div>
                 </div>
-                <table id="depTable" class="display com-dataTableInit" cellspacing="0" style="display: none;">
+                <table id="projectTable" class="display com-dataTableInit" cellspacing="0" style="display: none;">
                     <thead>
                     <tr>
                         <th style="width: 50px;">编号</th>
@@ -69,7 +69,7 @@
 <script src="js/main.js"></script>
 <script>
     $(function(){
-        fe.info.dataTable = $('#depTable').dataTable({
+        fe.info.dataTable = $('#projectTable').dataTable({
             "bServerSide": true,  //启动服务端分页、排序，搜索等功能
             "sAjaxSource": 'project',  //ajax请求路径
             "aaSorting" : [ [ 1, 'desc' ] ],  //初始化时默认的排序字段
