@@ -58,10 +58,19 @@ public class FeProjectController {
 
     @RequestMapping(value = "newProject", method = RequestMethod.POST)
     public String projectPOST(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session, Model model) {
+        File uploadPath = new File(environment.getProperty("file.upload.path"));
+        if (!uploadPath.exists()) {
+            uploadPath.mkdir();
+        }
+        File userPath = new File(environment.getProperty("file.upload.path") + File.separator + String.valueOf(session.getAttribute("mail")));
+        if (!userPath.exists()) {
+            userPath.mkdir();
+        }
         String projectPath = environment.getProperty("file.upload.path")
                 + File.separator + String.valueOf(session.getAttribute("mail")) + File.separator + feProjectDomain.getName();
         File project = new File(projectPath);
         if (!project.exists()) {
+            project.mkdir();
             FeProject feProject = new FeProject();
             feProject.setRemark(feProjectDomain.getRemark());
             feProject.setName(feProjectDomain.getName());
@@ -69,7 +78,6 @@ public class FeProjectController {
             feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
             iFeProjectService.save(feProject);
         } else {
-            project.mkdir();
             // TODO: 2016/3/15 默认创建css内容
         }
         model.addAttribute("success", !project.exists() ? true : false);

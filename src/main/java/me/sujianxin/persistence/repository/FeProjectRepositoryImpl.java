@@ -36,8 +36,8 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
         StringBuilder sbCount = new StringBuilder("select count(*) from FeProject f where f.user.id=:userid");
 
         if (!isNullOrEmpty(feProjectForm.getName())) {
-            sb.append(" f.name like CONCAT('%',:name,'%')");
-            sbCount.append(" f.name like CONCAT('%',:name,'%')");
+            sb.append(" and f.name like CONCAT('%',:name,'%')");
+            sbCount.append(" and f.name like CONCAT('%',:name,'%')");
             if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
                 sb.append(" and f.createTime between :fromTime and :toTime");
                 sbCount.append(" and f.createTime between :fromTime and :toTime");
@@ -50,6 +50,7 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
         }
 
         sb.append(" order by f.").append(feProjectForm.getSortCol()).append(" ").append(feProjectForm.getSortDir());
+        System.out.println("sb.toString()=" + sb.toString());
         TypedQuery<FeProjectDomain> query = entityManager.createQuery(sb.toString(), FeProjectDomain.class);
         TypedQuery<Long> queryCount = entityManager.createQuery(sbCount.toString(), Long.class);
 

@@ -136,7 +136,22 @@
         <!-- json,lau,2016-1-19 21:47:54 -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
             <version>${jackson2.version}</version>
         </dependency>
 
@@ -243,7 +258,7 @@
         <rest-assured.version>2.4.1</rest-assured.version>
 
         <!-- json -->
-        <jackson2.version>2.2.3</jackson2.version>
+        <jackson2.version>2.7.2</jackson2.version>
 
         <!-- web -->
         <servlet.version>3.0.1</servlet.version>
