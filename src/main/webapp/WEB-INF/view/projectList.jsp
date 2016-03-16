@@ -69,7 +69,7 @@
 <script src="js/main.js"></script>
 <script>
     $(function(){
-        fe.info.dataTable = $('#aaa').dataTable({
+        fe.info.dataTable = $('#projectTable').dataTable({
             "bServerSide": true,  //启动服务端分页、排序，搜索等功能
             "sAjaxSource": 'project',  //ajax请求路径
             "aaSorting" : [ [ 1, 'desc' ] ],  //初始化时默认的排序字段

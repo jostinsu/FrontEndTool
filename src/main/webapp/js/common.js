@@ -207,10 +207,11 @@ fe.tool = {
 	success: function (str, callbackForSuccess, callbackForFail) {
 		if (str != "") {
 			var obj = fe.tool.search(str);
-			if (obj.success) {
+			alert(JSON.stringify(obj, null, 4));
+			if (obj.success == "true") {
 				callbackForSuccess();
 			} else {
-				callbackForFail(obj.msg);
+				callbackForFail(decodeURI(obj.msg));
 			}
 		}
 	}
