@@ -9,6 +9,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -63,8 +64,8 @@ public class FeUserController implements ApplicationContextAware {
                 return "redirect:project";
             }
         }
-        model.addAttribute("success", validate && b ? true : false);
-        model.addAttribute("loginMsg", validate && b ? "" : "请检查账号/密码是否正确");
+        model.addAttribute("success", validate && b);
+        model.addAttribute("loginMsg", "请检查账号/密码是否正确");
         model.addAttribute("page", "login");
         return "user";
     }
@@ -87,7 +88,7 @@ public class FeUserController implements ApplicationContextAware {
                 tmp = iFeUserService.updatePassword(id, newPassword1);
             }
         }
-        model.addAttribute("success", check && 1 == tmp ? true : false);
+        model.addAttribute("success", check && 1 == tmp);
         model.addAttribute("msg", check && 1 == tmp ? "成功修改密码" : "原密码输入不正确，修改密码失败");
         return "redirect:updatePassword";
     }
@@ -99,7 +100,7 @@ public class FeUserController implements ApplicationContextAware {
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public String save(String mail, String password1, Model model, HttpSession session) {
+    public String save(String mail, String password1, HttpServletRequest request, Model model, HttpSession session) {
         boolean tmp = iFeUserService.existMail(mail);
         if (!tmp) {
             FeUser feUser = new FeUser();
@@ -110,9 +111,29 @@ public class FeUserController implements ApplicationContextAware {
             FeUser feUser1 = iFeUserService.save(feUser);
             session.setAttribute("userid", feUser1.getId());
             session.setAttribute("name", feUser1.getMail());
+            session.setAttribute("mail", feUser1.getMail());
+            //发送注册邮件
+            StringBuffer sb = new StringBuffer(
+                    "<html><head><meta http-equiv='content-type' content='text/html; charset=GBK'></head><body>尊敬的")
+                    .append(mail)
+                    .append(",您好</br>感谢使用前端可视化工具</br>")
+                    .append("<a href=\"")
+                    .append(request.getScheme())
+                    .append("://")
+                    .append(request.getServerName())
+                    .append(":")
+                    .append(request.getServerPort())
+                    .append(request.getContextPath())
+                    .append("/?time=")
+                    .append(new Date().getTime())
+                    .append("\">")
+                    .append("点击这里登录")
+                    .append("</a></br></body></html>");
+            EmailEvent emailEvent = new EmailEvent(this, mail, "注册成功-前端可视化工具服务邮件", sb.toString());
+            applicationContext.publishEvent(emailEvent);
             return "redirect:project";
         }
-        model.addAttribute("success", !tmp ? true : false);
+        model.addAttribute("success", !tmp);
         model.addAttribute("registerMsg", !tmp ? "成功注册用户" : "该邮箱已经被注册");
         model.addAttribute("page", "register");
         return "user";
@@ -122,7 +143,7 @@ public class FeUserController implements ApplicationContextAware {
     //@ResponseBody
     public Map<String, Object> deleteById(int id) {
         iFeUserService.deleteById(id);
-        return MapUtil.deleteMap();
+        return MapUtil.getDeleteMap();
     }
 
     @RequestMapping(value = "updateNickname", method = RequestMethod.POST)
@@ -136,7 +157,7 @@ public class FeUserController implements ApplicationContextAware {
             tmp = iFeUserService.updateNickname(id, nickname);
         }
         session.setAttribute("name", nickname);
-        map.put("success", 1 == tmp && b ? true : false);
+        map.put("success", 1 == tmp && b);
         map.put("msg", 1 == tmp && b ? "成功修改昵称" : "修改昵称失败");
         return map;
     }
@@ -147,7 +168,7 @@ public class FeUserController implements ApplicationContextAware {
     public Map<String, Object> existMail(String mail) {
         Map<String, Object> map = new HashMap<>(5);
         boolean tmp = iFeUserService.existMail(mail);
-        map.put("success", tmp ? false : true);
+        map.put("success", tmp);
         map.put("msg", tmp ? "该邮箱已经被注册" : "邮箱可用");
         return map;
     }
@@ -160,9 +181,10 @@ public class FeUserController implements ApplicationContextAware {
         map.put("msg", "");
         Pageable pageable = new PageRequest(page,
                 pageSize, new Sort(Sort.Direction.ASC, "nickname"));
-        map.put("data", iFeUserService.findAll(pageable));
-        map.put("iTotalRecords", iFeUserService.count());
-        map.put("iTotalDisplayRecords", iFeUserService.count());
+        Page<FeUser> feUserPage = iFeUserService.findAll(pageable);
+        map.put("data", feUserPage.getContent());
+        map.put("iTotalRecords", feUserPage.getTotalElements());
+        map.put("iTotalDisplayRecords", feUserPage.getNumberOfElements());
         return map;
     }
 
@@ -174,7 +196,7 @@ public class FeUserController implements ApplicationContextAware {
             feUser.setStatus("resetting");
             iFeUserService.save(feUser);
             StringBuffer sb = new StringBuffer(
-                    "<html><head><meta http-equiv='content-type' content='text/html; charset=GBK'></head><body>")
+                    "<html><head><meta http-equiv='content-type' content='text/html; charset=GBK'></head><body>尊敬的")
                     .append(null != feUser.getNickname() ? feUser.getNickname() : feUser.getMail())
                     .append(",您好</br><b>温馨提示</b>：重置密码链接只能使用一次，24小时内有效</br>")
                     .append("<a href=\"")
@@ -191,12 +213,12 @@ public class FeUserController implements ApplicationContextAware {
                     .append(new Date().getTime())
                     .append("\">")
                     .append("点击这里进入重置密码页面,如非本人操作请忽略")
-                    .append("</a></body></html>");
+                    .append("</a></br></body></html>");
             EmailEvent emailEvent = new EmailEvent(this, mail, "重置密码-前端可视化工具服务邮件", sb.toString());
             applicationContext.publishEvent(emailEvent);
-            return MapUtil.userPasswordResetRequstSuccessMap();
+            return MapUtil.getUserPasswordResetRequstSuccessMap();
         }
-        return MapUtil.userPasswordResetRequstFailMap();
+        return MapUtil.getUserPasswordResetRequstFailMap();
     }
 
     @RequestMapping(value = "resetPassword", method = RequestMethod.GET)
@@ -239,7 +261,6 @@ public class FeUserController implements ApplicationContextAware {
     @InitBinder
     protected void initBinder(HttpServletRequest request,
                               ServletRequestDataBinder binder) throws Exception {
-        //request.getSession().setAttribute("userid", 1);
     }
 
 }

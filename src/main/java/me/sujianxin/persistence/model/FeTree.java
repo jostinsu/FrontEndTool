@@ -1,7 +1,13 @@
 package me.sujianxin.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,11 +30,16 @@ public class FeTree implements Serializable {
 
     private String name;
 
+    @Column(columnDefinition = "char")
+    private String iconSkin;
+
     //bi-directional many-to-one association to FePage
-    @OneToMany(mappedBy = "tree")
-    private List<FePage> pages;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "tree", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<FePage> pages = new ArrayList<>();
 
     //bi-directional many-to-many association to FeProject
+    @JsonBackReference
     @ManyToMany
     @JoinTable(
             name = "connect"
@@ -42,11 +53,13 @@ public class FeTree implements Serializable {
     private List<FeProject> projects;
 
     //bi-directional many-to-one association to FeTree
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private FeTree tree;
 
     //bi-directional many-to-one association to FeTree
+    @JsonManagedReference
     @OneToMany(mappedBy = "tree")
     private List<FeTree> trees;
 
@@ -87,6 +100,14 @@ public class FeTree implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIconSkin() {
+        return iconSkin;
+    }
+
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
     }
 
     public List<FePage> getPages() {
@@ -148,5 +169,11 @@ public class FeTree implements Serializable {
 
         return tree;
     }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, true);
+    }
+
 
 }

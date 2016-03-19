@@ -1,5 +1,9 @@
 package me.sujianxin.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -21,6 +25,7 @@ public class FeType implements Serializable {
     private String name;
 
     //bi-directional many-to-one association to FeElement
+    @JsonBackReference
     @OneToMany(mappedBy = "type")
     private List<FeElement> elements;
 
@@ -67,6 +72,11 @@ public class FeType implements Serializable {
         element.setType(null);
 
         return element;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, true);
     }
 
 }

@@ -2,10 +2,14 @@ package me.sujianxin.spring.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.sujianxin.spring.interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -13,11 +17,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,6 +39,9 @@ import java.util.List;
         @ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class})
 })
 public class MvcConfig extends WebMvcConfigurationSupport {
+
+    @Autowired
+    private Environment environment;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -63,6 +72,13 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         addDefaultHttpMessageConverters(converters);
     }
 
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        //registry.addInterceptor(new DocUploadInterceptor()).addPathPatterns("/upload");//文件上传拦截器
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/*");
+        super.addInterceptors(registry);
+    }
+
     @Bean
     public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter() {
         ByteArrayHttpMessageConverter byteArrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
@@ -87,6 +103,12 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         multipartResolver.setDefaultEncoding("UTF-8");
         multipartResolver.setMaxUploadSize(1024 * 1024 * 100);
         multipartResolver.setMaxInMemorySize(40960);
+        FileSystemResource fileSystemResource = new FileSystemResource(environment.getProperty("file.tmp.path"));
+        try {
+            multipartResolver.setUploadTempDir(fileSystemResource);
+        } catch (IOException e) {
+            //multipartResolver.setUploadTempDir(new FileSystemResource(System.getProperty("java.io.tmpdir")));
+        }
         return multipartResolver;
     }
 

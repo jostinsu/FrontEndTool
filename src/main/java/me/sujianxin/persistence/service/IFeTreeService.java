@@ -18,9 +18,15 @@ public interface IFeTreeService {
 
     void updateById(FeTree feTree);
 
+    int updateNameById(int id, String name);
+
+    int updatePageByTreeId(int id, String code);
+
     FeTree findOne(int id);
 
-    FeTree findOneByProjectId(int projectid);
+    //FeTree findOneByProjectId(int projectid);
+
+    FeTree findPageByTreeId(int id);
 
     List<FeTree> findAll();
 

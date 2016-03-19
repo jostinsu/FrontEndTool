@@ -5,6 +5,7 @@ import me.sujianxin.persistence.service.IFeTypeService;
 import me.sujianxin.spring.util.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class FeTypeController {
     private IFeTypeService iFeTypeService;
 
     @RequestMapping(value = "saveType", method = RequestMethod.POST)
-    public String save(@ModelAttribute FeType feType) {
+    public String save(@ModelAttribute FeType feType, BindingResult bindingResult) {
         iFeTypeService.save(feType);
         return "";
     }
@@ -33,14 +34,14 @@ public class FeTypeController {
     @ResponseBody
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeTypeService.deleteById(id);
-        return MapUtil.deleteMap();
+        return MapUtil.getDeleteMap();
     }
 
     @RequestMapping(value = "updateType", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> update(@ModelAttribute FeType feType) {
+    public Map<String, Object> update(@ModelAttribute FeType feType, BindingResult bindingResult) {
         iFeTypeService.updateById(feType);
-        return MapUtil.updateMap();
+        return MapUtil.getUpdateSuccessMap();
     }
 
     @RequestMapping(value = "type/{id}", method = RequestMethod.GET)
@@ -48,7 +49,7 @@ public class FeTypeController {
     public Map<String, Object> findOne(@PathVariable("id") int id) {
         FeType feType = iFeTypeService.findOne(id);
         Map<String, Object> map = new HashMap<>(3);
-        map.put("success", null != feType ? true : false);
+        map.put("success", true);
         map.put("msg", null != feType ? "" : "非法操作");
         map.put("data", null != feType ? feType : "");
         return map;
@@ -59,9 +60,9 @@ public class FeTypeController {
     public Map<String, Object> findAll() {
         List<FeType> feType = iFeTypeService.findAll();
         Map<String, Object> map = new HashMap<>(3);
-        map.put("success", !feType.isEmpty() ? true : false);
-        map.put("msg", !feType.isEmpty() ? "" : "非法操作");
-        map.put("data", !feType.isEmpty() ? feType : "");
+        map.put("success", true);
+        map.put("msg", !feType.isEmpty() ? "" : "组件不存在");
+        map.put("data", feType);
         return map;
     }
 }

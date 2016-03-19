@@ -1,9 +1,11 @@
 package me.sujianxin.persistence.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sujianxin.persistence.model.FeProject;
+import me.sujianxin.persistence.model.FeStyle;
+import me.sujianxin.persistence.model.FeTree;
 import me.sujianxin.persistence.model.FeUser;
 import me.sujianxin.spring.config.ApplicationConfig;
-import me.sujianxin.spring.config.PersistenceJPAConfig;
 import me.sujianxin.spring.domain.FeProjectDomain;
 import me.sujianxin.spring.domain.FeProjectForm;
 import org.junit.Before;
@@ -16,7 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,17 +33,19 @@ import java.util.Map;
  * <p>Version: 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class, PersistenceJPAConfig.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = {ApplicationConfig.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 @Rollback(false)
 public class FeProjectServiceTest {
     @Autowired
-    private IFeProjectService feProjectService;
+    private IFeProjectService iFeProjectService;
     private SimpleDateFormat sdf;
+    private ObjectMapper objectMapper = null;
 
     @Before
     public void init() {
         this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -50,19 +56,35 @@ public class FeProjectServiceTest {
         feProjectForm.setSortCol("createTime");
         feProjectForm.setSortDir("desc");
         // feProjectForm.setName("项目");
-        Map<String, Object> result = feProjectService.findAll(feProjectForm, 1);
+        Map<String, Object> result = iFeProjectService.findAll(feProjectForm, 1);
         System.out.println(((List<FeProjectDomain>) result.get("data")).size());
     }
 
     @Test
     public void save() {
-        FeProject project = new FeProject();
-        project.setName("name_" + sdf.format(new Date()));
-        project.setCreateTime(new Date());
-        project.setRemark("remark_" + sdf.format(new Date()));
-        project.setUser(new FeUser(1));
-        FeProject tmp = feProjectService.save(project);
-        System.out.println(project.hashCode());
+        FeProject feProject = new FeProject();
+        feProject.setName("name_" + sdf.format(new Date()));
+        feProject.setCreateTime(new Date());
+        feProject.setRemark("remark_" + sdf.format(new Date()));
+        feProject.setUser(new FeUser(1));
+        FeStyle feStyle = new FeStyle();
+        feStyle.setName("common.css");
+        feStyle.setCode("code");
+        FeStyle feStyle1 = new FeStyle();
+        feStyle1.setName("common.css");
+        feStyle1.setCode("code");
+
+        feProject.addStyle(feStyle);
+        feProject.addStyle(feStyle1);
+
+        FeTree feTree = new FeTree();
+        feTree.setName("root");
+        feTree.setIsFolder("1");
+        List<FeTree> feTreeList = new ArrayList<>();
+        feTreeList.add(feTree);
+        feProject.setTrees(feTreeList);
+        FeProject tmp = iFeProjectService.save(feProject);
+        System.out.println(feProject.hashCode());
         System.out.println(tmp.hashCode());
     }
 
@@ -74,11 +96,22 @@ public class FeProjectServiceTest {
         project.setCreateTime(new Date());
         project.setRemark("update" + sdf.format(new Date()));
         project.setUser(new FeUser(1));
-        feProjectService.save(project);
+        iFeProjectService.save(project);
     }
 
     @Test
     public void deleteById() {
-        feProjectService.deleteById(4);
+        iFeProjectService.deleteById(4);
+    }
+
+    @Test
+    public void findOne() {
+        FeProject feProject = iFeProjectService.findOne(1);
+        try {
+            objectMapper.writeValue(System.out, feProject);
+            System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,10 +1,14 @@
 package me.sujianxin.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +26,7 @@ public class FeProject implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @CreatedDate
     @Temporal(TemporalType.DATE)
     @Column(name = "create_time")
     private Date createTime;
@@ -31,15 +36,20 @@ public class FeProject implements Serializable {
     private String remark;
 
     //bi-directional many-to-one association to FeUser
+    @JsonBackReference
     @ManyToOne
     private FeUser user;
 
     //bi-directional many-to-one association to FeStyle
-    @OneToMany(mappedBy = "project")
-    private List<FeStyle> styles;
+    @JsonManagedReference
+    //@OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<FeStyle> styles = new ArrayList<>();
 
     //bi-directional many-to-many association to FeTree
-    @ManyToMany(mappedBy = "projects")
+    @JsonManagedReference
+    //@ManyToMany(mappedBy = "projects")
+    @ManyToMany(mappedBy = "projects", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<FeTree> trees;
 
     public FeProject() {

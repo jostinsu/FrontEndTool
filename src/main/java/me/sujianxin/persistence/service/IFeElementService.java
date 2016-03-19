@@ -4,6 +4,8 @@ import me.sujianxin.persistence.model.FeElement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * <p>Created with IDEA
  * <p>Author: laudukang
@@ -21,6 +23,8 @@ public interface IFeElementService {
     FeElement findOne(int id);
 
     Page<FeElement> findAll(Pageable pageable);
+
+    List<FeElement> findByTypeId(int typeid);
 
     long count();
 }

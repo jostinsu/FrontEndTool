@@ -1,9 +1,11 @@
 package me.sujianxin.persistence.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sujianxin.persistence.model.FeElement;
 import me.sujianxin.persistence.model.FeType;
 import me.sujianxin.spring.config.ApplicationConfig;
-import me.sujianxin.spring.config.PersistenceJPAConfig;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>Created with IDEA
@@ -22,12 +26,38 @@ import javax.transaction.Transactional;
  * <p>Version: 1.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class, PersistenceJPAConfig.class}, loader = AnnotationConfigContextLoader.class)
+@ContextConfiguration(classes = {ApplicationConfig.class}, loader = AnnotationConfigContextLoader.class)
 @Transactional
 @Rollback(false)
 public class FeElementServiceTest {
     @Autowired
     private IFeElementService iFeElementService;
+
+    private ObjectMapper objectMapper = null;
+
+    @Before
+    public void init() {
+        objectMapper = new ObjectMapper();
+    }
+
+    @After
+    public void end() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void findListByTypeId() {
+        List<FeElement> feElementList = iFeElementService.findByTypeId(1);
+        try {
+            objectMapper.writeValue(System.out, feElementList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void save() {

@@ -45,6 +45,11 @@ public class FePageService implements IFePageService {
     }
 
     @Override
+    public int updateCode(int id, String code) {
+        return fePageRepository.updateCode(id, code);
+    }
+
+    @Override
     public FePage findOne(int id) {
         return fePageRepository.findOne(id);
     }

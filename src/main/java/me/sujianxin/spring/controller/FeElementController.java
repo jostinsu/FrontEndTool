@@ -6,9 +6,11 @@ import me.sujianxin.persistence.service.IFeElementService;
 import me.sujianxin.spring.util.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,7 +26,7 @@ public class FeElementController {
     private IFeElementService iFeElementService;
 
     @RequestMapping(value = "saveElement", method = RequestMethod.POST)
-    public String save(@ModelAttribute FeElement feElement, @RequestParam("typeid") int typeid) {
+    public String save(@ModelAttribute FeElement feElement, BindingResult bindingResult, @RequestParam("typeid") int typeid) {
         feElement.setType(new FeType(typeid));
         iFeElementService.save(feElement);
         return "";
@@ -33,25 +35,25 @@ public class FeElementController {
     @RequestMapping(value = "deleteElement", method = RequestMethod.DELETE)
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeElementService.deleteById(id);
-        return MapUtil.deleteMap();
+        return MapUtil.getDeleteMap();
     }
 
     @RequestMapping(value = "updateElement", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> update(@ModelAttribute FeElement feElement, int typeid) {
+    public Map<String, Object> update(@ModelAttribute FeElement feElement, BindingResult bindingResult, int typeid) {
         feElement.setType(new FeType(typeid));
         iFeElementService.updateById(feElement);
-        return MapUtil.updateMap();
+        return MapUtil.getUpdateSuccessMap();
     }
 
-    @RequestMapping(value = "element/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "element", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> findOne(@PathVariable("id") int id) {
-        FeElement feElement = iFeElementService.findOne(id);
+    public Map<String, Object> findOne(@RequestParam("id") int id) {
+        List<FeElement> feElementList = iFeElementService.findByTypeId(id);
         Map<String, Object> map = new HashMap<>(3);
-        map.put("success", null != feElement ? true : false);
-        map.put("msg", null != feElement ? "" : "非法操作");
-        map.put("data", null != feElement ? feElement : "");
+        map.put("success", true);
+        map.put("msg", "");
+        map.put("data", feElementList);
         return map;
     }
 }

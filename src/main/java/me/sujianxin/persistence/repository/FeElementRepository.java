@@ -2,6 +2,7 @@ package me.sujianxin.persistence.repository;
 
 import me.sujianxin.persistence.model.FeElement;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * <p>Version: 1.0
  */
 @Repository
-public interface FeElementRepository extends JpaRepository<FeElement, Integer> {
+public interface FeElementRepository extends JpaRepository<FeElement, Integer>, JpaSpecificationExecutor<FeElement> {
 }

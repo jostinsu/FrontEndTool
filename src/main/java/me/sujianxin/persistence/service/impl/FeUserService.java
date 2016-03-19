@@ -88,7 +88,7 @@ public class FeUserService implements IFeUserService {
 
     @Override
     public boolean existMail(String mail) {
-        return feUserRepository.existMail(mail) != 0 ? true : false;
+        return feUserRepository.existMail(mail) != 0;
     }
 
     private Specification getSpecification(final String nickname, final String password) {

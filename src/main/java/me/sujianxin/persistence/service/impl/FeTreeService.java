@@ -1,5 +1,6 @@
 package me.sujianxin.persistence.service.impl;
 
+import me.sujianxin.persistence.model.FePage;
 import me.sujianxin.persistence.model.FeTree;
 import me.sujianxin.persistence.repository.FeTreeRepository;
 import me.sujianxin.persistence.service.IFeTreeService;
@@ -45,14 +46,36 @@ public class FeTreeService implements IFeTreeService {
     }
 
     @Override
+    public int updateNameById(int id, String name) {
+        return feTreeRepository.updateNameById(id, name);
+    }
+
+    @Override
+    public int updatePageByTreeId(int id, String code) {
+        FeTree feTree = feTreeRepository.findOne(id);
+        if (null != feTree && feTree.getPages().size() > 0) {
+            FePage fePage = feTree.getPages().get(0);
+            fePage.setCode(code);
+            feTreeRepository.save(feTree);
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
     public FeTree findOne(int id) {
         return feTreeRepository.findOne(id);
     }
 
     @Override
-    public FeTree findOneByProjectId(int projectid) {
-        return feTreeRepository.findOneByProjectId(projectid);
+    public FeTree findPageByTreeId(int id) {
+        return feTreeRepository.findPageByTreeId(id);
     }
+
+//    @Override
+//    public FeTree findOneByProjectId(int projectid) {
+//        return feTreeRepository.findOneByProjectId(projectid);
+//    }
 
     @Override
     public List<FeTree> findAll() {

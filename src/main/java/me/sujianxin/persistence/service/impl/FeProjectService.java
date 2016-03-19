@@ -23,6 +23,11 @@ public class FeProjectService implements IFeProjectService {
     private FeProjectRepository feProjectRepository;
 
     @Override
+    public FeProject findOne(int id) {
+        return feProjectRepository.findOne(id);
+    }
+
+    @Override
     @Transactional
     public FeProject save(FeProject feProject) {
         return feProjectRepository.save(feProject);

@@ -1,5 +1,9 @@
 package me.sujianxin.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -22,6 +26,7 @@ public class FePage implements Serializable {
     private String style;
 
     //bi-directional many-to-one association to FeTree
+    @JsonBackReference
     @ManyToOne
     private FeTree tree;
 
@@ -58,6 +63,11 @@ public class FePage implements Serializable {
 
     public void setTree(FeTree tree) {
         this.tree = tree;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, true);
     }
 
 }

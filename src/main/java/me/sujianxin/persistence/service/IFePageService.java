@@ -18,6 +18,8 @@ public interface IFePageService {
 
     void updateById(FePage fePage);
 
+    int updateCode(int id, String code);
+
     FePage findOne(int id);
 
     Page<FePage> findAll(Pageable pageable);

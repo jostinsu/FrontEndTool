@@ -1,5 +1,9 @@
 package me.sujianxin.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -32,6 +36,7 @@ public class FeUser implements Serializable {
     private Date registerTime;
 
     //bi-directional many-to-one association to FeProject
+    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<FeProject> projects;
 
@@ -111,6 +116,11 @@ public class FeUser implements Serializable {
         project.setUser(null);
 
         return project;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE, true);
     }
 
 }

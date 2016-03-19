@@ -20,6 +20,8 @@ public class FeTreeDomain {
 
     private String name;
 
+    private String iconSkin;
+
     private int parentid;
 
     public int getId() {
@@ -52,6 +54,14 @@ public class FeTreeDomain {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIconSkin() {
+        return iconSkin;
+    }
+
+    public void setIconSkin(String iconSkin) {
+        this.iconSkin = iconSkin;
     }
 
     public int getParentid() {

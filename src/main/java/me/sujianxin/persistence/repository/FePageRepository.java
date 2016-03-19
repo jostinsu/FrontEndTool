@@ -2,6 +2,9 @@ package me.sujianxin.persistence.repository;
 
 import me.sujianxin.persistence.model.FePage;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +16,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FePageRepository extends JpaRepository<FePage, Integer> {
+
+    @Modifying
+    @Query("update FePage page set page.code=:code where page.id=:id")
+    int updateCode(@Param("id") int id, @Param("code") String code);
 }

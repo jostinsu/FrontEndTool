@@ -15,6 +15,8 @@ import java.util.Map;
 public interface IFeProjectService {
     FeProject save(FeProject feProject);
 
+    FeProject findOne(int id);
+
     void updateById(FeProject feProject);
 
     void deleteById(int id);

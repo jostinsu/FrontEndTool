@@ -13,4 +13,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FeProjectRepository extends JpaRepository<FeProject, Integer>, FeProjectRepositoryCustom {
+
+    //@Query("select tree from FeTree tree join tree.projects as pr join pr.trees tr where tr.id=tree.id and pr.id=:projectid")
+    //@Query("select project from FeProject project join project.trees as tree join tree.projects as pr where project.id=pr.id and project.id=:projectid")
+    //FeProject findOneByProjectId(@Param("projectid") int projectid);
 }

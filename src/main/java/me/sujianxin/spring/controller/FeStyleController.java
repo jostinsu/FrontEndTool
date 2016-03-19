@@ -33,14 +33,14 @@ public class FeStyleController {
     @RequestMapping(value = "deleteStyle", method = RequestMethod.DELETE)
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeStyleService.deleteById(id);
-        return MapUtil.deleteMap();
+        return MapUtil.getDeleteMap();
     }
 
     @RequestMapping(value = "updateStyle", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> update(@ModelAttribute FeStyle feStyle) {
         iFeStyleService.updateById(feStyle.getId(), feStyle.getCode());
-        return MapUtil.updateMap();
+        return MapUtil.getUpdateSuccessMap();
     }
 
     @RequestMapping(value = "style/{id}", method = RequestMethod.GET)
@@ -48,7 +48,7 @@ public class FeStyleController {
     public Map<String, Object> findOne(@PathVariable("id") int id) {
         Map<String, Object> map = new HashMap<>(3);
         FeStyle feStyle = iFeStyleService.findOne(id);
-        map.put("success", null != feStyle ? true : false);
+        map.put("success", true);
         map.put("msg", null != feStyle ? "" : "非法操作");
         map.put("data", null != feStyle ? feStyle : "");
         return map;
