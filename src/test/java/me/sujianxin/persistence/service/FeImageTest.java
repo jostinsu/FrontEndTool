@@ -19,4 +19,11 @@ public class FeImageTest {
 //        file.renameTo(reFile);
         System.out.println(path.substring(0, path.lastIndexOf("/") + 1));
     }
+
+    @Test
+    public void suffix() {
+        String suffix = "JPG,GIF,PNG";
+        String name = "lau.jpg";
+        System.out.println(name.substring(name.lastIndexOf(".") + 1));
+    }
 }

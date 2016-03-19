@@ -78,19 +78,19 @@ public class FeProjectController {
 
     @RequestMapping(value = "newProject", method = RequestMethod.POST)
     public String projectPOST(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session, Model model) {
-        File uploadPath = new File(environment.getProperty("file.upload.path"));
-        if (!uploadPath.exists()) {
-            uploadPath.mkdir();
-        }
-        File userPath = new File(environment.getProperty("file.upload.path") + File.separator + String.valueOf(session.getAttribute("mail")));
-        if (!userPath.exists()) {
-            userPath.mkdir();
-        }
+//        File uploadPath = new File(environment.getProperty("file.upload.path"));
+//        if (!uploadPath.exists()) {
+//            uploadPath.mkdirs();
+//        }
+//        File userPath = new File(environment.getProperty("file.upload.path") + File.separator + String.valueOf(session.getAttribute("mail")));
+//        if (!userPath.exists()) {
+//            userPath.mkdirs();
+//        }
         String projectPath = environment.getProperty("file.upload.path")
                 + File.separator + String.valueOf(session.getAttribute("mail")) + File.separator + feProjectDomain.getName();
         File project = new File(projectPath);
         if (!project.exists()) {
-            project.mkdir();
+            project.mkdirs();
             FeProject feProject = new FeProject();
             feProject.setRemark(feProjectDomain.getRemark());
             feProject.setName(feProjectDomain.getName());
@@ -116,7 +116,7 @@ public class FeProjectController {
 
             iFeProjectService.save(feProject);
         }
-        model.addAttribute("success", !project.exists() ? true : false);
+        model.addAttribute("success", !project.exists());
         model.addAttribute("msg", !project.exists() ? "保存成功" : "项目名称不能重复");
         return "redirect:newProject";
     }
@@ -158,10 +158,6 @@ public class FeProjectController {
         JSONObject jsonObject = JSONObject.fromObject(jsonStr);
         JSONArray jsonArray = jsonObject.getJSONArray("trees");
 
-        JSONObject jsonObjectImage = JSONObject.fromObject("{}");
-        jsonObjectImage.accumulate("name", "image");
-        jsonObjectImage.accumulate("projectName", "projectName");
-
         String mail = feProject.getUser().getMail();
         String projectName = feProject.getName();
         String projectPath = environment.getProperty("file.upload.path")
@@ -169,24 +165,30 @@ public class FeProjectController {
                 + File.separator + projectName;
         String imgURL = "/upload/" + mail + "/" + projectName + "/";
 
-        final List<File> imageList = new ArrayList<>();
+        if (new File(projectPath).exists()) {
 
-        try {
-            searchImage(projectPath, imageList);
-        } catch (IOException e) {
-            e.printStackTrace();
+            JSONObject jsonObjectImage = JSONObject.fromObject("{}");
+            jsonObjectImage.accumulate("name", "image");
+            jsonObjectImage.accumulate("projectName", projectName);
+
+            final List<File> imageList = new ArrayList<>();
+
+            try {
+                searchImage(projectPath, imageList);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (File file : imageList) {
+                if (file.isDirectory()) continue;
+                JSONObject obj = JSONObject.fromObject("{}");
+                obj.put("name", file.getName());
+                obj.put("title", imgURL + file.getName());
+                obj.put("iconSkin", "page");
+                jsonObjectImage.accumulate("trees", obj);
+            }
+            jsonArray.add(0, jsonObjectImage);
         }
-
-        for (File file : imageList) {
-            if (file.isDirectory()) continue;
-            JSONObject obj = JSONObject.fromObject("{}");
-            obj.put("name", file.getName());
-            obj.put("title", imgURL + file.getName());
-            obj.put("iconSkin", "page");
-            jsonObjectImage.accumulate("trees", obj);
-        }
-        jsonArray.add(0, jsonObjectImage);
-
         Map<String, Object> map = new HashMap<>();
         map.put("data", feProject);
         map.put("success", true);
@@ -215,28 +217,32 @@ public class FeProjectController {
 
         try {
 
-            final List<File> imageList = new ArrayList<>();
-            searchImage(projectPath, imageList);
-
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(bos);
 
-            ZipEntry zipEntry;
-            //zip image
-            for (File tmp : imageList) {
-                File parent = tmp.getParentFile();
-                StringBuilder sb = new StringBuilder();
-                while (!mail.equals(tmp.getName()) && null != parent && !mail.equals(parent.getName())) {
-                    if (parent.isDirectory())
-                        sb.insert(0, parent.getName() + File.separator);
-                    parent = parent.getParentFile();
+            if (new File(projectPath).exists()) {
+                final List<File> imageList = new ArrayList<>();
+
+                searchImage(projectPath, imageList);
+
+                ZipEntry zipEntry;
+                //zip image
+                for (File tmp : imageList) {
+                    File parent = tmp.getParentFile();
+                    StringBuilder sb = new StringBuilder();
+                    while (!mail.equals(tmp.getName()) && null != parent && !mail.equals(parent.getName())) {
+                        if (parent.isDirectory())
+                            sb.insert(0, parent.getName() + File.separator);
+                        parent = parent.getParentFile();
+                    }
+                    if (tmp.isDirectory()) continue;
+                    zipEntry = new ZipEntry(sb.toString() + tmp.getName());
+                    zipOutputStream.putNextEntry(zipEntry);
+                    Files.copy(tmp, zipOutputStream);
+                    zipOutputStream.closeEntry();
                 }
-                if (tmp.isDirectory()) continue;
-                zipEntry = new ZipEntry(sb.toString() + tmp.getName());
-                zipOutputStream.putNextEntry(zipEntry);
-                Files.copy(tmp, zipOutputStream);
-                zipOutputStream.closeEntry();
             }
+
             if (feProject.getTrees().size() > 0) {
                 packPageToZip(feProject.getTrees().get(0), zipOutputStream, "");
             }

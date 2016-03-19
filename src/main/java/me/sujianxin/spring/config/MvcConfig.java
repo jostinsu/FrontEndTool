@@ -101,9 +101,15 @@ public class MvcConfig extends WebMvcConfigurationSupport {
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setDefaultEncoding("UTF-8");
-        multipartResolver.setMaxUploadSize(1024 * 1024 * 100);
+        long maxFileSizeLimit;
+        try {
+            maxFileSizeLimit = Long.valueOf(environment.getProperty("file.upload.size"));
+        } catch (Exception e) {
+            maxFileSizeLimit = 10;
+        }
+        multipartResolver.setMaxUploadSize(1024 * 1024 * maxFileSizeLimit);
         multipartResolver.setMaxInMemorySize(40960);
-        FileSystemResource fileSystemResource = new FileSystemResource(environment.getProperty("file.tmp.path"));
+        FileSystemResource fileSystemResource = new FileSystemResource(environment.getProperty("file.upload.tmp"));
         try {
             multipartResolver.setUploadTempDir(fileSystemResource);
         } catch (IOException e) {

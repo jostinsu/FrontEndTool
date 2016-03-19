@@ -18,6 +18,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         System.out.println("in LoginInterceptor");
         request.getSession().setAttribute("userid", 1);
         request.getSession().setAttribute("adminid", 1);
+        request.getSession().setAttribute("mail", "751611201@qq.com");
         return super.preHandle(request, response, handler);
     }
 }
