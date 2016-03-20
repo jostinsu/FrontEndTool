@@ -149,8 +149,8 @@ fe.user.register = function () {
 	});
 
 	$('.register').on('submit', function () {
-		$('#password1').val($.md5($(this).val()));
-		$('#password2').val($.md5($(this).val()));
+		$('#password1').val($.md5($('#password1').val()));
+		$('#password2').val($.md5($('#password2').val()));
 	});
 };
 
