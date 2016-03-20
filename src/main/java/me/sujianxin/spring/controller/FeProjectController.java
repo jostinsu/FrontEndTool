@@ -137,17 +137,14 @@ public class FeProjectController {
     @RequestMapping(value = "deleteProject", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> projectDelete(@RequestParam("id") int id, HttpSession session) {
-//        FeProject feProject = iFeProjectService.findOne(id);
-//        if (null != feProject) {
-//            String projectPath = environment.getProperty("file.upload.path") + File.separator + feProject.getUser().getMail()
-//                    + File.separator + feProject.getName();
-//            File file = new File(projectPath);
-//            file.deleteOnExit();
-//        }
-        // TODO: 2016/3/20 递归删除图片文件夹及其文件
-
+        FeProject feProject = iFeProjectService.findOne(id);
+        if (null != feProject) {
+            String projectPath = environment.getProperty("file.upload.path") + File.separator + feProject.getUser().getMail()
+                    + File.separator + feProject.getName();
+            deleteFile(projectPath);
+            new File(projectPath).delete();
+        }
         iFeProjectService.deleteById(id);
-
         return MapUtil.getDeleteMap();
     }
 
@@ -186,34 +183,33 @@ public class FeProjectController {
                 + File.separator + mail
                 + File.separator + projectName + File.separator + "image";
         String imgURL = "/upload/" + mail + "/" + projectName + "/image/";
-        if (new File(projectPath).exists()) {
 
-            JSONObject jsonObjectImage = JSONObject.fromObject("{}");
-            jsonObjectImage.put("name", "image");
-            jsonObjectImage.put("iconSkin", "folder");
-            jsonObjectImage.put("isFolder", "1");
+        JSONObject jsonObjectImage = JSONObject.fromObject("{}");
+        jsonObjectImage.put("name", "image");
+        jsonObjectImage.put("iconSkin", "folder");
+        jsonObjectImage.put("isFolder", "1");
 
-            final List<File> imageList = new ArrayList<>();
+        final List<File> imageList = new ArrayList<>();
 
-            try {
-                searchImage(projectPath, imageList);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            JSONArray jsonArrayImage = JSONArray.fromObject("[]");
-
-            for (File file : imageList) {
-                if (file.isDirectory()) continue;
-                JSONObject obj = JSONObject.fromObject("{}");
-                obj.put("name", file.getName());
-                obj.put("title", imgURL + file.getName());
-                obj.put("iconSkin", "img");
-                obj.put("isFolder", "0");
-                jsonArrayImage.add(obj);
-            }
-            jsonObjectImage.put("trees", jsonArrayImage);
-            jsonArray.add(0, jsonObjectImage);
+        try {
+            searchImage(projectPath, imageList);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        JSONArray jsonArrayImage = JSONArray.fromObject("[]");
+
+        for (File file : imageList) {
+            if (file.isDirectory()) continue;
+            JSONObject obj = JSONObject.fromObject("{}");
+            obj.put("name", file.getName());
+            obj.put("title", imgURL + file.getName());
+            obj.put("iconSkin", "img");
+            obj.put("isFolder", "0");
+            jsonArrayImage.add(obj);
+        }
+        jsonObjectImage.put("trees", jsonArrayImage);
+        jsonArray.add(0, jsonObjectImage);
+
         Map<String, Object> map = new HashMap<>();
         map.put("data", jsonObject);
         map.put("success", true);
@@ -343,6 +339,27 @@ public class FeProjectController {
                     zipOutputStream.closeEntry();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void deleteFile(String filepath) {
+        File file = new File(filepath);
+        if (file.exists() && file.isDirectory()) {
+            if (file.listFiles().length == 0) {
+                file.delete();
+            } else {
+                File delFile[] = file.listFiles();
+                int i = file.listFiles().length;
+                for (int j = 0; j < i; j++) {
+                    try {
+                        if (delFile[j].isDirectory()) {
+                            deleteFile(delFile[j].getAbsolutePath());
+                        }
+                        delFile[j].delete();
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
