@@ -106,7 +106,7 @@ public class FeUserController implements ApplicationContextAware {
             FeUser feUser = new FeUser();
             feUser.setMail(mail);
             feUser.setPassword(password1);
-            feUser.setRegisterTime(new Date());
+            //feUser.setRegisterTime(new Date());
             feUser.setStatus("normal");
             FeUser feUser1 = iFeUserService.save(feUser);
             session.setAttribute("userid", feUser1.getId());
@@ -139,7 +139,7 @@ public class FeUserController implements ApplicationContextAware {
         return "user";
     }
 
-    //@RequestMapping(value = "deleteUser", method = RequestMethod.DELETE)
+    //@RequestMapping(value = "deleteUser", method = RequestMethod.POST)
     //@ResponseBody
     public Map<String, Object> deleteById(int id) {
         iFeUserService.deleteById(id);

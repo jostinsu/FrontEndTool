@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -31,25 +32,31 @@ public class FeTreeController {
     private Environment environment;
 
     @RequestMapping(value = "saveTree", method = RequestMethod.POST)
-    public String save(@ModelAttribute FeTreeDomain feTreeDomain, BindingResult bindingResult) {
+    @ResponseBody
+    public Map<String, Object> save(@ModelAttribute FeTreeDomain feTreeDomain, BindingResult bindingResult) {
         FeTree feTree = new FeTree();
         feTree.setName(feTreeDomain.getName());
-        feTree.setLayer(feTreeDomain.getLayer());
         feTree.setIsFolder(feTreeDomain.getIsFolder());
         feTree.setIconSkin(feTreeDomain.getIconSkin());
         if (null != feTreeDomain.getIsFolder() && "0".equals(feTreeDomain.getIsFolder())) {
             FePage fePage = new FePage();
             fePage.setCode("");
+            fePage.setStyle("");
             feTree.addPage(fePage);
         }
         if (0 != feTreeDomain.getParentid()) {
             feTree.setTree(new FeTree(feTreeDomain.getParentid()));
         }
-        iFeTreeService.save(feTree);
-        return "";
+        FeTree reFeTree = iFeTreeService.save(feTree);
+        Map<String, Object> map = new HashMap<>(3);
+        map.put("id", reFeTree.getId());
+        map.put("success", true);
+        map.put("msg", "新建成功");
+        return map;
     }
 
-    @RequestMapping(value = "deleteTree", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteTree", method = RequestMethod.POST)
+    @ResponseBody
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeTreeService.deleteById(id);
         return MapUtil.getDeleteMap();
@@ -63,7 +70,6 @@ public class FeTreeController {
         feTree.setName(feTreeDomain.getName());
         feTree.setIsFolder(feTreeDomain.getIsFolder());
         feTree.setIconSkin(feTreeDomain.getIconSkin());
-        feTree.setLayer(feTreeDomain.getLayer());
         if (0 != feTreeDomain.getParentid()) {
             feTree.setTree(new FeTree(feTreeDomain.getParentid()));
         }
@@ -71,7 +77,7 @@ public class FeTreeController {
         return MapUtil.getUpdateSuccessMap();
     }
 
-    @RequestMapping(value = "updateTreeName", method = RequestMethod.POST)
+    @RequestMapping(value = "renameTreeNodeName", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> updateTreeName(@ModelAttribute FeTreeDomain feTreeDomain, BindingResult bindingResult) {
         int tmp = iFeTreeService.updateNameById(feTreeDomain.getId(), feTreeDomain.getName());

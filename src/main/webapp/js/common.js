@@ -261,7 +261,7 @@ fe.app.confirmBoxEvent = function(){
 				fe.info.deleteProject($('.confirmBox_cover').data('projectId'));
 				break;
 			case 'info_newProject':
-				window.location.href = "edit.html";
+				window.location.href = "edit?id=" + fe.tool.search(window.location.search).id;
 				break;
 			case 'deleteTreeNode':
 				fe.edit.deleteTreeNode($('.confirmBox_cover').data('treeNode'));

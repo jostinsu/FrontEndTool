@@ -30,7 +30,7 @@ public class FeStyleController {
         return "";
     }
 
-    @RequestMapping(value = "deleteStyle", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteStyle", method = RequestMethod.POST)
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeStyleService.deleteById(id);
         return MapUtil.getDeleteMap();

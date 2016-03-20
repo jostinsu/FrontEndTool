@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "project")
+@EntityListeners({AuditingEntityListener.class})
 @NamedQuery(name = "FeProject.findAll", query = "SELECT f FROM FeProject f")
 public class FeProject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -49,7 +51,16 @@ public class FeProject implements Serializable {
     //bi-directional many-to-many association to FeTree
     @JsonManagedReference
     //@ManyToMany(mappedBy = "projects")
-    @ManyToMany(mappedBy = "projects", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "connect"
+            , joinColumns = {
+            @JoinColumn(name = "project_id")
+    }
+            , inverseJoinColumns = {
+            @JoinColumn(name = "tree_id")
+    }
+    )
     private List<FeTree> trees;
 
     public FeProject() {

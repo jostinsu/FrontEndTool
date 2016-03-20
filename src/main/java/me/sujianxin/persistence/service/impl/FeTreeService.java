@@ -24,8 +24,8 @@ public class FeTreeService implements IFeTreeService {
     private FeTreeRepository feTreeRepository;
 
     @Override
-    public void save(FeTree feTree) {
-        feTreeRepository.save(feTree);
+    public FeTree save(FeTree feTree) {
+        return feTreeRepository.save(feTree);
     }
 
     @Override
@@ -37,7 +37,6 @@ public class FeTreeService implements IFeTreeService {
     public void updateById(FeTree feTree) {
         FeTree tmp = feTreeRepository.findOne(feTree.getId());
         if (null != tmp) {
-            tmp.setLayer(feTree.getLayer());
             tmp.setTree(feTree.getTree());
             tmp.setName(feTree.getName());
             tmp.setIsFolder(feTree.getIsFolder());

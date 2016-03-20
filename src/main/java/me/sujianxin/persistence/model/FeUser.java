@@ -3,6 +3,8 @@ package me.sujianxin.persistence.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "user")
+@EntityListeners({AuditingEntityListener.class})
 @NamedQuery(name = "FeUser.findAll", query = "SELECT f FROM FeUser f")
 public class FeUser implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -31,6 +34,7 @@ public class FeUser implements Serializable {
 
     private String status;
 
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "register_time")
     private Date registerTime;

@@ -40,7 +40,7 @@ public class FePageController {
 //        return "";
 //    }
 
-//    @RequestMapping(value = "deletePage", method = RequestMethod.DELETE)
+//    @RequestMapping(value = "deletePage", method = RequestMethod.POST)
 //    public Map<String, Object> deletePageById(@RequestParam("id") int id) {
 //        iFePageService.deleteById(id);
 //        return MapUtil.getDeleteMap();

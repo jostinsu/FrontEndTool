@@ -80,9 +80,11 @@ public class FeProjectServiceTest {
         FeTree feTree = new FeTree();
         feTree.setName("root");
         feTree.setIsFolder("1");
+        feTree.setIconSkin("folder");
         List<FeTree> feTreeList = new ArrayList<>();
         feTreeList.add(feTree);
         feProject.setTrees(feTreeList);
+
         FeProject tmp = iFeProjectService.save(feProject);
         System.out.println(feProject.hashCode());
         System.out.println(tmp.hashCode());
@@ -106,7 +108,7 @@ public class FeProjectServiceTest {
 
     @Test
     public void findOne() {
-        FeProject feProject = iFeProjectService.findOne(1);
+        FeProject feProject = iFeProjectService.findOne(23);
         try {
             objectMapper.writeValue(System.out, feProject);
             System.out.println();

@@ -30,7 +30,7 @@ public class FeTypeController {
         return "";
     }
 
-    @RequestMapping(value = "deleteType", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteType", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeTypeService.deleteById(id);

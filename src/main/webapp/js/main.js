@@ -42,30 +42,20 @@ fe.info.dataTableEvent = function(){
 	});
 
 	fe.info.dataTable.delegate('.icon-download-alt', 'click', function () {
-		var id = $(this).data('id');
-		//fe.tool.getJSON({
-		//	url:"data.json",
-		//	data:{'id':id},
-		//	success:function(){
-		//		fe.info.dataTable.fnDraw(true);
-		//	},
-		//	error:{
-		//		remind:"删除部门出错"
-		//	}
-		//});
+		window.location.href = "/zip?id=" + $(this).data('id');
 	});
 }
 
 //删除项目
 fe.info.deleteProject = function (id) {
 	fe.tool.getJSON({
-		url: "data.json",
+		url: "deleteProject",
 		data: {'id': id},
 		success: function () {
 			fe.info.dataTable.fnDraw(true);
 		},
 		error: {
-			remind: "删除部门出错"
+			remind: "删除项目出错"
 		}
 	});
 
@@ -250,6 +240,12 @@ fe.edit.initTree = function () {
 		}).data('treeNode', treeNode);
 	}
 
+	function tree_download(treeNode) {
+		window.location.href = "/zip?id=" + treeNode.id;
+		//$(' <iframe id="downloadFrame" style="display:none"></iframe>').append($("body"))[0].src="/zip?id=1";
+	}
+
+
 	$(document).on('click', function () {
 		$('.edit_tree_rightMenu').remove();
 	});
@@ -268,13 +264,16 @@ fe.edit.initTree = function () {
 			case '新建文件夹':
 				tree_newFolder(treeNode);
 				break;
+			case '导出':
+				tree_download(treeNode);
+				break;
 		}
 	});
 };
 
 fe.edit.deleteTreeNode = function (treeNode) {
 	fe.tool.getJSON({
-		url: treeNode.deletePic ? "data.json" : "data.json",
+		url: treeNode.deletePic ? "deleteFile" : "deleteTree",
 		data: {'id': treeNode.id, 'title': treeNode.title},
 		success: function () {
 			fe.edit.zTreeObj.removeNode(treeNode);
@@ -325,9 +324,14 @@ fe.edit.renameTreeNode = function (treeNode) {
 		$('.inputBox_body_inputRemind').html(check.remind);
 	} else {
 		fe.tool.getJSON({
-			url: treeNode.renamePic ? "data.json" : "data.json",
+			url: treeNode.renamePic ? "renameFile" : "renameTreeNodeName",
 			data: {'id': treeNode.id, 'title': treeNode.title, 'name': check.fullName},
 			success: function () {
+				if (treeNode.renamePic) {
+					var arr = treeNode.title.split('/');
+					arr[arr.length - 1] = check.fullName;
+					treeNode.title = arr.join('/');
+				}
 				treeNode.name = check.fullName;
 				fe.edit.zTreeObj.updateNode(treeNode);
 				$('.inputBox_cover').remove();
@@ -406,15 +410,16 @@ fe.edit.addTreeNodeForPage = function (treeNode) {
 		$('.inputBox_body_inputRemind').html(check.remind);
 	} else {
 		fe.tool.getJSON({
-			url: "data1.json",
-			data: {'isFolder': 0, 'name': check.fullName, 'iconSkin': 'page'},
+			url: "saveTree",
+			data: {'isFolder': 0, 'name': check.fullName, 'iconSkin': 'page', "parentid": treeNode.id},
 			success: function (res) {
 				fe.edit.zTreeObj.addNodes(treeNode, fe.edit.compareNode(check.fullName, treeNode.trees, "0"), {
-					id: res.data.id,
+					id: res.id,
 					isFolder: 0,
 					name: check.fullName,
 					iconSkin: "page",
-					trees: []
+					trees: [],
+					pages: []
 				});
 				$('.inputBox_cover').remove();
 			},
@@ -432,15 +437,16 @@ fe.edit.addTreeNodeForFolder = function (treeNode) {
 		$('.inputBox_body_inputRemind').html(check.remind);
 	} else {
 		fe.tool.getJSON({
-			url: "data1.json",
-			data: {'isFolder': 0, 'name': check.fullName, 'iconSkin': 'folder'},
+			url: "saveTree",
+			data: {'isFolder': 1, 'name': check.fullName, 'iconSkin': 'folder', "parentid": treeNode.id},
 			success: function (res) {
 				fe.edit.zTreeObj.addNodes(treeNode, fe.edit.compareNode(check.fullName, treeNode.trees, "1"), {
-					id: res.data.id,
+					id: res.id,
 					isFolder: 1,
 					name: check.fullName,
 					iconSkin: "folder",
-					trees: []
+					trees: [],
+					pages: []
 				});
 				$('.inputBox_cover').remove();
 			},
@@ -450,6 +456,7 @@ fe.edit.addTreeNodeForFolder = function (treeNode) {
 		});
 	}
 };
+
 
 fe.edit.treeCallback = {
 	//右键点击事件
@@ -461,6 +468,7 @@ fe.edit.treeCallback = {
 			switch (true) {
 				case treeNode.tId == "tree_1":
 					aRightMenu.length = 2;
+					aRightMenu.push("导出");
 					fe.edit.pageFlag = "rootFolder";
 					break;
 				case treeNode.parentTId == "tree_1" && treeNode.name == "image":

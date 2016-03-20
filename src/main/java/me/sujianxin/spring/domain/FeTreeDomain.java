@@ -16,8 +16,6 @@ public class FeTreeDomain {
 
     private String isFolder;
 
-    private String layer;
-
     private String name;
 
     private String iconSkin;
@@ -38,14 +36,6 @@ public class FeTreeDomain {
 
     public void setIsFolder(String isFolder) {
         this.isFolder = isFolder;
-    }
-
-    public String getLayer() {
-        return layer;
-    }
-
-    public void setLayer(String layer) {
-        this.layer = layer;
     }
 
     public String getName() {

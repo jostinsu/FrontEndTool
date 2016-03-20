@@ -26,8 +26,6 @@ public class FeTree implements Serializable {
     @Column(columnDefinition = "enum")
     private String isFolder;
 
-    private String layer;
-
     private String name;
 
     @Column(columnDefinition = "char")
@@ -40,16 +38,16 @@ public class FeTree implements Serializable {
 
     //bi-directional many-to-many association to FeProject
     @JsonBackReference
-    @ManyToMany
-    @JoinTable(
-            name = "connect"
-            , joinColumns = {
-            @JoinColumn(name = "tree_id")
-    }
-            , inverseJoinColumns = {
-            @JoinColumn(name = "project_id")
-    }
-    )
+    @ManyToMany(mappedBy = "trees")
+//    @JoinTable(
+//            name = "connect"
+//            , joinColumns = {
+//            @JoinColumn(name = "tree_id")
+//    }
+//            , inverseJoinColumns = {
+//            @JoinColumn(name = "project_id")
+//    }
+//    )
     private List<FeProject> projects;
 
     //bi-directional many-to-one association to FeTree
@@ -84,14 +82,6 @@ public class FeTree implements Serializable {
 
     public void setIsFolder(String isFolder) {
         this.isFolder = isFolder;
-    }
-
-    public String getLayer() {
-        return this.layer;
-    }
-
-    public void setLayer(String layer) {
-        this.layer = layer;
     }
 
     public String getName() {

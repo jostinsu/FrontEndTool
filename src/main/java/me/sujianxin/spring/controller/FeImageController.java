@@ -88,9 +88,9 @@ public class FeImageController {
         return map;
     }
 
-    @RequestMapping(value = "rename", method = RequestMethod.POST)
+    @RequestMapping(value = "renameFile", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> rename(@RequestParam("title") String title, @RequestParam("newName") String newName) {
+    public Map<String, Object> rename(@RequestParam("title") String title, @RequestParam("name") String newName) {
         String originFilePath = environment.getProperty("file.upload.root") + title;
         boolean isSuccess = false;
         String newFilePath, msg;

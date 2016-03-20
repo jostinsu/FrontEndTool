@@ -32,7 +32,7 @@ public class FeElementController {
         return "";
     }
 
-    @RequestMapping(value = "deleteElement", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteElement", method = RequestMethod.POST)
     public Map<String, Object> delete(@RequestParam("id") int id) {
         iFeElementService.deleteById(id);
         return MapUtil.getDeleteMap();

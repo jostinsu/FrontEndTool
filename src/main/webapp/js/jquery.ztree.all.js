@@ -927,6 +927,10 @@
                 }
                 //console.log("---------------"+nodes.length);
                 // add by sujianxin 2016-03-19 ���ӽڵ���а��ļ������ȣ���ĸ��������
+                var imgNode = {};
+                if (nodes.level = 1) {
+                    imgNode = nodes.shift();
+                }
                 nodes.sort(function (value1, value2) {
                     if (value1.isFolder == "1") {
                         if (value2.isFolder == "1") {
@@ -937,7 +941,6 @@
                             }
                         } else {
                             return -1;
-                            ;
                         }
                     } else {
                         if (value2.isFolder == "1") {
@@ -952,6 +955,10 @@
                     }
                     return 0;
                 });
+
+                if (nodes.level = 1) {
+                    nodes.unshift(imgNode);
+                }
 
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = nodes[i];
@@ -1308,8 +1315,6 @@
             makeNodeIcoClass: function (setting, node) {
                 var icoCss = ["ico"];
                 if (!node.isAjaxing) {
-                    //icoCss[0] = (node.iconSkin ? node.iconSkin + "_" : "") + icoCss[0];
-                    // alert by sujianxin 2016-3-8 ��iconSkin��ΪisFolder
                     icoCss[0] = (node.iconSkin ? node.iconSkin + "_" : "") + icoCss[0];
                     if (node.isParent) {
                         icoCss.push(node.open ? consts.folder.OPEN : consts.folder.CLOSE);

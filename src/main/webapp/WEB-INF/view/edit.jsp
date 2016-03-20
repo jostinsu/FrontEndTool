@@ -80,6 +80,7 @@
             </div>
         </div>
         <div class="edit_body_main">
+
         </div>
     </div>
 </div>
@@ -100,7 +101,7 @@
                 showTitle: function (treeId, treeNode) {
                     var parent = treeNode.getParentNode();
                     if (parent) {
-                        return parent.level == "1" && parent.name == "images";
+                        return parent.level == "1" && parent.name == "image";
                     }
                     return false;
                 }
@@ -128,7 +129,8 @@
         };
 
         fe.tool.getJSON({
-            url: "tree.json",
+            url: "tree",
+            data: {id: "${id}"},
             success: function (res) {
                 var zNodes = res.data.trees;
                 fe.edit.zTreeObj = $.fn.zTree.init($("#tree"), setting, zNodes);

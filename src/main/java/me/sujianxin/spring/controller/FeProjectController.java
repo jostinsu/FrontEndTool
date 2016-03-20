@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -33,7 +34,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -57,6 +61,12 @@ public class FeProjectController {
     @RequestMapping(value = {"project"}, method = RequestMethod.GET)
     public String projectPage() {
         return "projectList";
+    }
+
+    @RequestMapping(value = {"edit"}, method = RequestMethod.GET)
+    public String editPage(@RequestParam("id") String id, Model model) {
+        model.addAttribute("id", id);
+        return "edit";
     }
 
     @RequestMapping(value = "project", method = RequestMethod.POST)
@@ -91,6 +101,7 @@ public class FeProjectController {
         File project = new File(projectPath);
         if (!project.exists()) {
             project.mkdirs();
+            new File(projectPath + File.separator + "image").mkdir();
             FeProject feProject = new FeProject();
             feProject.setRemark(feProjectDomain.getRemark());
             feProject.setName(feProjectDomain.getName());
@@ -114,28 +125,39 @@ public class FeProjectController {
             feTreeList.add(feTree);
             feProject.setTrees(feTreeList);
 
-            iFeProjectService.save(feProject);
+            feProject = iFeProjectService.save(feProject);
+
+            model.addAttribute("id", feProject.getId());
         }
         model.addAttribute("success", !project.exists());
         model.addAttribute("msg", !project.exists() ? "保存成功" : "项目名称不能重复");
         return "redirect:newProject";
     }
 
-    @RequestMapping(value = "projectDelete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteProject", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> projectDelete(@RequestParam("id") int id, HttpSession session) {
+//        FeProject feProject = iFeProjectService.findOne(id);
+//        if (null != feProject) {
+//            String projectPath = environment.getProperty("file.upload.path") + File.separator + feProject.getUser().getMail()
+//                    + File.separator + feProject.getName();
+//            File file = new File(projectPath);
+//            file.deleteOnExit();
+//        }
+        // TODO: 2016/3/20 递归删除图片文件夹及其文件
+
         iFeProjectService.deleteById(id);
+
         return MapUtil.getDeleteMap();
     }
 
     @RequestMapping(value = "updateProject", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> update(@ModelAttribute FeProjectDomain feProjectDomain, HttpSession session) {
+    public Map<String, Object> update(@ModelAttribute FeProjectDomain feProjectDomain, BindingResult bindingResult, HttpSession session) {
         FeProject feProject = new FeProject();
         feProject.setId(feProjectDomain.getId());
         feProject.setRemark(feProjectDomain.getRemark());
         feProject.setName(feProjectDomain.getName());
-        feProject.setCreateTime(new Date());
         feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
         iFeProjectService.updateById(feProject);
         return MapUtil.getUpdateSuccessMap();
@@ -156,20 +178,20 @@ public class FeProjectController {
             e.printStackTrace();
         }
         JSONObject jsonObject = JSONObject.fromObject(jsonStr);
-        JSONArray jsonArray = jsonObject.getJSONArray("trees");
+        JSONArray jsonArray = ((JSONObject) jsonObject.getJSONArray("trees").get(0)).getJSONArray("trees");
 
         String mail = feProject.getUser().getMail();
         String projectName = feProject.getName();
         String projectPath = environment.getProperty("file.upload.path")
                 + File.separator + mail
-                + File.separator + projectName;
-        String imgURL = "/upload/" + mail + "/" + projectName + "/";
-
+                + File.separator + projectName + File.separator + "image";
+        String imgURL = "/upload/" + mail + "/" + projectName + "/image/";
         if (new File(projectPath).exists()) {
 
             JSONObject jsonObjectImage = JSONObject.fromObject("{}");
-            jsonObjectImage.accumulate("name", "image");
-            jsonObjectImage.accumulate("projectName", projectName);
+            jsonObjectImage.put("name", "image");
+            jsonObjectImage.put("iconSkin", "folder");
+            jsonObjectImage.put("isFolder", "1");
 
             final List<File> imageList = new ArrayList<>();
 
@@ -178,19 +200,22 @@ public class FeProjectController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            JSONArray jsonArrayImage = JSONArray.fromObject("[]");
 
             for (File file : imageList) {
                 if (file.isDirectory()) continue;
                 JSONObject obj = JSONObject.fromObject("{}");
                 obj.put("name", file.getName());
                 obj.put("title", imgURL + file.getName());
-                obj.put("iconSkin", "page");
-                jsonObjectImage.accumulate("trees", obj);
+                obj.put("iconSkin", "img");
+                obj.put("isFolder", "0");
+                jsonArrayImage.add(obj);
             }
+            jsonObjectImage.put("trees", jsonArrayImage);
             jsonArray.add(0, jsonObjectImage);
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("data", feProject);
+        map.put("data", jsonObject);
         map.put("success", true);
         return map;
     }
@@ -203,7 +228,7 @@ public class FeProjectController {
         HttpHeaders headers = new HttpHeaders();
 
         if (!isNullOrEmpty(id) && isNumber(id))
-            feProject = iFeProjectService.findOne(1);
+            feProject = iFeProjectService.findOne(Integer.valueOf(id));
         if (null == feProject) {
             headers.setContentType(MediaType.TEXT_HTML);
             return new ResponseEntity<>("非法操作".getBytes(), headers, HttpStatus.BAD_REQUEST);
@@ -284,6 +309,13 @@ public class FeProjectController {
     private void packPageToZip(FeTree feTree, ZipOutputStream zipOutputStream, String path) {
         if (feTree.getIsFolder().equals("1")) {
             path = path + feTree.getName() + File.separator;
+            try {
+                ZipEntry zipEntry = new ZipEntry(path);
+                zipOutputStream.putNextEntry(zipEntry);
+                zipOutputStream.closeEntry();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             try {
                 ZipEntry zipEntry = new ZipEntry(path + feTree.getName());//+ ".html"
