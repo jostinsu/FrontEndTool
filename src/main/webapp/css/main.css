@@ -169,11 +169,11 @@ button.tool_btn, input.tool_btn {
   overflow: auto;
 }
 
-.remindBox_cover, .confirmBox_cover {
+.remindBox_cover, .confirmBox_cover, .inputBox_cover {
   z-index: 500;
 }
 
-.tool_remindBox, .tool_confirmBox {
+.tool_remindBox, .tool_confirmBox, .tool_inputBox {
   position: absolute;
   left: 50%;
   top: 120px;
@@ -186,14 +186,14 @@ button.tool_btn, input.tool_btn {
   box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
 }
 
-.tool_remindBox header, .tool_confirmBox header {
+.tool_remindBox header, .tool_confirmBox header, .tool_inputBox header {
   height: 30px;
   line-height: 30px;
   background-color: #336699;
   border-radius: 4px 4px 0 0;
 }
 
-.tool_remindBox header h2, .tool_confirmBox header h2 {
+.tool_remindBox header h2, .tool_confirmBox header h2, .tool_inputBox header h2 {
   font-size: 14px;
   font-weight: normal;
   line-height: 30px;
@@ -202,19 +202,19 @@ button.tool_btn, input.tool_btn {
   padding-left: 12px;
 }
 
-.tool_remindBox section, .tool_confirmBox section {
+.tool_remindBox section, .tool_confirmBox section, .tool_inputBox section {
   margin: 34px 0 0 30px;
   height: 48px;
 }
 
-.tool_remindBox section i, .tool_confirmBox section i {
+.tool_remindBox section i, .tool_confirmBox section i, .tool_inputBox section i {
   display: inline-block;
   line-height: 48px;
   font-size: 35px;
   vertical-align: middle;
 }
 
-.tool_remindBox section p, .tool_confirmBox section p {
+.tool_remindBox section p, .tool_confirmBox section p, .tool_inputBox section p {
   display: inline-block;
   width: 300px;
   vertical-align: middle;
@@ -223,7 +223,7 @@ button.tool_btn, input.tool_btn {
   padding-left: 10px;
 }
 
-.tool_remindBox footer, .tool_confirmBox footer {
+.tool_remindBox footer, .tool_confirmBox footer, .tool_inputBox footer {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -235,11 +235,44 @@ button.tool_btn, input.tool_btn {
   border-radius: 0 0 4px 4px;
 }
 
-.tool_remindBox footer .tool_btn, .tool_confirmBox footer .tool_btn {
+.tool_remindBox footer .tool_btn, .tool_confirmBox footer .tool_btn, .tool_inputBox footer .tool_btn {
   margin-left: 10px;
 }
 
-.remindBox_closeBtn, .confirmBox_closeBtn {
+.tool_inputBox_Small {
+  width: 340px;
+  height: 170px;
+  margin-left: -170px;
+}
+
+.tool_inputBox_Small .inputBox_body {
+  margin-top: 35px;
+  text-align: center;
+}
+
+.tool_inputBox_Small .inputBox_body_title {
+  line-height: 26px;
+}
+
+.tool_inputBox_Small .inputBox_body_right {
+  position: relative;
+  margin-left: 4px;
+}
+
+.tool_inputBox_Small .inputBox_body_input {
+  width: 180px;
+}
+
+.tool_inputBox_Small .inputBox_body_inputRemind {
+  position: absolute;
+  left: 8px;
+  bottom: -24px;
+  color: #f30;
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.remindBox_closeBtn, .confirmBox_closeBtn, .inputBox_closeBtn {
   position: absolute;
   right: 8px;
   top: 7px;
@@ -247,7 +280,7 @@ button.tool_btn, input.tool_btn {
   font-size: 16px;
 }
 
-.remindBox_closeBtn:hover, .confirmBox_closeBtn:hover {
+.remindBox_closeBtn:hover, .confirmBox_closeBtn:hover, .inputBox_closeBtn:hover {
   color: #ff9900;
 }
 
@@ -731,6 +764,155 @@ button.tool_btn, input.tool_btn {
 .forgivePassword_item .tool_text {
   width: 214px;
   padding-left: 36px;
+}
+
+.edit {
+  position: relative;
+  height: 100%;
+}
+
+.edit_topBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 40px;
+  background-color: #336699;
+  padding: 0 50px;
+  line-height: 40px;
+}
+
+.edit_logo {
+  float: left;
+  font-size: 0;
+}
+
+.edit_logo img {
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: middle;
+  -webkit-animation: logoRotate 36s linear infinite;
+  animation: logoRotate 36s linear infinite;
+}
+
+.edit_logo span {
+  color: #fff;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.edit_topBar_operation {
+  float: left;
+  margin-left: 80px;
+}
+
+.edit_topBar_operation .tool_btn {
+  margin-right: 8px;
+}
+
+.edit_topBar_other {
+  float: right;
+  color: #fff;
+}
+
+.edit_topBar_other .edit_topBar_other_projectName {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.edit_topBar_other .edit_topBar_other_exitBtn {
+  display: inline-block;
+  padding: 0 5px;
+  margin-left: 15px;
+  color: #fff;
+}
+
+.edit_topBar_other .edit_topBar_other_exitBtn:hover {
+  text-decoration: underline;
+}
+
+.edit_body {
+  overflow: hidden;
+  height: 100%;
+}
+
+.edit_body_leftAside {
+  float: left;
+  width: 250px;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 40px;
+  background-color: #F9FAFC;
+  border-right: 1px solid #D2D7DC;
+}
+
+.edit_body_rightAside {
+  float: right;
+  width: 250px;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 40px;
+  background-color: #F9FAFC;
+  border-left: 1px solid #D2D7DC;
+}
+
+.edit_tree {
+  height: 50%;
+}
+
+.edit_element {
+  height: 50%;
+}
+
+.edit_block {
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.edit_attr {
+  height: 30%;
+}
+
+.edit_pageStyle {
+  height: 35%;
+}
+
+.edit_commonStyle {
+  height: 35%;
+}
+
+.edit_block_header {
+  padding: 0 5px;
+  height: 18px;
+  line-height: 18px;
+  font-size: 12px;
+  background-color: #DFE9F5;
+  border-bottom: 1px solid #bdc9d6;
+}
+
+.edit_block_body {
+  padding: 0 3px;
+}
+
+.edit_tree_rightMenu {
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 2px 0;
+  box-shadow: 0 0 3px 0 #C8C8C8, 0 0 8px 0 rgba(0, 0, 0, 0.12);
+}
+
+.edit_tree_rightMenu li {
+  font-size: 12px;
+  color: #333;
+  padding: 4px 9px;
+  min-width: 80px;
+  cursor: pointer;
+}
+
+.edit_tree_rightMenu li:hover {
+  background-color: #336699;
+  color: #fff;
 }
 
 /*# sourceMappingURL=main.css.map */
