@@ -1,6 +1,5 @@
 package me.sujianxin.spring.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Files;
@@ -166,7 +165,6 @@ public class FeProjectController {
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         String jsonStr = "{}";
         try {
