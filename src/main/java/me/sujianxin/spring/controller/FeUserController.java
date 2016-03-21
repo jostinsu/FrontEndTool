@@ -241,6 +241,7 @@ public class FeUserController implements ApplicationContextAware {
             FeUser feUser = iFeUserService.findByMailEquals(mail);
             if ("resetting".equals(feUser.getStatus())) {
                 feUser.setPassword(password);
+                feUser.setStatus("normal");
                 iFeUserService.save(feUser);
                 model.addAttribute("success", true);
                 model.addAttribute("msg", "成功重置密码");
