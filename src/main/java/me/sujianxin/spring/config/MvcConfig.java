@@ -1,7 +1,9 @@
 package me.sujianxin.spring.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import me.sujianxin.spring.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * <p>Created with IDEA
@@ -93,7 +96,18 @@ public class MvcConfig extends WebMvcConfigurationSupport {
          * 2016年1月22日15:52:08
          * sujianxin
          */
-        converter.setObjectMapper(new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false));
+        ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        //objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        //objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+//        Hibernate4Module hibernateModule = new Hibernate4Module();
+//        hibernateModule.configure(Hibernate4Module.Feature.FORCE_LAZY_LOADING, false);
+//        objectMapper.registerModules(hibernateModule);
+
+        converter.setObjectMapper(objectMapper);
         return converter;
     }
 
