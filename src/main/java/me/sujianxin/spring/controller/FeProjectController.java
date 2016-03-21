@@ -1,5 +1,6 @@
 package me.sujianxin.spring.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Files;
@@ -34,10 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -168,6 +166,8 @@ public class FeProjectController {
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         }
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         String jsonStr = "{}";
         try {
             jsonStr = objectMapper.writeValueAsString(feProject);
@@ -299,8 +299,8 @@ public class FeProjectController {
                 return FileVisitResult.CONTINUE;
             }
         };
-
-        java.nio.file.Files.walkFileTree(Paths.get(searchPath), finder);
+        if (new File(searchPath).exists())
+            java.nio.file.Files.walkFileTree(Paths.get(searchPath), finder);
     }
 
     private void packPageToZip(FeTree feTree, ZipOutputStream zipOutputStream, String path) {

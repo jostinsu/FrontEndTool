@@ -1,5 +1,6 @@
 package me.sujianxin.persistence.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sujianxin.persistence.model.FeProject;
 import me.sujianxin.persistence.model.FeStyle;
@@ -46,6 +47,7 @@ public class FeProjectServiceTest {
     public void init() {
         this.sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
     }
 
     @Test
@@ -80,7 +82,7 @@ public class FeProjectServiceTest {
         FeTree feTree = new FeTree();
         feTree.setName("root");
         feTree.setIsFolder("1");
-        feTree.setIconSkin("folder");
+        //feTree.setIconSkin("folder");
         List<FeTree> feTreeList = new ArrayList<>();
         feTreeList.add(feTree);
         feProject.setTrees(feTreeList);
@@ -108,7 +110,7 @@ public class FeProjectServiceTest {
 
     @Test
     public void findOne() {
-        FeProject feProject = iFeProjectService.findOne(23);
+        FeProject feProject = iFeProjectService.findOne(28);
         try {
             objectMapper.writeValue(System.out, feProject);
             System.out.println();

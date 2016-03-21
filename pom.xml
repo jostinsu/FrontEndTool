@@ -275,7 +275,7 @@
         <rest-assured.version>2.4.1</rest-assured.version>
 
         <!-- json -->
-        <jackson2.version>2.7.2</jackson2.version>
+        <jackson2.version>2.6.5</jackson2.version>
 
         <!-- web -->
         <servlet.version>3.0.1</servlet.version>
