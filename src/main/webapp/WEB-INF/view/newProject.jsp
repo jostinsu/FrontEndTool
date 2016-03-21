@@ -38,7 +38,9 @@
             <div class="info_main_content">
                 <form action="newProject" class="info_newProject_form" method="post">
                     <div class="info_newProject_item">
-                        <span>项目名称：</span><input name="name" type="text" class="tool_text info_newProject_name" maxlength="255" required/>
+                        <span>项目名称：</span><input name="name" type="text" class="tool_text info_newProject_name"
+                                                 maxlength="255" required pattern="^[A-Za-z0-9_]{1,255}$"
+                                                 placeholder="英文字母、数字、下划线或其组合"/>
                     </div>
                     <div class="info_newProject_item">
                         <span>备注：</span><textarea name="remark" placeholder="最多输入255个字符" maxlength="255" class="tool_textarea"></textarea>

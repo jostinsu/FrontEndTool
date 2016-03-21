@@ -34,7 +34,7 @@
         </div>
         <div class="edit_topBar_other">
             <h2 class="edit_topBar_other_projectName">项目：${项目名字}</h2>
-            <a class="edit_topBar_other_exitBtn" href="#">退出编辑</a>
+            <a class="edit_topBar_other_exitBtn" href="project">退出编辑</a>
         </div>
     </div>
     <div class="edit_body">
@@ -132,39 +132,14 @@
             url: "tree",
             data: {id: "${id}"},
             success: function (res) {
-                var zNodes = res.data.trees;
-                fe.edit.zTreeObj = $.fn.zTree.init($("#tree"), setting, zNodes);
+                fe.edit.data = res.data;
+                fe.edit.zTreeObj = $.fn.zTree.init($("#tree"), setting, fe.edit.data.trees);
                 fe.edit.initTree();
             },
             error: {
                 remind: "获取项目结构失败"
             }
         });
-        // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
-        /* var zNodes = [
-         {id:"1", isFolder:"1", name: "project", iconSkin:"folder",trees: [
-         {
-         id:"1", isFolder:"1", name: "image", iconSkin:"folder",trees: [
-         {id:"1", isFolder:"0", name: "logo.png", iconSkin:"page",title:"/491501792@qq.com/project/images/logo.png",iconSkin: "img"},
-         {id:"1", isFolder:"0", name: "topBarBg.png",iconSkin:"page", title:"/491501792@qq.com/project/images/topBarBg.png",iconSkin: "img"}
-         ]
-         },
-         {
-         id:"5", isFolder:"1", name: "html",  iconSkin:"folder",trees: [
-         {id:"6", isFolder:"1", name: "xml",iconSkin:"folder",tree:[]},
-         {
-         id:"7", isFolder:"1", name: "user",iconSkin:"folder", trees: [
-         {id:"8", isFolder:"0",iconSkin:"page", name: "login.html",tree:[]},
-         {id:"9", isFolder:"0", iconSkin:"page",name: "register.html",tree:[]}
-         ]
-         }
-         ]
-         }
-         ]
-         }
-         ];*/
-
-        //alert(JSON.stringify(fe.edit.zTreeObj.getNodes(),null,4));
     });
 </script>
 </body>

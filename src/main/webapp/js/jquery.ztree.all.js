@@ -925,10 +925,9 @@
                 if (!tmpPChild || index >= tmpPChild.length) {
                     index = -1;
                 }
-                //console.log("---------------"+nodes.length);
                 // add by sujianxin 2016-03-19 ���ӽڵ���а��ļ������ȣ���ĸ��������
                 var imgNode = {};
-                if (nodes.level = 1) {
+                if (nodes[0].layer == 1) {
                     imgNode = nodes.shift();
                 }
                 nodes.sort(function (value1, value2) {
@@ -956,9 +955,10 @@
                     return 0;
                 });
 
-                if (nodes.level = 1) {
+                if (imgNode.layer == 1) {
                     nodes.unshift(imgNode);
                 }
+
 
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = nodes[i];

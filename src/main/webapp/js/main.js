@@ -240,9 +240,8 @@ fe.edit.initTree = function () {
 		}).data('treeNode', treeNode);
 	}
 
-	function tree_download(treeNode) {
-		window.location.href = "/zip?id=" + treeNode.id;
-		//$(' <iframe id="downloadFrame" style="display:none"></iframe>').append($("body"))[0].src="/zip?id=1";
+	function tree_download() {
+		window.location.href = "/zip?id=" + fe.edit.data.id;
 	}
 
 
@@ -383,7 +382,7 @@ fe.edit.compareNode = function (name, borther, isFolder) {
 		if (isFolder == "1") {
 			index = k;
 			if (borther[i].isFolder == "1") {
-				if (name < borther[i].name) {
+				if (borther[i].name != "image" && name < borther[i].name) {
 					index = i;
 					break;
 				} else {
