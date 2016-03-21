@@ -96,7 +96,7 @@ public class FeUserController implements ApplicationContextAware {
     @RequestMapping(value = "userInfo", method = RequestMethod.GET)
     public String findOne(HttpSession session, Model model) {
         model.addAttribute("feUser", iFeUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
-        return "account";
+        return "mail";
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
@@ -197,7 +197,7 @@ public class FeUserController implements ApplicationContextAware {
             iFeUserService.save(feUser);
             StringBuffer sb = new StringBuffer(
                     "<html><head><meta http-equiv='content-type' content='text/html; charset=GBK'></head><body>尊敬的")
-                    .append(null != feUser.getNickname() ? feUser.getNickname() : feUser.getMail())
+                    .append(!isNullOrEmpty(feUser.getNickname()) ? feUser.getNickname() : feUser.getMail())
                     .append(",您好</br><b>温馨提示</b>：重置密码链接只能使用一次，24小时内有效</br>")
                     .append("<a href=\"")
                     .append(request.getScheme())
@@ -209,12 +209,12 @@ public class FeUserController implements ApplicationContextAware {
                     .append("/")
                     .append("resetPassword?mail=")
                     .append(mail)
-                    .append("&v=")
+                    .append("&time=")
                     .append(new Date().getTime())
                     .append("\">")
                     .append("点击这里进入重置密码页面,如非本人操作请忽略")
                     .append("</a></br></body></html>");
-            EmailEvent emailEvent = new EmailEvent(this, mail, "重置密码-前端可视化工具服务邮件", sb.toString());
+            EmailEvent emailEvent = new EmailEvent(this, mail, "重置密码申请-前端可视化工具服务邮件", sb.toString());
             applicationContext.publishEvent(emailEvent);
             return MapUtil.getUserPasswordResetRequstSuccessMap();
         }
@@ -222,11 +222,12 @@ public class FeUserController implements ApplicationContextAware {
     }
 
     @RequestMapping(value = "resetPassword", method = RequestMethod.GET)
-    public String resetPasswordPage(@RequestParam("v") String v, Model model) {
-        if (NumberUtils.isNumber(v)) {
+    public String resetPasswordPage(@RequestParam("mail") String mail, @RequestParam("time") String time, HttpSession session, Model model) {
+        if (NumberUtils.isNumber(time)) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(Integer.valueOf(v) + 24 * 60 * 60 * 1000);
-            if (calendar.getTime().before(new Date())) {
+            calendar.setTimeInMillis(Integer.valueOf(time) + 24 * 60 * 60 * 1000);
+            if (calendar.getTime().before(new Date()) && !isNullOrEmpty(mail)) {
+                session.setAttribute("accountTmp", mail);
                 return "resetPassword";//返回重置密码页面
             }
         }
@@ -236,7 +237,8 @@ public class FeUserController implements ApplicationContextAware {
     }
 
     @RequestMapping(value = "resetPassword", method = RequestMethod.POST)
-    public String resetPassword(@RequestParam("mail") String mail, @RequestParam("password") String password, Model model) {
+    public String resetPassword(@RequestParam("password") String password, Model model, HttpSession session) {
+        String mail = null != session.getAttribute("accountTmp") ? String.valueOf(session.getAttribute("accountTmp")) : "";
         if (!isNullOrEmpty(mail)) {
             FeUser feUser = iFeUserService.findByMailEquals(mail);
             if ("resetting".equals(feUser.getStatus())) {
@@ -245,12 +247,13 @@ public class FeUserController implements ApplicationContextAware {
                 iFeUserService.save(feUser);
                 model.addAttribute("success", true);
                 model.addAttribute("msg", "成功重置密码");
+                session.removeAttribute("accountTmp");
                 return "redirect:login";
             }
         }
         model.addAttribute("success", false);
         model.addAttribute("msg", "非法操作");
-        return "redirect:/";
+        return "redirect:login";
     }
 
     @RequestMapping(value = "/logout")
