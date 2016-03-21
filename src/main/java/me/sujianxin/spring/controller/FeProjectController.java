@@ -205,6 +205,7 @@ public class FeProjectController {
             obj.put("title", imgURL + file.getName());
             obj.put("iconSkin", "img");
             obj.put("isFolder", "0");
+            obj.put("layer", "1");
             jsonArrayImage.add(obj);
         }
         jsonObjectImage.put("trees", jsonArrayImage);
