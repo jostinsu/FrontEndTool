@@ -188,6 +188,7 @@ public class FeProjectController {
         jsonObjectImage.put("name", "image");
         jsonObjectImage.put("iconSkin", "folder");
         jsonObjectImage.put("isFolder", "1");
+        jsonObjectImage.put("layer", "1");
 
         final List<File> imageList = new ArrayList<>();
 
@@ -205,7 +206,6 @@ public class FeProjectController {
             obj.put("title", imgURL + file.getName());
             obj.put("iconSkin", "img");
             obj.put("isFolder", "0");
-            obj.put("layer", "1");
             jsonArrayImage.add(obj);
         }
         jsonObjectImage.put("trees", jsonArrayImage);
