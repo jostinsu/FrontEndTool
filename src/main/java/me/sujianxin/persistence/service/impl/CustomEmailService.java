@@ -1,5 +1,6 @@
 package me.sujianxin.persistence.service.impl;
 
+import com.google.common.base.Strings;
 import me.sujianxin.persistence.service.ICustomEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -33,9 +32,9 @@ public class CustomEmailService implements ICustomEmailService {
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
             mimeMessageHelper.setTo(toAddress);
-            if (!isNullOrEmpty(subject))
+            if (!Strings.isNullOrEmpty(subject))
                 mimeMessageHelper.setSubject(subject);
-            if (!isNullOrEmpty(content))
+            if (!Strings.isNullOrEmpty(content))
                 mimeMessageHelper.setText(content, true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException ex) {

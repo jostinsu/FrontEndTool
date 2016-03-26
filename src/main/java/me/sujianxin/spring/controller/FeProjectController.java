@@ -2,12 +2,12 @@ package me.sujianxin.spring.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import me.sujianxin.persistence.model.FeProject;
-import me.sujianxin.persistence.model.FeStyle;
-import me.sujianxin.persistence.model.FeTree;
-import me.sujianxin.persistence.model.FeUser;
+import me.sujianxin.persistence.model.*;
 import me.sujianxin.persistence.service.IFeProjectService;
+import me.sujianxin.persistence.service.IFeTreeService;
+import me.sujianxin.persistence.service.IFeTypeService;
 import me.sujianxin.spring.domain.FeProjectDomain;
 import me.sujianxin.spring.domain.FeProjectForm;
 import me.sujianxin.spring.util.MapUtil;
@@ -38,7 +38,6 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static org.apache.commons.lang3.math.NumberUtils.isNumber;
 
 /**
@@ -53,6 +52,10 @@ public class FeProjectController {
     @Autowired
     private IFeProjectService iFeProjectService;
     @Autowired
+    private IFeTreeService iFeTreeService;
+    @Autowired
+    private IFeTypeService iFeTypeService;
+    @Autowired
     private Environment environment;
 
     @RequestMapping(value = {"project"}, method = RequestMethod.GET)
@@ -62,7 +65,9 @@ public class FeProjectController {
 
     @RequestMapping(value = {"edit"}, method = RequestMethod.GET)
     public String editPage(@RequestParam("id") String id, Model model) {
+        List<FeType> feType = iFeTypeService.findAll();
         model.addAttribute("id", id);
+        model.addAttribute("feType", feType);
         return "edit";
     }
 
@@ -161,7 +166,7 @@ public class FeProjectController {
     @ResponseBody
     public Map<String, Object> getTreeByProjectId(@RequestParam("id") String id) {
         FeProject feProject = null;
-        if (!isNullOrEmpty(id) && isNumber(id)) {
+        if (!Strings.isNullOrEmpty(id) && isNumber(id)) {
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -222,9 +227,62 @@ public class FeProjectController {
         FeProject feProject = null;
         HttpHeaders headers = new HttpHeaders();
 
-        if (!isNullOrEmpty(id) && isNumber(id))
+        if (!Strings.isNullOrEmpty(id) && isNumber(id))
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         if (null == feProject) {
+            headers.setContentType(MediaType.TEXT_HTML);
+            return new ResponseEntity<>("非法操作".getBytes(), headers, HttpStatus.BAD_REQUEST);
+        }
+
+        String mail = feProject.getUser().getMail();
+        String projectName = feProject.getName();
+        String projectPath = environment.getProperty("file.upload.path")
+                + File.separator + mail
+                + File.separator + projectName;
+
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ZipOutputStream zipOutputStream = new ZipOutputStream(bos);
+
+            putImageToZip(projectPath, mail, zipOutputStream);
+            if (feProject.getTrees().size() > 0) {
+                packPageToZip(feProject.getTrees().get(0), zipOutputStream, "");
+            }
+            packCSStoZip(feProject.getStyles(), zipOutputStream, projectName);
+
+            zipOutputStream.close();
+            result = bos.toByteArray();
+            bos.close();
+            downloadFileName = new String((projectName + ".zip").getBytes("gb2312"), "iso-8859-1");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            headers.setContentType(MediaType.TEXT_HTML);
+            return new ResponseEntity<>("服务器错误".getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", downloadFileName);
+        return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "zipTree")
+    public ResponseEntity<byte[]> zipTree(@RequestParam("id") String id, @RequestParam("treeid") String treeid,
+                                          @RequestParam("path") String path) {
+        byte[] result;
+        String downloadFileName;
+        FeTree feTree = null;
+        FeProject feProject = null;
+        HttpHeaders headers = new HttpHeaders();
+
+        if (!Strings.isNullOrEmpty(id) && isNumber(id))
+            feProject = iFeProjectService.findOne(Integer.valueOf(id));
+        if (null == feProject) {
+            headers.setContentType(MediaType.TEXT_HTML);
+            return new ResponseEntity<>("非法操作".getBytes(), headers, HttpStatus.BAD_REQUEST);
+        }
+
+        if (!Strings.isNullOrEmpty(treeid) && isNumber(treeid))
+            feTree = iFeTreeService.findOne(Integer.valueOf(treeid));
+        if (null == feTree) {
             headers.setContentType(MediaType.TEXT_HTML);
             return new ResponseEntity<>("非法操作".getBytes(), headers, HttpStatus.BAD_REQUEST);
         }
@@ -240,33 +298,8 @@ public class FeProjectController {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(bos);
 
-            if (new File(projectPath).exists()) {
-                final List<File> imageList = new ArrayList<>();
-
-                searchImage(projectPath, imageList);
-
-                ZipEntry zipEntry;
-                //zip image
-                for (File tmp : imageList) {
-                    File parent = tmp.getParentFile();
-                    StringBuilder sb = new StringBuilder();
-                    while (!mail.equals(tmp.getName()) && null != parent && !mail.equals(parent.getName())) {
-                        if (parent.isDirectory())
-                            sb.insert(0, parent.getName() + File.separator);
-                        parent = parent.getParentFile();
-                    }
-                    if (tmp.isDirectory()) continue;
-                    zipEntry = new ZipEntry(sb.toString() + tmp.getName());
-                    zipOutputStream.putNextEntry(zipEntry);
-                    Files.copy(tmp, zipOutputStream);
-                    zipOutputStream.closeEntry();
-                }
-            }
-
-            if (feProject.getTrees().size() > 0) {
-                packPageToZip(feProject.getTrees().get(0), zipOutputStream, "");
-            }
-
+            putImageToZip(projectPath, mail, zipOutputStream);
+            packPageToZip(feTree, zipOutputStream, path);
             packCSStoZip(feProject.getStyles(), zipOutputStream, projectName);
 
             zipOutputStream.close();
@@ -281,6 +314,31 @@ public class FeProjectController {
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", downloadFileName);
         return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
+    }
+
+    private void putImageToZip(String projectPath, String mail, ZipOutputStream zipOutputStream) throws IOException {
+        if (new File(projectPath).exists()) {
+            final List<File> imageList = new ArrayList<>();
+
+            searchImage(projectPath, imageList);
+
+            ZipEntry zipEntry;
+            //zip image
+            for (File tmp : imageList) {
+                File parent = tmp.getParentFile();
+                StringBuilder sb = new StringBuilder();
+                while (!mail.equals(tmp.getName()) && null != parent && !mail.equals(parent.getName())) {
+                    if (parent.isDirectory())
+                        sb.insert(0, parent.getName() + "/");
+                    parent = parent.getParentFile();
+                }
+                if (tmp.isDirectory()) continue;
+                zipEntry = new ZipEntry(sb.toString() + tmp.getName());
+                zipOutputStream.putNextEntry(zipEntry);
+                Files.copy(tmp, zipOutputStream);
+                zipOutputStream.closeEntry();
+            }
+        }
     }
 
     private void searchImage(String searchPath, List<File> fileList) throws IOException {
@@ -303,7 +361,7 @@ public class FeProjectController {
 
     private void packPageToZip(FeTree feTree, ZipOutputStream zipOutputStream, String path) {
         if (feTree.getIsFolder().equals("1")) {
-            path = path + feTree.getName() + File.separator;
+            path = path + feTree.getName() + "/";
             try {
                 ZipEntry zipEntry = new ZipEntry(path);
                 zipOutputStream.putNextEntry(zipEntry);

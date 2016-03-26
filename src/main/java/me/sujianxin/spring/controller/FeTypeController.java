@@ -44,16 +44,16 @@ public class FeTypeController {
         return MapUtil.getUpdateSuccessMap();
     }
 
-    @RequestMapping(value = "type/{id}", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> findOne(@PathVariable("id") int id) {
-        FeType feType = iFeTypeService.findOne(id);
-        Map<String, Object> map = new HashMap<>(3);
-        map.put("success", true);
-        map.put("msg", null != feType ? "" : "非法操作");
-        map.put("data", null != feType ? feType : "");
-        return map;
-    }
+//    @RequestMapping(value = "type/{id}", method = RequestMethod.GET)
+//    @ResponseBody
+//    public Map<String, Object> findOne(@PathVariable("id") int id) {
+//        FeType feType = iFeTypeService.findOne(id);
+//        Map<String, Object> map = new HashMap<>(3);
+//        map.put("success", true);
+//        map.put("msg", null != feType ? "" : "非法操作");
+//        map.put("data", feType);
+//        return map;
+//    }
 
     @RequestMapping(value = "types", method = RequestMethod.GET)
     @ResponseBody

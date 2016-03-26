@@ -46,9 +46,9 @@ public class FeElementController {
         return MapUtil.getUpdateSuccessMap();
     }
 
-    @RequestMapping(value = "element", method = RequestMethod.POST)
+    @RequestMapping(value = "element/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> findOne(@RequestParam("id") int id) {
+    public Map<String, Object> findOne(@PathVariable("id") int id) {
         List<FeElement> feElementList = iFeElementService.findByTypeId(id);
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", true);

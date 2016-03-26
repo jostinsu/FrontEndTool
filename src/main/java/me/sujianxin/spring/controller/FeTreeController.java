@@ -1,5 +1,6 @@
 package me.sujianxin.spring.controller;
 
+import com.google.common.base.Strings;
 import me.sujianxin.persistence.model.FePage;
 import me.sujianxin.persistence.model.FeTree;
 import me.sujianxin.persistence.service.IFeTreeService;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -88,7 +87,7 @@ public class FeTreeController {
     @ResponseBody
     public Map<String, Object> updatePageCodeByTreeId(@RequestParam("id") String id, @RequestParam("code") String code) {
         int tmp = 0;
-        if (!isNullOrEmpty(id) && NumberUtils.isNumber(id) && !isNullOrEmpty(code)) {
+        if (!Strings.isNullOrEmpty(id) && NumberUtils.isNumber(id) && !Strings.isNullOrEmpty(code)) {
             tmp = iFeTreeService.updatePageByTreeId(Integer.valueOf(id), code);
         }
         return 1 == tmp ? MapUtil.getUpdateSuccessMap() : MapUtil.getUpdateFailMap();

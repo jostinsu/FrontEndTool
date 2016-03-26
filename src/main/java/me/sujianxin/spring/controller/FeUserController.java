@@ -1,5 +1,6 @@
 package me.sujianxin.spring.controller;
 
+import com.google.common.base.Strings;
 import me.sujianxin.persistence.model.FeUser;
 import me.sujianxin.persistence.service.IFeUserService;
 import me.sujianxin.spring.events.EmailEvent;
@@ -24,8 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -52,7 +51,7 @@ public class FeUserController implements ApplicationContextAware {
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public String login(String mail, String password, HttpSession session, Model model) {
-        boolean validate = !isNullOrEmpty(mail) && !isNullOrEmpty(password);
+        boolean validate = !Strings.isNullOrEmpty(mail) && !Strings.isNullOrEmpty(password);
         FeUser tmp = null;
         boolean b = false;
         if (validate) {
@@ -80,8 +79,8 @@ public class FeUserController implements ApplicationContextAware {
     public String updatePassword(String password, String newPassword1, String newPassword2, HttpSession session, Model model) {
         boolean check;
         int tmp = 0;
-        boolean isSame = !isNullOrEmpty(newPassword1) && !isNullOrEmpty(newPassword2) && newPassword1.equals(newPassword2);
-        if (check = !isNullOrEmpty(password)) {
+        boolean isSame = !Strings.isNullOrEmpty(newPassword1) && !Strings.isNullOrEmpty(newPassword2) && newPassword1.equals(newPassword2);
+        if (check = !Strings.isNullOrEmpty(password)) {
             int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
             FeUser feUser = iFeUserService.findOne(id);
             if (null != feUser && feUser.getPassword().equals(password) && isSame) {
@@ -96,7 +95,7 @@ public class FeUserController implements ApplicationContextAware {
     @RequestMapping(value = "userInfo", method = RequestMethod.GET)
     public String findOne(HttpSession session, Model model) {
         model.addAttribute("feUser", iFeUserService.findOne(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
-        return "mail";
+        return "account";
     }
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
@@ -152,7 +151,7 @@ public class FeUserController implements ApplicationContextAware {
         Map<String, Object> map = new HashMap<>(2);
         int tmp = 0;
         boolean b;
-        if (b = !isNullOrEmpty(nickname)) {
+        if (b = !Strings.isNullOrEmpty(nickname)) {
             int id = Integer.valueOf(String.valueOf(session.getAttribute("userid")));
             tmp = iFeUserService.updateNickname(id, nickname);
         }
@@ -197,7 +196,7 @@ public class FeUserController implements ApplicationContextAware {
             iFeUserService.save(feUser);
             StringBuffer sb = new StringBuffer(
                     "<html><head><meta http-equiv='content-type' content='text/html; charset=GBK'></head><body>尊敬的")
-                    .append(!isNullOrEmpty(feUser.getNickname()) ? feUser.getNickname() : feUser.getMail())
+                    .append(!Strings.isNullOrEmpty(feUser.getNickname()) ? feUser.getNickname() : feUser.getMail())
                     .append(",您好</br><b>温馨提示</b>：重置密码链接只能使用一次，24小时内有效</br>")
                     .append("<a href=\"")
                     .append(request.getScheme())
@@ -226,7 +225,7 @@ public class FeUserController implements ApplicationContextAware {
         if (NumberUtils.isNumber(time)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(Integer.valueOf(time) + 24 * 60 * 60 * 1000);
-            if (calendar.getTime().before(new Date()) && !isNullOrEmpty(mail)) {
+            if (calendar.getTime().before(new Date()) && !Strings.isNullOrEmpty(mail)) {
                 session.setAttribute("accountTmp", mail);
                 return "resetPassword";//返回重置密码页面
             }
@@ -239,7 +238,7 @@ public class FeUserController implements ApplicationContextAware {
     @RequestMapping(value = "resetPassword", method = RequestMethod.POST)
     public String resetPassword(@RequestParam("password") String password, Model model, HttpSession session) {
         String mail = null != session.getAttribute("accountTmp") ? String.valueOf(session.getAttribute("accountTmp")) : "";
-        if (!isNullOrEmpty(mail)) {
+        if (!Strings.isNullOrEmpty(mail)) {
             FeUser feUser = iFeUserService.findByMailEquals(mail);
             if ("resetting".equals(feUser.getStatus())) {
                 feUser.setPassword(password);

@@ -1,5 +1,6 @@
 package me.sujianxin.spring.controller;
 
+import com.google.common.base.Strings;
 import me.sujianxin.persistence.service.IFePageService;
 import me.sujianxin.spring.util.MapUtil;
 import org.apache.commons.lang.math.NumberUtils;
@@ -11,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -62,7 +61,7 @@ public class FePageController {
     @ResponseBody
     public Map<String, Object> updatePageCode(@RequestParam("id") String id, @RequestParam("code") String code) {
         int tmp = 0;
-        if (!isNullOrEmpty(id) && NumberUtils.isNumber(id) && !isNullOrEmpty(code)) {
+        if (!Strings.isNullOrEmpty(id) && NumberUtils.isNumber(id) && !Strings.isNullOrEmpty(code)) {
             tmp = iFePageService.updateCode(Integer.valueOf(id), code);
         }
         return 1 == tmp ? MapUtil.getUpdateSuccessMap() : MapUtil.getUpdateFailMap();

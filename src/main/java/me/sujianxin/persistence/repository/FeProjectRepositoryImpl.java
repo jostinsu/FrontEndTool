@@ -1,5 +1,6 @@
 package me.sujianxin.persistence.repository;
 
+import com.google.common.base.Strings;
 import me.sujianxin.spring.domain.FeProjectDomain;
 import me.sujianxin.spring.domain.FeProjectForm;
 import org.springframework.stereotype.Repository;
@@ -14,8 +15,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * <p>Created with IDEA
@@ -35,15 +34,15 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
         StringBuilder sb = new StringBuilder("select new me.sujianxin.spring.domain.FeProjectDomain(f.id,f.name,f.createTime,f.remark) from FeProject f where f.user.id=:userid");
         StringBuilder sbCount = new StringBuilder("select count(*) from FeProject f where f.user.id=:userid");
 
-        if (!isNullOrEmpty(feProjectForm.getName())) {
+        if (!Strings.isNullOrEmpty(feProjectForm.getName())) {
             sb.append(" and f.name like CONCAT('%',:name,'%')");
             sbCount.append(" and f.name like CONCAT('%',:name,'%')");
-            if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
+            if (!Strings.isNullOrEmpty(feProjectForm.getFromTime()) && !Strings.isNullOrEmpty(feProjectForm.getToTime())) {
                 sb.append(" and f.createTime between :fromTime and :toTime");
                 sbCount.append(" and f.createTime between :fromTime and :toTime");
             }
         } else {
-            if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
+            if (!Strings.isNullOrEmpty(feProjectForm.getFromTime()) && !Strings.isNullOrEmpty(feProjectForm.getToTime())) {
                 sb.append(" and f.createTime between :fromTime and :toTime");
                 sbCount.append(" and f.createTime between :fromTime and :toTime");
             }
@@ -54,11 +53,11 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
         TypedQuery<FeProjectDomain> query = entityManager.createQuery(sb.toString(), FeProjectDomain.class);
         TypedQuery<Long> queryCount = entityManager.createQuery(sbCount.toString(), Long.class);
 
-        if (!isNullOrEmpty(feProjectForm.getName())) {
+        if (!Strings.isNullOrEmpty(feProjectForm.getName())) {
             query.setParameter("name", feProjectForm.getName());
             queryCount.setParameter("name", feProjectForm.getName());
         }
-        if (!isNullOrEmpty(feProjectForm.getFromTime()) && !isNullOrEmpty(feProjectForm.getToTime())) {
+        if (!Strings.isNullOrEmpty(feProjectForm.getFromTime()) && !Strings.isNullOrEmpty(feProjectForm.getToTime())) {
             try {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 query.setParameter("fromTime", format.parse(feProjectForm.getFromTime()));
