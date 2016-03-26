@@ -49,7 +49,6 @@ public class FeProjectRepositoryImpl implements FeProjectRepositoryCustom {
         }
 
         sb.append(" order by f.").append(feProjectForm.getSortCol()).append(" ").append(feProjectForm.getSortDir());
-        System.out.println("sb.toString()=" + sb.toString());
         TypedQuery<FeProjectDomain> query = entityManager.createQuery(sb.toString(), FeProjectDomain.class);
         TypedQuery<Long> queryCount = entityManager.createQuery(sbCount.toString(), Long.class);
 
