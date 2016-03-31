@@ -1,14 +1,14 @@
 package me.sujianxin.spring.controller;
 
-import com.google.common.base.Strings;
 import me.sujianxin.persistence.service.IFePageService;
+import me.sujianxin.spring.domain.FePageDomain;
 import me.sujianxin.spring.util.MapUtil;
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
@@ -31,7 +31,7 @@ public class FePageController {
 //        FePage fePage = new FePage();
 //        fePage.setTree(new FeTree(fePageDomain.getTreeid()));
 //        fePage.setStyle(fePageDomain.getStyle());
-//        fePage.setCode(fePageDomain.getCode());
+//        fePage.setDownloadCode(fePageDomain.getDownloadCode());
 //        iFePageService.save(fePage);
 //        Map<String, Object> map = new HashMap<>(2);
 //        map.put("success", true);
@@ -50,7 +50,7 @@ public class FePageController {
 //    public Map<String, Object> updatePage(@ModelAttribute FePageDomain fePageDomain) {
 //        FePage fePage = new FePage();
 //        fePage.setId(fePageDomain.getId());
-//        fePage.setCode(fePageDomain.getCode());
+//        fePage.setDownloadCode(fePageDomain.getDownloadCode());
 //        fePage.setStyle(fePageDomain.getStyle());
 //        fePage.setTree(new FeTree(fePageDomain.getTreeid()));
 //        iFePageService.updateById(fePage);
@@ -59,11 +59,8 @@ public class FePageController {
 
     @RequestMapping(value = "updatePageCode", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> updatePageCode(@RequestParam("id") String id, @RequestParam("code") String code) {
-        int tmp = 0;
-        if (!Strings.isNullOrEmpty(id) && NumberUtils.isNumber(id) && !Strings.isNullOrEmpty(code)) {
-            tmp = iFePageService.updateCode(Integer.valueOf(id), code);
-        }
+    public Map<String, Object> updatePageCode(@ModelAttribute FePageDomain fePageDomain, BindingResult bindingResult) {
+        int tmp = iFePageService.updateCode(fePageDomain);
         return 1 == tmp ? MapUtil.getUpdateSuccessMap() : MapUtil.getUpdateFailMap();
     }
 

@@ -1,6 +1,7 @@
 package me.sujianxin.persistence.service;
 
 import me.sujianxin.persistence.model.FePage;
+import me.sujianxin.spring.domain.FePageDomain;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,9 +17,9 @@ public interface IFePageService {
 
     void deleteById(int id);
 
-    void updateById(FePage fePage);
+    void updateById(FePageDomain fePageDomain);
 
-    int updateCode(int id, String code);
+    int updateCode(FePageDomain fePageDomain);
 
     FePage findOne(int id);
 

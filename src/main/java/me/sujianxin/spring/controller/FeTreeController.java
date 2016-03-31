@@ -39,8 +39,9 @@ public class FeTreeController {
         feTree.setIconSkin(feTreeDomain.getIconSkin());
         if (null != feTreeDomain.getIsFolder() && "0".equals(feTreeDomain.getIsFolder())) {
             FePage fePage = new FePage();
-            fePage.setCode("");
-            fePage.setStyle("");
+            fePage.setDownloadCode("");
+            fePage.setMutipleCode("");
+            fePage.setSimpleCode("");
             feTree.addPage(fePage);
         }
         if (0 != feTreeDomain.getParentid()) {

@@ -11,10 +11,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * <p>Version: 1.0
  */
 public class FePageDomain {
-    int id;
-    String code;
-    String style;
-    int treeid;
+    private int id;
+    private String downloadCode;
+    private String mutipleCode;
+    private String simpleCode;
+    private int treeid;
 
     public int getId() {
         return id;
@@ -24,20 +25,28 @@ public class FePageDomain {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getDownloadCode() {
+        return downloadCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setDownloadCode(String downloadCode) {
+        this.downloadCode = downloadCode;
     }
 
-    public String getStyle() {
-        return style;
+    public String getMutipleCode() {
+        return mutipleCode;
     }
 
-    public void setStyle(String style) {
-        this.style = style;
+    public void setMutipleCode(String mutipleCode) {
+        this.mutipleCode = mutipleCode;
+    }
+
+    public String getSimpleCode() {
+        return simpleCode;
+    }
+
+    public void setSimpleCode(String simpleCode) {
+        this.simpleCode = simpleCode;
     }
 
     public int getTreeid() {

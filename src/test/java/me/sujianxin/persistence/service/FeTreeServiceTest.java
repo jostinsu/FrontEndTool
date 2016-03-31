@@ -77,7 +77,7 @@ public class FeTreeServiceTest {
 
     @Test
     public void findPageByTreeId() {
-        FeTree tree = iFeTreeService.findOne(4);
+        FeTree tree = iFeTreeService.findOne(5);
         try {
             jsonGenerator.writeObject(tree);
             System.out.println();
@@ -95,7 +95,7 @@ public class FeTreeServiceTest {
         feTree.setIconSkin("page");
 
         FePage fePage = new FePage();
-        fePage.setCode("code");
+        fePage.setDownloadCode("code");
         feTree.addPage(fePage);
 
         iFeTreeService.save(feTree);

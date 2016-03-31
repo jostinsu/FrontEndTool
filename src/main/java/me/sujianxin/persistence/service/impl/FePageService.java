@@ -3,6 +3,7 @@ package me.sujianxin.persistence.service.impl;
 import me.sujianxin.persistence.model.FePage;
 import me.sujianxin.persistence.repository.FePageRepository;
 import me.sujianxin.persistence.service.IFePageService;
+import me.sujianxin.spring.domain.FePageDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,19 +35,19 @@ public class FePageService implements IFePageService {
     }
 
     @Override
-    public void updateById(FePage fePage) {
-        FePage tmp = fePageRepository.findOne(fePage.getId());
+    public void updateById(FePageDomain fePageDomain) {
+        FePage tmp = fePageRepository.findOne(fePageDomain.getId());
         if (null != tmp) {
-            tmp.setCode(fePage.getCode());
-            tmp.setStyle(fePage.getStyle());
-            tmp.setTree(fePage.getTree());
+            tmp.setDownloadCode(fePageDomain.getDownloadCode());
+            tmp.setMutipleCode(fePageDomain.getMutipleCode());
+            tmp.setSimpleCode(fePageDomain.getSimpleCode());
             fePageRepository.save(tmp);
         }
     }
 
     @Override
-    public int updateCode(int id, String code) {
-        return fePageRepository.updateCode(id, code);
+    public int updateCode(FePageDomain fePageDomain) {
+        return fePageRepository.updateCode(fePageDomain.getId(), fePageDomain.getSimpleCode(), fePageDomain.getMutipleCode(), fePageDomain.getDownloadCode());
     }
 
     @Override

@@ -244,7 +244,7 @@ public class FeProjectController {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(bos);
 
-            putImageToZip(projectPath, mail, zipOutputStream);
+            packImageToZip(projectPath, mail, zipOutputStream);
             if (feProject.getTrees().size() > 0) {
                 packPageToZip(feProject.getTrees().get(0), zipOutputStream, "");
             }
@@ -298,7 +298,7 @@ public class FeProjectController {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(bos);
 
-            putImageToZip(projectPath, mail, zipOutputStream);
+            packImageToZip(projectPath, mail, zipOutputStream);
             packPageToZip(feTree, zipOutputStream, path);
             packCSStoZip(feProject.getStyles(), zipOutputStream, projectName);
 
@@ -307,7 +307,6 @@ public class FeProjectController {
             bos.close();
             downloadFileName = new String((projectName + ".zip").getBytes("gb2312"), "iso-8859-1");
         } catch (IOException ex) {
-            ex.printStackTrace();
             headers.setContentType(MediaType.TEXT_HTML);
             return new ResponseEntity<>("服务器错误".getBytes(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -316,7 +315,7 @@ public class FeProjectController {
         return new ResponseEntity<>(result, headers, HttpStatus.CREATED);
     }
 
-    private void putImageToZip(String projectPath, String mail, ZipOutputStream zipOutputStream) throws IOException {
+    private void packImageToZip(String projectPath, String mail, ZipOutputStream zipOutputStream) throws IOException {
         if (new File(projectPath).exists()) {
             final List<File> imageList = new ArrayList<>();
 
@@ -341,24 +340,6 @@ public class FeProjectController {
         }
     }
 
-    private void searchImage(String searchPath, List<File> fileList) throws IOException {
-        SimpleFileVisitor<Path> finder = new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                fileList.add(file.toFile());
-                return super.visitFile(file, attrs);
-            }
-
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                fileList.add(dir.toFile());
-                return FileVisitResult.CONTINUE;
-            }
-        };
-        if (new File(searchPath).exists())
-            java.nio.file.Files.walkFileTree(Paths.get(searchPath), finder);
-    }
-
     private void packPageToZip(FeTree feTree, ZipOutputStream zipOutputStream, String path) {
         if (feTree.getIsFolder().equals("1")) {
             path = path + feTree.getName() + "/";
@@ -367,16 +348,14 @@ public class FeProjectController {
                 zipOutputStream.putNextEntry(zipEntry);
                 zipOutputStream.closeEntry();
             } catch (IOException e) {
-                e.printStackTrace();
             }
         } else {
             try {
                 ZipEntry zipEntry = new ZipEntry(path + feTree.getName());//+ ".html"
                 zipOutputStream.putNextEntry(zipEntry);
-                zipOutputStream.write(feTree.getPages().get(0).getCode().getBytes(Charset.defaultCharset()));
+                zipOutputStream.write(feTree.getPages().get(0).getDownloadCode().getBytes(Charset.defaultCharset()));
                 zipOutputStream.closeEntry();
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         if (feTree.getTrees().size() > 0) {
@@ -395,10 +374,37 @@ public class FeProjectController {
                     zipOutputStream.write(feStyle.getCode().getBytes(Charset.defaultCharset()));
                     zipOutputStream.closeEntry();
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         }
+        File systemCSS = new File(environment.getProperty("file.system.css.path"));
+        if (systemCSS.exists()) {//压缩系统CSS
+            try {
+                ZipEntry zipEntry = new ZipEntry(root + "/css/" + systemCSS.getName());
+                zipOutputStream.putNextEntry(zipEntry);
+                Files.copy(systemCSS, zipOutputStream);
+                zipOutputStream.closeEntry();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private void searchImage(String searchPath, List<File> fileList) throws IOException {
+        SimpleFileVisitor<Path> finder = new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                fileList.add(file.toFile());
+                return super.visitFile(file, attrs);
+            }
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+                fileList.add(dir.toFile());
+                return FileVisitResult.CONTINUE;
+            }
+        };
+        if (new File(searchPath).exists())
+            java.nio.file.Files.walkFileTree(Paths.get(searchPath), finder);
     }
 
     private void deleteFile(String filepath) {

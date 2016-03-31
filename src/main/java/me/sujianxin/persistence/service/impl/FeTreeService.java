@@ -54,7 +54,7 @@ public class FeTreeService implements IFeTreeService {
         FeTree feTree = feTreeRepository.findOne(id);
         if (null != feTree && feTree.getPages().size() > 0) {
             FePage fePage = feTree.getPages().get(0);
-            fePage.setCode(code);
+            fePage.setDownloadCode(code);
             feTreeRepository.save(feTree);
             return 1;
         }

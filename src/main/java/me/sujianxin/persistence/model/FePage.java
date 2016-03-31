@@ -1,6 +1,7 @@
 package me.sujianxin.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,10 +21,17 @@ public class FePage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @JsonIgnore
     @Column(columnDefinition = "longtext")
-    private String code;
+    private String downloadCode;
+
     @Column(columnDefinition = "longtext")
-    private String style;
+    private String mutipleCode;
+
+    @JsonIgnore
+    @Column(columnDefinition = "longtext")
+    private String simpleCode;
 
     //bi-directional many-to-one association to FeTree
     @JsonBackReference
@@ -41,20 +49,28 @@ public class FePage implements Serializable {
         this.id = id;
     }
 
-    public String getCode() {
-        return this.code;
+    public String getDownloadCode() {
+        return this.downloadCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setDownloadCode(String downloadCode) {
+        this.downloadCode = downloadCode;
     }
 
-    public String getStyle() {
-        return this.style;
+    public String getSimpleCode() {
+        return simpleCode;
     }
 
-    public void setStyle(String style) {
-        this.style = style;
+    public void setSimpleCode(String simpleCode) {
+        this.simpleCode = simpleCode;
+    }
+
+    public String getMutipleCode() {
+        return mutipleCode;
+    }
+
+    public void setMutipleCode(String mutipleCode) {
+        this.mutipleCode = mutipleCode;
     }
 
     public FeTree getTree() {
