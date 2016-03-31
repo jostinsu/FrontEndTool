@@ -29,10 +29,6 @@ public class FePage implements Serializable {
     @Column(columnDefinition = "longtext")
     private String multipleCode;
 
-    @JsonIgnore
-    @Column(columnDefinition = "longtext")
-    private String simpleCode;
-
     //bi-directional many-to-one association to FeTree
     @JsonBackReference
     @ManyToOne
@@ -55,14 +51,6 @@ public class FePage implements Serializable {
 
     public void setDownloadCode(String downloadCode) {
         this.downloadCode = downloadCode;
-    }
-
-    public String getSimpleCode() {
-        return simpleCode;
-    }
-
-    public void setSimpleCode(String simpleCode) {
-        this.simpleCode = simpleCode;
     }
 
     public String getMultipleCode() {

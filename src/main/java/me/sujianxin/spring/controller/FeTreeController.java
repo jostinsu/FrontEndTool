@@ -41,7 +41,6 @@ public class FeTreeController {
             FePage fePage = new FePage();
             fePage.setDownloadCode("");
             fePage.setMultipleCode("");
-            fePage.setSimpleCode("");
             feTree.addPage(fePage);
         }
         if (0 != feTreeDomain.getParentid()) {

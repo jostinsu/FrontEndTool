@@ -112,10 +112,10 @@ public class FeProjectController {
             //FeStyle feStyleCommon = new FeStyle();
             //feStyleCommon.setName("common.css");
             //feStyleCommon.setCode("");
+            //feProject.addStyle(feStyleCommon);
             FeStyle feStyleReset = new FeStyle();
             feStyleReset.setName("reset.css");
             feStyleReset.setCode("");
-            //feProject.addStyle(feStyleCommon);
             feProject.addStyle(feStyleReset);
 
             FeTree feTree = new FeTree();
