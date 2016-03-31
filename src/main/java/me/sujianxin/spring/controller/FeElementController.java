@@ -48,7 +48,7 @@ public class FeElementController {
 
     @RequestMapping(value = "element/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> findOne(@PathVariable("id") int id) {
+    public Map<String, Object> findByTypeId(@PathVariable("id") int id) {
         List<FeElement> feElementList = iFeElementService.findByTypeId(id);
         Map<String, Object> map = new HashMap<>(3);
         map.put("success", true);

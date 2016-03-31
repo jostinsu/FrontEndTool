@@ -27,7 +27,7 @@ public class FePage implements Serializable {
     private String downloadCode;
 
     @Column(columnDefinition = "longtext")
-    private String mutipleCode;
+    private String multipleCode;
 
     @JsonIgnore
     @Column(columnDefinition = "longtext")
@@ -65,12 +65,12 @@ public class FePage implements Serializable {
         this.simpleCode = simpleCode;
     }
 
-    public String getMutipleCode() {
-        return mutipleCode;
+    public String getMultipleCode() {
+        return multipleCode;
     }
 
-    public void setMutipleCode(String mutipleCode) {
-        this.mutipleCode = mutipleCode;
+    public void setMultipleCode(String multipleCode) {
+        this.multipleCode = multipleCode;
     }
 
     public FeTree getTree() {

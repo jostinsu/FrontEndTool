@@ -40,7 +40,7 @@ public class FeTreeController {
         if (null != feTreeDomain.getIsFolder() && "0".equals(feTreeDomain.getIsFolder())) {
             FePage fePage = new FePage();
             fePage.setDownloadCode("");
-            fePage.setMutipleCode("");
+            fePage.setMultipleCode("");
             fePage.setSimpleCode("");
             feTree.addPage(fePage);
         }

@@ -13,6 +13,7 @@ import me.sujianxin.spring.domain.FeProjectForm;
 import me.sujianxin.spring.util.MapUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
@@ -37,8 +38,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import static org.apache.commons.lang3.math.NumberUtils.isNumber;
 
 /**
  * <p>Created with IDEA
@@ -110,13 +109,13 @@ public class FeProjectController {
             //feProject.setCreateTime(new Date());
             feProject.setUser(new FeUser(Integer.valueOf(String.valueOf(session.getAttribute("userid")))));
 
-            FeStyle feStyleCommon = new FeStyle();
-            feStyleCommon.setName("common.css");
-            feStyleCommon.setCode("");
+            //FeStyle feStyleCommon = new FeStyle();
+            //feStyleCommon.setName("common.css");
+            //feStyleCommon.setCode("");
             FeStyle feStyleReset = new FeStyle();
             feStyleReset.setName("reset.css");
             feStyleReset.setCode("");
-            feProject.addStyle(feStyleCommon);
+            //feProject.addStyle(feStyleCommon);
             feProject.addStyle(feStyleReset);
 
             FeTree feTree = new FeTree();
@@ -166,7 +165,7 @@ public class FeProjectController {
     @ResponseBody
     public Map<String, Object> getTreeByProjectId(@RequestParam("id") String id) {
         FeProject feProject = null;
-        if (!Strings.isNullOrEmpty(id) && isNumber(id)) {
+        if (!Strings.isNullOrEmpty(id) && NumberUtils.isNumber(id)) {
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -227,7 +226,7 @@ public class FeProjectController {
         FeProject feProject = null;
         HttpHeaders headers = new HttpHeaders();
 
-        if (!Strings.isNullOrEmpty(id) && isNumber(id))
+        if (!Strings.isNullOrEmpty(id) && NumberUtils.isNumber(id))
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         if (null == feProject) {
             headers.setContentType(MediaType.TEXT_HTML);
@@ -273,14 +272,14 @@ public class FeProjectController {
         FeProject feProject = null;
         HttpHeaders headers = new HttpHeaders();
 
-        if (!Strings.isNullOrEmpty(id) && isNumber(id))
+        if (!Strings.isNullOrEmpty(id) && NumberUtils.isNumber(id))
             feProject = iFeProjectService.findOne(Integer.valueOf(id));
         if (null == feProject) {
             headers.setContentType(MediaType.TEXT_HTML);
             return new ResponseEntity<>("非法操作".getBytes(), headers, HttpStatus.BAD_REQUEST);
         }
 
-        if (!Strings.isNullOrEmpty(treeid) && isNumber(treeid))
+        if (!Strings.isNullOrEmpty(treeid) && NumberUtils.isNumber(treeid))
             feTree = iFeTreeService.findOne(Integer.valueOf(treeid));
         if (null == feTree) {
             headers.setContentType(MediaType.TEXT_HTML);
