@@ -30,6 +30,12 @@ public class FeElement implements Serializable {
 
     private String remark;
 
+    @Column(columnDefinition = "char")
+    private String isBlock;
+
+    @Column(columnDefinition = "char")
+    private String isContainer;
+
     //bi-directional many-to-one association to FeType
     @JsonBackReference
     @ManyToOne
@@ -84,6 +90,22 @@ public class FeElement implements Serializable {
 
     public void setType(FeType type) {
         this.type = type;
+    }
+
+    public String getIsBlock() {
+        return isBlock;
+    }
+
+    public void setIsBlock(String isBlock) {
+        this.isBlock = isBlock;
+    }
+
+    public String getIsContainer() {
+        return isContainer;
+    }
+
+    public void setIsContainer(String isContainer) {
+        this.isContainer = isContainer;
     }
 
     @Override
