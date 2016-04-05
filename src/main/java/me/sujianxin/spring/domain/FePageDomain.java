@@ -13,8 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class FePageDomain {
     private int id;
     private String downloadCode;
-    private String mutipleCode;
-    private String simpleCode;
+    private String multipleCode;
     private int treeid;
 
     public int getId() {
@@ -33,20 +32,12 @@ public class FePageDomain {
         this.downloadCode = downloadCode;
     }
 
-    public String getMutipleCode() {
-        return mutipleCode;
+    public String getMultipleCode() {
+        return multipleCode;
     }
 
-    public void setMutipleCode(String mutipleCode) {
-        this.mutipleCode = mutipleCode;
-    }
-
-    public String getSimpleCode() {
-        return simpleCode;
-    }
-
-    public void setSimpleCode(String simpleCode) {
-        this.simpleCode = simpleCode;
+    public void setMultipleCode(String multipleCode) {
+        this.multipleCode = multipleCode;
     }
 
     public int getTreeid() {

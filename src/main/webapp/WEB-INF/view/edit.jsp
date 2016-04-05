@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -57,30 +58,18 @@
                 </div>
                 <div class="edit_block_body">
                     <div class="edit_element_main">
-                        <div class="edit_element_item" data-id="1">
-                            <div class="edit_element_title">
-                                <i class="tool_icon icon-caret-right"></i>
-                                <h3>容器</h3>
-                            </div>
-                            <div class="edit_element_content">
-                            </div>
-                        </div>
-                        <div class="edit_element_item" data-id="2">
-                            <div class="edit_element_title">
-                                <i class="tool_icon icon-caret-right"></i>
-                                <h3>标题段落</h3>
-                            </div>
-                            <div class="edit_element_content">
-                            </div>
-                        </div>
-                        <div class="edit_element_item" data-id="3">
-                            <div class="edit_element_title">
-                                <i class="tool_icon icon-caret-right"></i>
-                                <h3>行内元素</h3>
-                            </div>
-                            <div class="edit_element_content">
-                            </div>
-                        </div>
+                        <c:if test="${not empty feType}">
+                            <c:forEach items="${feType}" var="feType">
+                                <div class="edit_element_item" data-id="${feType.id}">
+                                    <div class="edit_element_title">
+                                        <i class="tool_icon icon-caret-right"></i>
+                                        <h3>${feType.name}</h3>
+                                    </div>
+                                    <div class="edit_element_content">
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:if>
                     </div>
                 </div>
             </div>

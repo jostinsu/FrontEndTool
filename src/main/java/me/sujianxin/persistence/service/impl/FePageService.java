@@ -39,15 +39,14 @@ public class FePageService implements IFePageService {
         FePage tmp = fePageRepository.findOne(fePageDomain.getId());
         if (null != tmp) {
             tmp.setDownloadCode(fePageDomain.getDownloadCode());
-            tmp.setMultipleCode(fePageDomain.getMutipleCode());
-            tmp.setSimpleCode(fePageDomain.getSimpleCode());
+            tmp.setMultipleCode(fePageDomain.getMultipleCode());
             fePageRepository.save(tmp);
         }
     }
 
     @Override
     public int updateCode(FePageDomain fePageDomain) {
-        return fePageRepository.updateCode(fePageDomain.getId(), fePageDomain.getSimpleCode(), fePageDomain.getMutipleCode(), fePageDomain.getDownloadCode());
+        return fePageRepository.updateCode(fePageDomain.getId(), fePageDomain.getMultipleCode(), fePageDomain.getDownloadCode());
     }
 
     @Override

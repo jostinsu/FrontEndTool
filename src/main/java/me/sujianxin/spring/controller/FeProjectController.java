@@ -48,6 +48,36 @@ import java.util.zip.ZipOutputStream;
  */
 @Controller
 public class FeProjectController {
+    private final static String resetCSSCode = "div,article,section,header,footer,nav,div,ul,ol,li,table,tr,th,td,h1,h2,h3,h4,h5,h6,p,pre,code,form,input,textarea {\n" +
+            "  margin: 0;\n" +
+            "  padding: 0;\n" +
+            "}\n" +
+            "html {\n" +
+            "  margin: 0;\n" +
+            "  padding: 0;\n" +
+            "  background-color: #fff;\n" +
+            "}\n" +
+            "body {\n" +
+            "  margin: 0;\n" +
+            "  padding: 0;\n" +
+            "  color: #000;\n" +
+            "  background-color: #fff;\n" +
+            "  font-size: 12px;\n" +
+            "  font-family: '微软雅黑','黑体','Lucida Grande','Lucida Sans Unicode',Helvetica,Arial,Verdana,sans-serif;\n" +
+            "}\n" +
+            "img {\n" +
+            "  vertical-align: baseline;\n" +
+            "}\n" +
+            "a {\n" +
+            "  text-decoration: underline;\n" +
+            "  color: #00E;\n" +
+            "}\n" +
+            "a:hover {\n" +
+            "  text-decoration: underline;\n" +
+            "}\n" +
+            "li {\n" +
+            "  list-style: none;\n" +
+            "}";
     @Autowired
     private IFeProjectService iFeProjectService;
     @Autowired
@@ -115,7 +145,7 @@ public class FeProjectController {
             //feProject.addStyle(feStyleCommon);
             FeStyle feStyleReset = new FeStyle();
             feStyleReset.setName("reset.css");
-            feStyleReset.setCode("");
+            feStyleReset.setCode(resetCSSCode);
             feProject.addStyle(feStyleReset);
 
             FeTree feTree = new FeTree();
@@ -352,7 +382,7 @@ public class FeProjectController {
             try {
                 ZipEntry zipEntry = new ZipEntry(path + feTree.getName());//+ ".html"
                 zipOutputStream.putNextEntry(zipEntry);
-                zipOutputStream.write(feTree.getPages().get(0).getDownloadCode().getBytes(Charset.defaultCharset()));
+                zipOutputStream.write(feTree.getPages().get(0).getDownloadCode().getBytes(Charset.forName("UTF-8")));
                 zipOutputStream.closeEntry();
             } catch (IOException e) {
             }
@@ -370,22 +400,22 @@ public class FeProjectController {
                 try {
                     ZipEntry zipEntry = new ZipEntry(root + "/css/" + feStyle.getName());
                     zipOutputStream.putNextEntry(zipEntry);
-                    zipOutputStream.write(feStyle.getCode().getBytes(Charset.defaultCharset()));
+                    zipOutputStream.write(feStyle.getCode().getBytes(Charset.forName("UTF-8")));
                     zipOutputStream.closeEntry();
                 } catch (IOException e) {
                 }
             }
         }
-        File systemCSS = new File(environment.getProperty("file.system.css.path"));
-        if (systemCSS.exists()) {//压缩系统CSS
-            try {
-                ZipEntry zipEntry = new ZipEntry(root + "/css/" + systemCSS.getName());
-                zipOutputStream.putNextEntry(zipEntry);
-                Files.copy(systemCSS, zipOutputStream);
-                zipOutputStream.closeEntry();
-            } catch (IOException e) {
-            }
-        }
+        //File systemCSS = new File(environment.getProperty("file.system.css.path"));
+        //if (systemCSS.exists()) {//压缩系统CSS
+        //    try {
+        //        ZipEntry zipEntry = new ZipEntry(root + "/css/" + systemCSS.getName());
+        //        zipOutputStream.putNextEntry(zipEntry);
+        //        Files.copy(systemCSS, zipOutputStream);
+        //        zipOutputStream.closeEntry();
+        //    } catch (IOException e) {
+        //    }
+        //}
     }
 
     private void searchImage(String searchPath, List<File> fileList) throws IOException {

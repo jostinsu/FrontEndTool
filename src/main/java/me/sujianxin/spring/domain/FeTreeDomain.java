@@ -22,6 +22,8 @@ public class FeTreeDomain {
 
     private int parentid;
 
+    private String multipleCode;
+
     public int getId() {
         return id;
     }
@@ -60,6 +62,14 @@ public class FeTreeDomain {
 
     public void setParentid(int parentid) {
         this.parentid = parentid;
+    }
+
+    public String getMultipleCode() {
+        return multipleCode;
+    }
+
+    public void setMultipleCode(String multipleCode) {
+        this.multipleCode = multipleCode;
     }
 
     @Override

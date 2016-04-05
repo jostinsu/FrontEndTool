@@ -40,7 +40,7 @@ public class FeTreeController {
         if (null != feTreeDomain.getIsFolder() && "0".equals(feTreeDomain.getIsFolder())) {
             FePage fePage = new FePage();
             fePage.setDownloadCode("");
-            fePage.setMultipleCode("");
+            fePage.setMultipleCode(feTreeDomain.getMultipleCode());
             feTree.addPage(fePage);
         }
         if (0 != feTreeDomain.getParentid()) {
@@ -48,7 +48,9 @@ public class FeTreeController {
         }
         FeTree reFeTree = iFeTreeService.save(feTree);
         Map<String, Object> map = new HashMap<>(3);
-        map.put("id", reFeTree.getId());
+        map.put("treeid", reFeTree.getId());
+        if ("0".equals(feTreeDomain.getIsFolder()))
+            map.put("pageid", reFeTree.getPages().get(0).getId());
         map.put("success", true);
         map.put("msg", "新建成功");
         return map;

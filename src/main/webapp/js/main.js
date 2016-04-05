@@ -411,12 +411,19 @@ fe.edit.compareNode = function (name, borther, isFolder) {
 fe.edit.addTreeNodeForPage = function (treeNode) {
 	var name = $('.inputBox_body_input').val();
 	var check = fe.edit.beforeAddTreeNode(name, treeNode, true);
+	var multipleCode = '<style id="pageCss"></style><div class="sjx_html" style="height: 100%"><div class="sjx_additional_wrap" id="basicBody" data-is-container="1" style="height: 100%;overflow: auto;box-sizing: border-box;" ondragover="fe.drag.elemDragOver(event,this)" ondrop="fe.drag.elemDrop(event,this)" ondragleave="fe.drag.elemDragLeave(event,this)"><div class="sjx_additional_header"><span class="sjx_additional_icon">container</span></div><div class="sjx_additional_body"><div class="sjx_body"></div></div></div></div>';
 	if (!check.flag) {
 		$('.inputBox_body_inputRemind').html(check.remind);
 	} else {
 		fe.tool.getJSON({
 			url: "saveTree",
-			data: {'isFolder': 0, 'name': check.fullName, 'iconSkin': 'page'},
+			data: {
+				'isFolder': 0,
+				'name': check.fullName,
+				'iconSkin': 'page',
+				'parentid': treeNode.id,
+				'multipleCode': HTMLFormat(multipleCode, '    ')
+			},
 			success: function (res) {
 				$('.inputBox_cover').remove();
 				fe.edit.zTreeObj.addNodes(treeNode, fe.edit.compareNode(check.fullName, treeNode.trees, "0"), {
@@ -427,7 +434,7 @@ fe.edit.addTreeNodeForPage = function (treeNode) {
 					trees: [],
 					pages: [{
 						id: res.pageid,
-						multipleCode: '<style id="pageCss"></style><div class="sjx_html" style="height: 100%"><div class="sjx_additional_wrap" id="basicBody" data-is-container="1" style="height: 100%;overflow: auto;box-sizing: border-box;" ondragover="fe.drag.elemDragOver(event,this)" ondrop="fe.drag.elemDrop(event,this)" ondragleave="fe.drag.elemDragLeave(event,this)"><div class="sjx_additional_header"><span class="sjx_additional_icon">container</span></div><div class="sjx_additional_body"><div class="sjx_body"></div></div></div></div>'
+						multipleCode: multipleCode
 					}]
 				});
 				var newTreeNode = fe.edit.zTreeObj.getNodesByParam('id', res.treeid, treeNode)[0];
@@ -449,7 +456,7 @@ fe.edit.addTreeNodeForFolder = function (treeNode) {
 	} else {
 		fe.tool.getJSON({
 			url: "saveTree",
-			data: {'isFolder': 1, 'name': check.fullName, 'iconSkin': 'folder'},
+			data: {'isFolder': 1, 'name': check.fullName, 'iconSkin': 'folder', 'parentid': treeNode.id},
 			success: function (res) {
 				fe.edit.zTreeObj.addNodes(treeNode, fe.edit.compareNode(check.fullName, treeNode.trees, "1"), {
 					id: res.id,
@@ -541,8 +548,7 @@ fe.edit.elemEvent = function () {
 
 	function getElementData(id, content) {
 		fe.tool.getJSON({
-			url: "elementData" + id + ".json",
-			data: {'id': id},
+			url: "element/" + id,
 			success: function (res) {
 				for (var i = 0, len = res.data.length; i < len; i++) {
 					$('<div class="tool_element_item" id="basic' + fe.tool.getRandomNumber() + '" draggable="true" ondragstart="fe.drag.elemDragStart(event,this)"><span>&lt;' + res.data[i].icon + '&gt;</span> <h4>' + res.data[i].name + '</h4></div>')
@@ -857,7 +863,7 @@ fe.edit.savePage = function (remind, callback) {
 		fe.edit.data.currentPage.downloadCode = fe.edit.getDownloadCode(currentNode);
 		fe.edit.data.currentPage.multipleCode = $('#editMain').clone().find('#resetCss').remove().end().html();
 		fe.tool.getJSON({
-			url: "data.json",
+			url: "updatePageCode",
 			data: {
 				'id': fe.edit.data.currentPage.id,
 				'multipleCode': fe.edit.data.currentPage.multipleCode,
@@ -1070,7 +1076,7 @@ fe.edit.resetStyleEvent = function () {
 		fe.edit.data.styles[0].code = $('#editResetStyle').val();
 		fe.edit.data.styles[0].pageResetCssCode = fe.edit.data.styles[0].code.replace(/html|body/g, '.sjx_$&');
 		fe.tool.getJSON({
-			url: "data.json",
+			url: "updateStyle",
 			data: {'id': fe.edit.data.styles[0].id, 'code': fe.edit.data.styles[0].code, 'name': "reset.css"},
 			success: function () {
 

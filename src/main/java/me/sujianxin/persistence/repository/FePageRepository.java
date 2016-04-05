@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
 public interface FePageRepository extends JpaRepository<FePage, Integer> {
 
     @Modifying
-    @Query("update FePage page set page.simpleCode=:simpleCode,page.downloadCode=:downloadCode,page.mutipleCode=:mutipleCode where page.id=:id")
-    int updateCode(@Param("id") int id, @Param("simpleCode") String simpleCode, @Param("mutipleCode") String mutipleCode, @Param("downloadCode") String downloadCode);
+    @Query("update FePage page set page.downloadCode=:downloadCode,page.multipleCode=:multipleCode where page.id=:id")
+    int updateCode(@Param("id") int id, @Param("multipleCode") String multipleCode, @Param("downloadCode") String downloadCode);
 }
