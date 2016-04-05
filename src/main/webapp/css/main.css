@@ -1,5 +1,5 @@
 @charset "UTF-8";
-body, div, article, section, header, footer, nav, div, ul, ol, li, table, tr, th, td, h1, h2, h3, h4, p, pre, code, form, input, textarea {
+html, body, div, article, section, header, footer, nav, div, ul, ol, li, table, tr, th, td, h1, h2, h3, h4, h5, h6, p, pre, code, form, input, textarea {
   margin: 0;
   padding: 0; }
 
@@ -23,6 +23,10 @@ a {
 
 li {
   list-style: none; }
+
+.pos {
+  position: static !important;
+}
 
 html, body {
   background-color: #E9EAEB; }
@@ -49,7 +53,9 @@ html, body {
   text-align: center;
   font-size: 12px;
   color: #222;
-  _overflow-y: hidden; }
+  _overflow-y: hidden;
+  text-decoration: none;
+}
 
 .tool_btn:hover {
   border-color: #79838D;
@@ -75,7 +81,7 @@ html, body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFCFCFC', endColorstr='#FFF5F5F5', GradientType=0);
   border-color: #E4E4E4;
   color: #c3c3c3;
-  cursor: default;
+  cursor: not-allowed;
   -webkit-transition-duration: 0s;
           transition-duration: 0s; }
 
@@ -114,7 +120,8 @@ button.tool_btn, input.tool_btn {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFA2C8EA', endColorstr='#FF9BC0DD', GradientType=0);
   color: #fff !important;
-  cursor: default; }
+  cursor: not-allowed;
+}
 
 .tool_btn_Big {
   height: 28px;
@@ -240,9 +247,9 @@ button.tool_btn, input.tool_btn {
 }
 
 .tool_inputBox_Small {
-  width: 340px;
+  width: 400px;
   height: 170px;
-  margin-left: -170px;
+  margin-left: -200px;
 }
 
 .tool_inputBox_Small .inputBox_body {
@@ -260,7 +267,7 @@ button.tool_btn, input.tool_btn {
 }
 
 .tool_inputBox_Small .inputBox_body_input {
-  width: 180px;
+  width: 210px;
 }
 
 .tool_inputBox_Small .inputBox_body_inputRemind {
@@ -282,6 +289,77 @@ button.tool_btn, input.tool_btn {
 
 .remindBox_closeBtn:hover, .confirmBox_closeBtn:hover, .inputBox_closeBtn:hover {
   color: #ff9900;
+}
+
+.tool_editBox {
+  position: absolute;
+  left: 50%;
+  top: 60px;
+  width: 760px;
+  padding: 10px 15px;
+  min-height: 500px;
+  margin-left: -400px;
+  z-index: 100;
+  background-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.tool_editBox_header {
+  height: 30px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  color: #666;
+  overflow: hidden;
+}
+
+.tool_editBox_header h2 {
+  float: left;
+  line-height: 30px;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.tool_editBox_header .icon-remove {
+  float: right;
+  font-size: 20px;
+  font-weight: lighter;
+}
+
+.tool_editBox_body {
+  padding-top: 10px;
+}
+
+.tool_editor {
+  border: 1px solid #ddd;
+  color: #666;
+}
+
+.tool_editor_tab {
+  height: 40px;
+  border-bottom: 1px solid #ddd;
+  overflow: hidden;
+  background-color: #F9FAFC;
+}
+
+.tool_editor_tab .tool_editor_tab_item {
+  float: left;
+  padding: 0 15px;
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: center;
+  border-right: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.tool_editor_tab .active {
+  background-color: #709299;
+  color: #fff;
+}
+
+.tool_editor_body {
+  height: 380px;
 }
 
 .tool_tip {
@@ -306,13 +384,27 @@ button.tool_btn, input.tool_btn {
   animation: disappear 1s linear 2s forwards;
 }
 
+.tool_topTip {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  height: 30px;
+  background-color: #ff9900;
+  color: #fff;
+  line-height: 30px;
+  font-size: 14px;
+  padding: 0 10px;
+  -webkit-animation: disappear 1s linear 1s forwards;
+  animation: disappear 1s linear 1s forwards;
+}
+
 @-webkit-keyframes disappear {
   0% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    display: none;
+    z-index: -1;
   }
 }
 
@@ -322,7 +414,7 @@ button.tool_btn, input.tool_btn {
   }
   100% {
     opacity: 0;
-    display: none;
+    z-index: -1;
   }
 }
 .tool_header {
@@ -353,6 +445,35 @@ button.tool_btn, input.tool_btn {
 .tool_header_right {
   height: 100%;
   float: right; }
+
+.tool_element_item {
+  float: left;
+  text-align: center;
+  width: 75px;
+  height: 55px;
+  margin-bottom: 5px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.tool_element_item span {
+  color: #336699;
+  font-size: 14px;
+  line-height: 26px;
+}
+
+.tool_element_item h4 {
+  margin-top: 5px;
+  font-weight: normal;
+  color: #333;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.tool_element_item:hover {
+  border: 1px solid #336699;
+  cursor: pointer;
+}
 
 .info_header {
   position: relative;
@@ -729,12 +850,6 @@ button.tool_btn, input.tool_btn {
   transform: rotateY(-90deg) translateZ(150px);
 }
 
-.forgivePassword_title {
-  float: left;
-  font-weight: normal;
-  font-size: 18px;
-}
-
 .forgivePassword_item:first-child {
   margin-bottom: 15px;
   overflow: hidden;
@@ -808,6 +923,11 @@ button.tool_btn, input.tool_btn {
 
 .edit_topBar_operation .tool_btn {
   margin-right: 8px;
+  text-decoration: none;
+}
+
+.edit_topBar_operation .tool_btn:hover {
+  text-decoration: none;
 }
 
 .edit_topBar_other {
@@ -826,6 +946,7 @@ button.tool_btn, input.tool_btn {
   padding: 0 5px;
   margin-left: 15px;
   color: #fff;
+  text-decoration: none;
 }
 
 .edit_topBar_other .edit_topBar_other_exitBtn:hover {
@@ -839,7 +960,7 @@ button.tool_btn, input.tool_btn {
 
 .edit_body_leftAside {
   float: left;
-  width: 250px;
+  width: 265px;
   height: 100%;
   box-sizing: border-box;
   padding-top: 40px;
@@ -857,6 +978,13 @@ button.tool_btn, input.tool_btn {
   border-left: 1px solid #D2D7DC;
 }
 
+.edit_body_main {
+  padding-top: 40px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+}
+
 .edit_tree {
   height: 50%;
 }
@@ -866,33 +994,259 @@ button.tool_btn, input.tool_btn {
 }
 
 .edit_block {
+  position: relative;
+}
+
+.edit_attr {
+  height: 50%;
+}
+
+.edit_attr .edit_block_body {
+  padding: 0;
+  position: relative;
+}
+
+.edit_attr_header {
+  overflow: hidden;
+}
+
+.edit_attr_header .edit_attr_header_item {
+  margin-top: 4px;
+  line-height: 22px;
+  float: left;
+  font-size: 12px;
+  width: 50%;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-bottom: 1px solid #6699CC;
+}
+
+.edit_attr_header .edit_attr_header_item:first-child {
+  text-align: right;
+  padding-right: 15px;
+  border-right: 1px solid #6699CC;
+}
+
+.edit_attr_header .edit_attr_header_item:last-child {
+  text-align: left;
+  padding-left: 15px;
+}
+
+.edit_attr_header .active {
+  color: #336699;
+}
+
+.edit_attr_content {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.edit_sourceSetting {
+  height: 100%;
+  width: 100%;
+}
+
+.edit_sourceSetting .edit_editSourceCode, .edit_sourceSetting .edit_showSourceCode {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.edit_sourceSetting_header {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  height: 26px;
+  background-color: #fff;
+}
+
+.edit_sourceSetting_header .tool_icon {
+  float: right;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.edit_sourceSetting_body {
+  display: block;
+  box-sizing: border-box;
+  height: 100%;
+  border-top: 26px solid transparent;
+  overflow: auto;
+}
+
+.edit_sourceSetting_body textarea {
+  padding: 0 8px 8px;
+  height: 1000%;
+  width: 1000%;
+  resize: none;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #F9FAFC;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.edit_sourceSetting_body pre {
+  display: block;
+  padding: 4px;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
+}
+
+.edit_sourceSetting_body .snippet-container {
+  height: 100%;
+}
+
+.edit_sourceSetting_body .snippet-wrap {
+  height: 100%;
+}
+
+.edit_attrSetting {
+  position: relative;
+  padding-top: 8px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.edit_attrSetting_header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;
+  background-color: #fff;
+}
+
+.edit_attrSetting_header span {
+  display: inline-block;
+  padding-left: 10px;
+  line-height: 35px;
+}
+
+.edit_attrSetting_header .tool_icon {
+  float: right;
+  margin-top: 8px;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.edit_attrSetting_body {
+  height: 100%;
+  border-top: 30px solid transparent;
   box-sizing: border-box;
   overflow: auto;
 }
 
-.edit_attr {
-  height: 30%;
+.edit_attrSetting_item {
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #99CCFF;
+}
+
+.edit_attrSetting_item_title {
+  float: left;
+  height: 100%;
+  border-right: 1px solid #99CCFF;
+  width: 98px;
+}
+
+.edit_attrSetting_item_title .tool_text {
+  width: 80px;
+  border: none;
+  outline: none;
+}
+
+.edit_attrSetting_item_description {
+  overflow: hidden;
+  height: 100%;
+}
+
+.edit_attrSetting_item_description .tool_text {
+  width: 90%;
+  box-sizing: border-box;
+  height: 24px;
+  border: none;
+  outline: none;
 }
 
 .edit_pageStyle {
-  height: 35%;
+  height: 50%;
 }
 
-.edit_commonStyle {
-  height: 35%;
+.edit_pageStyle .edit_block_body {
+  padding: 0;
+}
+
+.edit_styleSetting {
+  height: 100%;
+  position: relative;
+  background-color: #fff;
+}
+
+.edit_styleSetting_title {
+  height: 32px;
+  line-height: 32px;
+  padding: 0 5px;
+  margin-bottom: 4px;
+}
+
+.edit_styleSetting_title .edit_styleSetting_name {
+  width: 150px;
+}
+
+.edit_styleSetting_title .icon-eye-open {
+  margin-top: 9px;
+  float: right;
+  font-size: 16px;
+}
+
+.edit_styleSetting_content {
+  position: absolute;
+  left: 0;
+  top: 36px;
+  bottom: 0;
+  right: 0;
+}
+
+.edit_styleSetting_content textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #666;
+  box-sizing: border-box;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: #F9FAFC;
 }
 
 .edit_block_header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
   padding: 0 5px;
-  height: 18px;
-  line-height: 18px;
+  height: 22px;
+  line-height: 22px;
   font-size: 12px;
   background-color: #DFE9F5;
   border-bottom: 1px solid #bdc9d6;
 }
 
 .edit_block_body {
+  border-top: 23px solid transparent;
   padding: 0 3px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 .edit_tree_rightMenu {
@@ -913,6 +1267,120 @@ button.tool_btn, input.tool_btn {
 .edit_tree_rightMenu li:hover {
   background-color: #336699;
   color: #fff;
+}
+
+.edit_element_main {
+  padding: 10px 5px;
+}
+
+.edit_element_item {
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+
+.edit_element_item:last-of-type {
+  border: none;
+}
+
+.edit_element_title {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.edit_element_title i {
+  float: left;
+  margin-top: 2px;
+}
+
+.edit_element_title h3 {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.edit_showResetStyle, .edit_showHtmlCode, .edit_showResetCss, .edit_showPageCss {
+  height: 100%;
+}
+
+.edit_showResetStyle .snippet-container, .edit_showHtmlCode .snippet-container, .edit_showResetCss .snippet-container, .edit_showPageCss .snippet-container {
+  height: 100%;
+}
+
+.edit_showResetStyle .snippet-wrap, .edit_showHtmlCode .snippet-wrap, .edit_showResetCss .snippet-wrap, .edit_showPageCss .snippet-wrap {
+  height: 100%;
+}
+
+.edit_showResetStyle pre, .edit_showHtmlCode pre, .edit_showResetCss pre, .edit_showPageCss pre {
+  padding: 8px;
+  display: block;
+  height: 364px;
+  overflow: auto;
+}
+
+.edit_editResetStyle {
+  height: 100%;
+}
+
+.edit_editResetStyle textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: #F9FAFC;
+  resize: none;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+#edit_pageCodeCover .tool_editor {
+  position: relative;
+}
+
+#edit_pageCodeCover #edit_pageCode_downloadBtn {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 16px;
+}
+
+.sjx_additional_wrap {
+  border: 4px solid #CCCCCC;
+  margin-bottom: 10px;
+}
+
+.sjx_additional_wrap[data-is-container="0"] .sjx_additional_body {
+  padding: 0;
+}
+
+.sjx_additional_header {
+  height: 20px;
+  background-color: #CCCCCC;
+}
+
+.sjx_additional_header .sjx_additional_removeBtn {
+  float: right;
+  line-height: 20px;
+}
+
+.sjx_additional_header .sjx_additional_icon {
+  display: inline-block;
+}
+
+.sjx_additional_body {
+  padding: 10px 5px;
+}
+
+.sjx_additional_body:after {
+  content: '';
+  height: 0;
+  display: block;
+  clear: both;
+  visibility: hidden;
 }
 
 /*# sourceMappingURL=main.css.map */

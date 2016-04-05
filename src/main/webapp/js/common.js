@@ -87,7 +87,16 @@ $.extend({
 		return $('<div class="tool_tip">' +
 			'<span class="tool_tip_content">' + setting.content + '</span>' +
 			'</div>').appendTo($('body'));
+	},
+
+	/*动态生成提醒topTip的方法*/
+	topTip: function (option) {
+		var setting = $.extend({
+			content: "提醒内容"
+		}, option || {});
+		return $('<div class="tool_topTip">' + setting.content + '</div>').appendTo($('body'));
 	}
+
 });
 
 var fe = {}; //全局的命名空间
@@ -238,11 +247,75 @@ fe.tool = {
 				callbackForFail(obj.msg);
 			}
 		}
+	},
+
+	getRandomNumber: function () {
+		return new Date().getTime() + ((1000000 * Math.random()).toFixed(0));
+	},
+
+	getTreeNodeParents: function (treeNode) {
+		var parents = treeNode.getPath(),
+			paths = [];
+		for (var i = 0, len = parents.length; i < len; i++) {
+			paths.push(parents[i].name);
+		}
+		return paths;
+	},
+
+	match: function (sHtml) {
+
+		var aData = sHtml.match(/<([^>])+>/);
+		var obj = {};
+		if (aData) {
+			sHtml = aData[0].replace(/(\s*[<=>]\s*)/g, function (match, pos, originalText) {
+				switch (true) {
+					case match.indexOf("=") != -1:
+						return "="
+					case match.indexOf("<") != -1:
+						return "<"
+					case match.indexOf(">") != -1:
+						return ""
+				}
+			});
+			sHtml = sHtml.replace(/"\s*([\w-\s]*\w)\s*"/g, '\"$1\"');
+			sHtml = sHtml.replace(/\s*class="[\w-\s]+"/g, '');  //去掉class属性
+			sHtml = sHtml.replace(/\s*style="[\w-\s;:]+"/g, '');  //去掉class属性
+			var list = sHtml.split(/\s+/);
+			for (var i = 1; i < list.length; i++) {
+				if (list[i].indexOf('=') != -1) {
+					var item = list[i].split('=');
+					obj[item[0]] = item[1].replace(/"/g, '');
+				} else {
+					obj[list[i]] = "";
+				}
+			}
+		}
+		return obj;
+	},
+
+	replaceHtml: function (sHtml) {
+		return sHtml.replace(/<|>/g, function (match) {
+			if (match == "<") {
+				return "&lt;";
+			} else {
+				return "&gt;";
+			}
+		});
+	},
+
+	formatCss: function (style) {
+		var format = new formathtmljscss(style, 2, 'format');
+		format.formatcss();
+		return format.source;
 	}
-}
+};
 
 /*--------------------------------项目中的公共运用函数------------------------------*/
-fe.app = {} //公共的实现方法
+//公共的实现方法
+fe.app = {}
+
+
+
 /*为确认框绑定事件*/
 fe.app.confirmBoxEvent = function(){
 	/*为确认框绑定关闭事件*/

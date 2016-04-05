@@ -925,7 +925,8 @@
                 if (!tmpPChild || index >= tmpPChild.length) {
                     index = -1;
                 }
-                // add by sujianxin 2016-03-19 ���ӽڵ���а��ļ������ȣ���ĸ��������
+
+                // add by sujianxin 2016-03-19 根据节点排序
                 var imgNode = {};
                 if (nodes[0].layer == 1) {
                     imgNode = nodes.shift();
@@ -958,7 +959,6 @@
                 if (imgNode.layer == 1) {
                     nodes.unshift(imgNode);
                 }
-
 
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = nodes[i];
