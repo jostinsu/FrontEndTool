@@ -318,8 +318,6 @@ fe.tool = {
 //公共的实现方法
 fe.app = {}
 
-
-
 /*为确认框绑定事件*/
 fe.app.confirmBoxEvent = function(){
 	/*为确认框绑定关闭事件*/
