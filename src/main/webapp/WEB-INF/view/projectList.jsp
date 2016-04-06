@@ -98,6 +98,7 @@
             ],
             "fnRowCallback" :  function(nRow, oData, iDisplayIndex, iDisplayIndexFull){
                 $('td:eq(0)', nRow).html(iDisplayIndex+1);
+                $('td:eq(2)', nRow).html('<a href="edit?id=' + oData.id + '" class="tool_link">' + oData.name + '</a>');
                 $('td:eq(4)', nRow).html('<a href="edit?id=' + oData.id + '"><i class="tool_icon icon-edit" data-id="' + oData.id + '"></i></a><i class="tool_icon icon-download-alt " data-id="' + oData.id + '"></i><i class="tool_icon icon-trash " data-id="' + oData.id + '"></i>');
                 return nRow;
             }

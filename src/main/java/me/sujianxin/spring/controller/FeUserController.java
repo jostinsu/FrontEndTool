@@ -224,8 +224,8 @@ public class FeUserController implements ApplicationContextAware {
     public String resetPasswordPage(@RequestParam("mail") String mail, @RequestParam("time") String time, HttpSession session, Model model) {
         if (NumberUtils.isNumber(time)) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(Integer.valueOf(time) + 24 * 60 * 60 * 1000);
-            if (calendar.getTime().before(new Date()) && !Strings.isNullOrEmpty(mail)) {
+            calendar.setTimeInMillis(Long.valueOf(time) + 24 * 60 * 60 * 1000);
+            if (calendar.getTime().after(new Date()) && !Strings.isNullOrEmpty(mail)) {
                 session.setAttribute("accountTmp", mail);
                 return "resetPassword";//返回重置密码页面
             }

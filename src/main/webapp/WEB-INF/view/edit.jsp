@@ -38,7 +38,7 @@
             <a href="javascript:;" class="tool_btn tool_btn_Blue" id="edit_showResetStyle">全局样式</a>
         </div>
         <div class="edit_topBar_other">
-            <h2 class="edit_topBar_other_projectName">项目：${项目名字}</h2>
+            <h2 class="edit_topBar_other_projectName"></h2>
             <a class="edit_topBar_other_exitBtn" href="project">退出编辑</a>
         </div>
     </div>
@@ -298,6 +298,7 @@
             url: "tree",
             data: {id: "${id}"},
             success: function (res) {
+                $('.edit_topBar_other_projectName').html('项目：' + res.data.name);
                 formatData(res);
                 fe.edit.zTreeObj = $.fn.zTree.init($("#tree"), setting, res.data.trees);
                 fe.edit.initTree();
@@ -315,8 +316,15 @@
 
         function formatData(res) {
             fe.edit.data = {
-                currentPage: {},
-                currentNode: {},
+                currentPage: {
+                    id: '',
+                    downloadCode: '',
+                    multipleCode: ''
+                },
+                currentNode: {
+                    tId: '',
+                    pageFlag: '',
+                },
                 currentElem: {
                     self: null,
                     parent: null,

@@ -304,9 +304,13 @@ fe.tool = {
 	},
 
 	formatCss: function (style) {
-		var format = new formathtmljscss(style, 2, 'format');
-		format.formatcss();
-		return format.source;
+		if (style) {
+			var format = new formathtmljscss(style, 2, 'format');
+			format.formatcss();
+			return format.source;
+		} else {
+			return '';
+		}
 	}
 };
 

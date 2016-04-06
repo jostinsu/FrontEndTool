@@ -31,6 +31,14 @@ li {
 html, body {
   background-color: #E9EAEB; }
 
+.tool_link {
+  color: #336699;
+}
+
+.tool_link:hover {
+  text-decoration: underline;
+}
+
 .tool_btn {
   background-image: -webkit-linear-gradient(top, #fff 0, #F8F8F8 100%);
   background-image: linear-gradient(to bottom, #fff 0, #F8F8F8 100%);
@@ -592,8 +600,16 @@ button.tool_btn, input.tool_btn {
 
 .info_filter {
   margin-bottom: 15px;
-  overflow: hidden;
   margin-left: -20px; }
+
+.info_filter:after {
+  display: block;
+  content: '';
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
 
 .info_filter_item {
   float: left;
@@ -612,7 +628,7 @@ button.tool_btn, input.tool_btn {
 
 .info_newProject_item {
   margin-bottom: 25px;
-  overflow: hidden; }
+}
   .info_newProject_item span {
     float: left;
     width: 70px;
@@ -1296,7 +1312,7 @@ button.tool_btn, input.tool_btn {
 .edit_element_title h3 {
   overflow: hidden;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
   color: #333;
 }
 
@@ -1340,7 +1356,6 @@ button.tool_btn, input.tool_btn {
 #edit_pageCodeCover .tool_editor {
   position: relative;
 }
-
 #edit_pageCodeCover #edit_pageCode_downloadBtn {
   position: absolute;
   right: 12px;
@@ -1381,6 +1396,12 @@ button.tool_btn, input.tool_btn {
   display: block;
   clear: both;
   visibility: hidden;
+}
+
+.sjx_additional_firstWrap {
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
 }
 
 /*# sourceMappingURL=main.css.map */

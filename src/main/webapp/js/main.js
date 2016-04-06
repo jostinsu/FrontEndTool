@@ -158,10 +158,10 @@ fe.user.forgivePassword = function () {
 				data: obj,
 				success: function (res) {
 					if (res.success) {
-						$('.forgivePassword_item:last-child').html('请到注册邮箱接收激活邮件，并按步骤重置密码');
+						$('.forgivePassword_item:last-child').html('请到注册邮箱接收激活邮件，并按步骤重置密码').show();
 						$('.user_remind').html('');
 					} else {
-						$('.user_remind').html(res.msg || "该邮箱非注册登记的邮箱");
+						$('.user_remind').html(res.msg || "该邮箱非注册登记的邮箱").show();
 						$('.forgivePassword_item:last-child').html('');
 					}
 				}
@@ -218,7 +218,7 @@ fe.edit.initTree = function () {
 				obj.content = "新的图片名";
 				break;
 		}
-		$.inputBox(obj).data('treeNode', treeNode);
+		$.inputBox(obj).data('treeNode', treeNode).find('input')[0].focus();
 	}
 
 	function tree_newPage(treeNode) {
@@ -227,7 +227,7 @@ fe.edit.initTree = function () {
 			title: "新建页面",
 			content: "文件名",
 			placeholder: "英文字母、数字、下划线或其组合"
-		}).data('treeNode', treeNode);
+		}).data('treeNode', treeNode).find('input')[0].focus();
 	}
 
 	function tree_newFolder(treeNode) {
@@ -236,7 +236,7 @@ fe.edit.initTree = function () {
 			title: "新建文件夹",
 			content: "文件夹名",
 			placeholder: "英文字母、数字、下划线或其组合"
-		}).data('treeNode', treeNode);
+		}).data('treeNode', treeNode).find('input')[0].focus();
 	}
 
 	$(document).on('click', function () {
@@ -258,6 +258,7 @@ fe.edit.initTree = function () {
 				tree_newFolder(treeNode);
 				break;
 			case '导出':
+				fe.edit.data.currentNode.tId = treeNode.tId;
 				fe.edit.savePage(false, fe.edit.download);
 				break;
 		}
@@ -282,6 +283,9 @@ fe.edit.deleteTreeNode = function (treeNode) {
 		data: {'id': treeNode.id, 'title': treeNode.title},
 		success: function () {
 			fe.edit.zTreeObj.removeNode(treeNode);
+			fe.edit.initPage();
+			fe.edit.data.currentNode.tId = '';
+			fe.edit.data.currentNode.pageFlag = '';
 		},
 		error: {
 			remind: "删除失败"
@@ -411,7 +415,7 @@ fe.edit.compareNode = function (name, borther, isFolder) {
 fe.edit.addTreeNodeForPage = function (treeNode) {
 	var name = $('.inputBox_body_input').val();
 	var check = fe.edit.beforeAddTreeNode(name, treeNode, true);
-	var multipleCode = '<style id="pageCss"></style><div class="sjx_html" style="height: 100%"><div class="sjx_additional_wrap" id="basicBody" data-is-container="1" style="height: 100%;overflow: auto;box-sizing: border-box;" ondragover="fe.drag.elemDragOver(event,this)" ondrop="fe.drag.elemDrop(event,this)" ondragleave="fe.drag.elemDragLeave(event,this)"><div class="sjx_additional_header"><span class="sjx_additional_icon">container</span></div><div class="sjx_additional_body"><div class="sjx_body"></div></div></div></div>';
+	var multipleCode = '<style id="pageCss"></style><div class="sjx_html" style="height: 100%"><div class="sjx_additional_wrap sjx_additional_firstWrap" id="basicBody" data-is-container="1"  ondragover="fe.drag.elemDragOver(event,this)" ondrop="fe.drag.elemDrop(event,this)" ondragleave="fe.drag.elemDragLeave(event,this)"><div class="sjx_additional_header"><span class="sjx_additional_icon">container</span></div><div class="sjx_additional_body"><div class="sjx_body"></div></div></div></div>';
 	if (!check.flag) {
 		$('.inputBox_body_inputRemind').html(check.remind);
 	} else {
@@ -439,7 +443,7 @@ fe.edit.addTreeNodeForPage = function (treeNode) {
 				});
 				var newTreeNode = fe.edit.zTreeObj.getNodesByParam('id', res.treeid, treeNode)[0];
 				fe.edit.zTreeObj.selectNode(newTreeNode);
-				fe.edit.initPage(newTreeNode);
+				fe.edit.selectPage(newTreeNode);
 			},
 			error: {
 				remind: "新建文件失败"
@@ -475,17 +479,25 @@ fe.edit.addTreeNodeForFolder = function (treeNode) {
 	}
 };
 
-fe.edit.initPage = function (treeNode) {
-	if (fe.edit.data.currentNode.tId) {
-		fe.edit.savePage();
-	}
+fe.edit.initPage = function () {
+	//fe.edit.data.currentPage = {}; TODO:为什么情况会影响selectPage中的treeNode.pages[0].multipleCode
+	$('#editMain').html('');
 	fe.edit.initElem();
 	fe.edit.initElemAttr();
 	fe.edit.initElemStyle();
+};
+
+fe.edit.selectPage = function (treeNode) {
+	if (fe.edit.data.currentNode.tId) {
+		fe.edit.savePage();
+	}
+	fe.edit.initPage();
+	//alert(treeNode.pages[0].multipleCode);
 	$('#editMain').html('<style id="resetCss">' + fe.edit.data.styles[0].pageResetCssCode + '</style>' + treeNode.pages[0].multipleCode);
 	fe.edit.data.currentPage.id = treeNode.pages[0].id;
 	fe.edit.data.currentNode.tId = treeNode.tId;
-};
+}
+
 
 fe.edit.treeCallback = {
 	//右键点击事件
@@ -523,7 +535,7 @@ fe.edit.treeCallback = {
 
 	zTreeOnClick: function (event, treeId, treeNode) {
 		if (treeNode.iconSkin == "page") {
-			fe.edit.initPage(treeNode);
+			fe.edit.selectPage(treeNode);
 		}
 	}
 };
@@ -588,21 +600,28 @@ fe.edit.elemEvent = function () {
 
 
 	$('.edit_body_main').delegate('.sjx_additional_wrap', 'click', function (ev) {
-		fe.edit.initElem(this.id);
+		fe.edit.initElem();
 		fe.edit.initElemAttr();
 		fe.edit.initElemStyle();
+		fe.edit.selectElem(this.id);
 		fe.edit.showElemAttr();
 		fe.edit.showElemStyle();
 		ev.stopPropagation();
 	});
 };
 
-fe.edit.initElem = function (id) {
+fe.edit.selectElem = function (id) {
 	$('#editMain').find('.sjx_additional_header').css('backgroundColor', '#ccc');
 	$("#" + id).find('.sjx_additional_header').eq(0).css('backgroundColor', '#FF9900');
 	fe.edit.data.currentElem.wrapId = id;
 	fe.edit.data.currentElem.parent = $("#" + id).find('.sjx_additional_body');
 	fe.edit.data.currentElem.self = fe.edit.data.currentElem.parent.children().eq(0);
+}
+
+fe.edit.initElem = function () {
+	fe.edit.data.currentElem.wrapId = '';
+	fe.edit.data.currentElem.parent = null;
+	fe.edit.data.currentElem.self = null;
 }
 
 fe.edit.initElemAttr = function () {
@@ -677,7 +696,7 @@ fe.edit.styleEvent = function () {
 	});
 
 	function fixClassContent(classCodntent) {
-		initElem();
+		initElemStyle();
 		var oStyle = markObject(classCodntent);
 		for (var item in oStyle) {
 			switch (true) {
@@ -696,7 +715,7 @@ fe.edit.styleEvent = function () {
 		}
 	}
 
-	function initElem() {
+	function initElemStyle() {
 		if (fe.edit.data.currentElem.self.hasClass('pos')) {
 			fe.edit.data.currentElem.self.removeClass('pos');
 		}
@@ -835,7 +854,7 @@ fe.edit.getPageCssCode = function () {
 	if ($('#editMain').find("#pageCss").html()) {
 		pageCss = $('#editMain').find("#pageCss").html();
 	}
-	return pageCss;
+	return pageCss ? fe.tool.formatCss(pageCss) : pageCss;
 }
 
 fe.edit.getDownloadCode = function (currentNode) {
@@ -846,14 +865,18 @@ fe.edit.getDownloadCode = function (currentNode) {
 		.find('.sjx_additional_body').each(function () {
 			$(this).children().eq(0).unwrap().unwrap();
 		}).end();
-	return '<html lang="zh-cn">' +
-		'<head>' +
-		'<meta charset="UTF-8">' +
-		'<title>' + fe.edit.data.name + '</title>' +
-		'<link rel="stylesheet" href="' + relativePath + 'css/reset.css">' +
-		'<style id="pageCss">' + pageCss + '</style>' +
-		'</head>' +
-		'<body>' + simplePage.find(".sjx_body").html() + '</body>' +
+	return '<html lang="zh-cn">\n' +
+		'<head>\n' +
+		'  <meta charset="UTF-8">\n' +
+		'  <title>' + fe.edit.data.name + '</title>\n' +
+		'  <link rel="stylesheet" href="' + relativePath + 'css/reset.css">\n' +
+		'  <style id="pageCss">\n' +
+		pageCss + '\n' +
+		'  </style>\n' +
+		'</head>\n' +
+		'<body>\n' +
+		HTMLFormat(simplePage.find(".sjx_body").html()) + '\n' +
+		'</body>\n' +
 		'</html>';
 };
 
@@ -861,7 +884,7 @@ fe.edit.savePage = function (remind, callback) {
 	if (fe.edit.data.currentNode.tId) {
 		var currentNode = fe.edit.zTreeObj.getNodeByTId(fe.edit.data.currentNode.tId);
 		fe.edit.data.currentPage.downloadCode = fe.edit.getDownloadCode(currentNode);
-		fe.edit.data.currentPage.multipleCode = $('#editMain').clone().find('#resetCss').remove().end().html();
+		fe.edit.data.currentPage.multipleCode = $('#editMain').clone().find('.sjx_additional_header').css('backgroundColor', '#ccc').end().find('#resetCss').remove().end().html();
 		fe.tool.getJSON({
 			url: "updatePageCode",
 			data: {
@@ -884,10 +907,6 @@ fe.edit.savePage = function (remind, callback) {
 			error: {
 				remind: "保存页面失败"
 			}
-		});
-	} else {
-		$.remindBox({
-			'remind': "请先进入相应的页面"
 		});
 	}
 };
@@ -1107,7 +1126,10 @@ fe.edit.formatHtmlCode = function (sHtml, parent) {
 }
 
 fe.edit.formatCssCode = function (style, parent) {
-	var styleCode = fe.tool.formatCss(style);
+	var styleCode = ''
+	if (style) {
+		styleCode = fe.tool.formatCss(style);
+	}
 	parent.find('.snippet-container').remove();
 	$('<pre>' + styleCode + '</pre>').appendTo(parent)
 		.snippet("CSS", {
@@ -1341,9 +1363,10 @@ fe.drag = {
 		$(that).css({
 			"borderColor": "#ccc"
 		});
-		fe.edit.initElem(newElemId);
+		fe.edit.initElem();
 		fe.edit.initElemAttr();
 		fe.edit.initElemStyle();
+		fe.edit.selectElem(newElemId);
 		fe.edit.showElemAttr();
 		fe.edit.showElemStyle();
 		ev.preventDefault();
