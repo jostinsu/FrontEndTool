@@ -15,6 +15,7 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -38,7 +39,7 @@ import java.util.TimeZone;
  */
 @Configuration
 @ComponentScan(basePackages = "me.sujianxin.spring.controller", useDefaultFilters = false, includeFilters = {
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class})
+        @ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class, ControllerAdvice.class})
 })
 public class MvcConfig extends WebMvcConfigurationSupport {
 

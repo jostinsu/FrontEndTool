@@ -176,7 +176,6 @@ fe.user.forgivePassword = function () {
 fe.edit = {} //用户命名空间
 
 fe.edit.initTree = function () {
-
 	function tree_delete(treeNode) {
 		var obj = {
 			id: "deleteTreeNode"
